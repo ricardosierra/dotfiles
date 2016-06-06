@@ -44,17 +44,22 @@ packages=(
   docker.io
   cowsay
   git-core
+  gitk
   chromium-browser
   htop
   id3tool
   libssl-dev
   mercurial
   nmap
+  php
+  python
+  python-pip
   silversearcher-ag
   sl
   telnet
   tree
   vim
+  vim-gnome
 )
 
 packages=($(setdiff "${packages[*]}" "$(dpkg --get-selections | grep -v deinstall | awk '{print $1}')"))
@@ -90,5 +95,13 @@ if [[ ! "$(type -P google-chrome)" ]]; then
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
     sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
     sudo apt-get -qq update ; sudo apt-get -qq install google-chrome-stable -y
+  )
+fi
+
+# Install Google-Chrome
+if [[ ! "$(type -P fab)" ]]; then
+  e_header "Installing Fabric"
+  (
+    sudo pip install fabric
   )
 fi

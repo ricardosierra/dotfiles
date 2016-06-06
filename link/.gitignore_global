@@ -4,6 +4,7 @@
 *.dll
 *.exe
 *.o
+*.phar
 *.so
 
 # Packages #
@@ -49,7 +50,7 @@
 .Trashes
 
 # Windows image file caches
-Thumbs.db 
+Thumbs.db
 
 # Folder config file
 Desktop.ini
@@ -57,8 +58,34 @@ Desktop.ini
 # NPM
 .npmignore
 
+# Temps
+*.*~
+
+# Outout File
+nohup.out
+
+# composer vendor dir
+/vendor
+
+# IDES generated files #
+######################
 # Vim
 .swp
 .swo
 .*.swp
 .*.swo
+
+# PHPSTORM
+.idea
+
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
+
+# SUBLIME
+*.sublime-project
+*.sublime-workspace
+
+# NETBEANS
+nbproject/**
