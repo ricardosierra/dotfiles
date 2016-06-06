@@ -41,6 +41,7 @@ sudo apt-get -qq dist-upgrade
 packages=(
   ansible
   build-essential
+  docker.io
   cowsay
   git-core
   htop
@@ -52,6 +53,7 @@ packages=(
   sl
   telnet
   tree
+  vim
 )
 
 packages=($(setdiff "${packages[*]}" "$(dpkg --get-selections | grep -v deinstall | awk '{print $1}')"))
@@ -69,5 +71,23 @@ if [[ ! "$(type -P git-extras)" ]]; then
   (
     cd $DOTFILES/vendor/git-extras &&
     sudo make install
+  )
+fi
+
+# Install Atom
+if [[ ! "$(type -P atom)" ]]; then
+  e_header "Installing Atom IDE"
+  (
+    sudo add-apt-repository ppa:webupd8team/atom -y && sudo apt-get -qq update && sudo apt-get install -qq atom -y
+  )
+fi
+
+# Install Google-Chrome
+if [[ ! "$(type -P google-chrome)" ]]; then
+  e_header "Installing Google-Chrome"
+  (
+    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+    sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+    sudo apt-get -qq update ; sudo apt-get -qq install google-chrome-stable -y
   )
 fi
