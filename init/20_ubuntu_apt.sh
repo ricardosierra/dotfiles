@@ -58,6 +58,7 @@ packages=(
   sl
   telnet
   tree
+  xclip
   vim
   vim-gnome
 )
@@ -98,7 +99,7 @@ if [[ ! "$(type -P google-chrome)" ]]; then
   )
 fi
 
-# Install Google-Chrome
+# Install Fabric
 if [[ ! "$(type -P fab)" ]]; then
   e_header "Installing Fabric"
   (

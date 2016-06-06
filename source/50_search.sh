@@ -29,8 +29,10 @@ alias grep="grep $GREP_OPTIONS"
 # clean up
 unset GREP_OPTIONS
 unset VCS_FOLDERS
-unfunction grep-flag-available
 
 #############################
 #         FIND
 #############################
+function searchFiles() {
+       find . -name \*."$1" -print0 | xargs -0 grep --color -n "$2"
+}

@@ -8,6 +8,8 @@ function nave_default() {
   [[ ! "$1" ]] && echo "Specify a node version or \"stable\"" && return 1
   [[ "$1" == "stable" ]] && version=$(nave stable) || version=${1#v}
   rm "$default" 2>/dev/null
+  echo "$version"
+  echo "$default"
   ln -s $version "$default"
   echo "Nave default set to $version"
 }
