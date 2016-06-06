@@ -44,6 +44,7 @@ packages=(
   docker.io
   cowsay
   git-core
+  chromium-browser
   htop
   id3tool
   libssl-dev
