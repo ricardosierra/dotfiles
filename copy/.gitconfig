@@ -1,6 +1,8 @@
-[user]
-  name = Ben Alman
-  email = EMAIL
+# Local/private config goes in the include
+[include]
+  path = ~/.gitconfig.local
+[hub]
+  protocol = https
 [core]
   autocrlf = input
   whitespace = fix,space-before-tab,tab-in-indent,trailing-space

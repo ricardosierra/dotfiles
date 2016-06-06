@@ -28,6 +28,20 @@ function e_header()   { echo -e "\n\033[1m$@\033[0m"; }
 function e_success()  { echo -e " \033[1;32m✔\033[0m  $@"; }
 function e_error()    { echo -e " \033[1;31m✖\033[0m  $@"; }
 function e_arrow()    { echo -e " \033[1;34m➜\033[0m  $@"; }
+info () {
+  printf "\r  [ \033[00;34m..\033[0m ] $1\n"
+}
+user () {
+  printf "\r  [ \033[0;33m??\033[0m ] $1\n"
+}
+success () {
+  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
+}
+fail () {
+  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
+  echo ''
+  exit
+}
 
 # For testing.
 function assert() {
@@ -125,6 +139,33 @@ function _prompt_menu_add() {
   done
   [[ ! "$match" && "$state" == 1 || "$keep" ]] || return
   _prompt_menu_result=("${_prompt_menu_result[@]}" "${menu_options[i]}")
+}
+
+# CONFIGURE GIT CONFIG
+generate_custom_file_for_git () {
+  if ! [ -f copy/.gitconfig.local ]
+  then
+    info 'setup gitconfig'
+
+    git_credential='cache'
+    if [ "$(uname -s)" == "Darwin" ]
+    then
+      git_credential='osxkeychain'
+    fi
+
+    user ' - What is your github author name?'
+    read -e git_authorname
+    user ' - What is your github author email?'
+    read -e git_authoremail
+
+    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" copy/.gitconfig.local.example > copy/.gitconfig.local
+
+    success 'gitconfig'
+  fi
+}
+# Configure All Files with end .example
+generate_custom_files () {
+  generate_custom_file_for_git
 }
 
 # Given strings containing space-delimited words A and B, "setdiff A B" will
@@ -230,35 +271,40 @@ function do_stuff() {
   [[ $(declare -f "$1_header") ]] && "$1_header"
   # Iterate over files.
   for file in "${files[@]}"; do
-    base="$(basename $file)"
-    dest="$HOME/$base"
-    # Run _test function only if declared.
-    if [[ $(declare -f "$1_test") ]]; then
-      # If _test function returns a string, skip file and print that message.
-      skip="$("$1_test" "$file" "$dest")"
-      if [[ "$skip" ]]; then
-        e_error "Skipping ~/$base, $skip."
-        continue
+    if [[ ! "$file" == *example ]]
+    then
+      base="$(basename $file)"
+      dest="$HOME/$base"
+      # Run _test function only if declared.
+      if [[ $(declare -f "$1_test") ]]; then
+        # If _test function returns a string, skip file and print that message.
+        skip="$("$1_test" "$file" "$dest")"
+        if [[ "$skip" ]]; then
+          e_error "Skipping ~/$base, $skip."
+          continue
+        fi
+        # Destination file already exists in ~/. Back it up!
+        if [[ -e "$dest" ]]; then
+          e_arrow "Backing up ~/$base."
+          # Set backup flag, so a nice message can be shown at the end.
+          backup=1
+          # Create backup dir if it doesn't already exist.
+          [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
+          # Backup file / link / whatever.
+          mv "$dest" "$backup_dir"
+        fi
       fi
-      # Destination file already exists in ~/. Back it up!
-      if [[ -e "$dest" ]]; then
-        e_arrow "Backing up ~/$base."
-        # Set backup flag, so a nice message can be shown at the end.
-        backup=1
-        # Create backup dir if it doesn't already exist.
-        [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
-        # Backup file / link / whatever.
-        mv "$dest" "$backup_dir"
-      fi
+      # Do stuff.
+      "$1_do" "$base" "$file"
     fi
-    # Do stuff.
-    "$1_do" "$base" "$file"
   done
 }
 
 # Enough with the functions, let's do stuff.
 
 export prompt_delay=5
+
+generate_custom_files
 
 # Ensure that we can actually, like, compile anything.
 if [[ ! "$(type -P gcc)" ]] && is_osx; then
