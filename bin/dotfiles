@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 [[ "$1" == "source" ]] || \
 
-echo 'Dotfiles - "Cowboy" Ben Alman - http://benalman.com/'
+echo 'Dotfiles - Ricardo R. Sierra - http://ricardosierra.com.br/'
 
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then cat <<HELP
 
 Usage: $(basename "$0")
 
 See the README for documentation.
-https://github.com/cowboy/dotfiles
+https://github.com/ricardorsierra/dotfiles
 
-Copyright (c) 2014 "Cowboy" Ben Alman
-Licensed under the MIT license.
-http://benalman.com/about/license/
+Is a fork then "Cowbow" Ben Alman <http://benalman.com/about/license/>
 HELP
 exit; fi
 
@@ -52,17 +50,45 @@ function assert() {
   ${modes[success]} "\"$actual\" ${equals[success]} \"$expected\""
 }
 
-# OS detection
+
+###########################################
+#             OS detection
+###########################################
+function get_os() {
+  for os in osx ubuntu debian; do
+    is_$os; [[ $? == ${1:-0} ]] && echo $os
+  done
+}
+# MAC
 function is_osx() {
   [[ "$OSTYPE" =~ ^darwin ]] || return 1
+}
+# LINUX
+function is_linux() {
+  if is_debian || is_redhat; then
+    return 0
+  fi
+}
+function is_debian() {
+  if is_kali; then
+    return 0
+  fi
+  [[ "$(cat /etc/issue 2> /dev/null)" =~ Debian ]] || return 1
+}
+function is_redhat() {
+  if is_fedora; then
+    return 0
+  fi
+  [[ "$(cat /etc/issue 2> /dev/null)" =~ RedHat ]] || return 1
+}
+function is_fedora() {
+  [[ "$(cat /etc/issue 2> /dev/null)" =~ Fedora ]] || return 1
 }
 function is_ubuntu() {
   [[ "$(cat /etc/issue 2> /dev/null)" =~ Ubuntu ]] || return 1
 }
-function get_os() {
-  for os in osx ubuntu; do
-    is_$os; [[ $? == ${1:-0} ]] && echo $os
-  done
+function is_kali() {
+  [[ "$(cat /etc/issue 2> /dev/null)" =~ Kali ]] || return 1
 }
 
 # Remove an entry from $PATH
@@ -148,7 +174,7 @@ generate_custom_file_for_git () {
     info 'setup gitconfig'
 
     git_credential='cache'
-    if [ "$(uname -s)" == "Darwin" ]
+    if is_osx
     then
       git_credential='osxkeychain'
     fi
@@ -158,11 +184,12 @@ generate_custom_file_for_git () {
     user ' - What is your github author email?'
     read -e git_authoremail
 
-    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" copy/.gitconfig.local.example > copy/.gitconfig.local
+    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" ~/.dotfiles/copy/.gitconfig.local.example > ~/.dotfiles/copy/.gitconfig.local
 
     success 'gitconfig'
   fi
 }
+
 # Configure All Files with end .example
 generate_custom_files () {
   generate_custom_file_for_git
@@ -314,9 +341,14 @@ fi
 
 # If Git is not installed, install it (Ubuntu only, since Git comes standard
 # with recent XCode or CLT)
-if [[ ! "$(type -P git)" ]] && is_ubuntu; then
+if [[ ! "$(type -P git)" ]] && is_linux; then
   e_header "Installing Git"
-  sudo apt-get -qq install git-core
+  if is_debian; then
+    sudo apt-get -qq install git-core
+  fi
+  if is_redhat; then
+    sudo yum install git-all
+  fi
 fi
 
 # If Git isn't installed by now, something exploded. We gots to quit!
@@ -331,7 +363,7 @@ if [[ ! -d $DOTFILES ]]; then
   new_dotfiles_install=1
   prompt_delay=15
   e_header "Downloading dotfiles"
-  git clone --recursive git://github.com/${github_user:-cowboy}/dotfiles.git $DOTFILES
+  git clone --recursive git://github.com/ricardorsierra/dotfiles.git $DOTFILES
   cd $DOTFILES
 elif [[ "$1" != "restart" ]]; then
   # Make sure we have the latest files.

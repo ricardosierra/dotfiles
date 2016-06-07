@@ -1,6 +1,7 @@
 # Dotfiles
 
-My OSX / Ubuntu dotfiles.
+OSX / Ubuntu / Fedora / KaliLinux / Debian dotfiles.
+Is a fork from "Cowboy" Ben Alman.
 
 ## About this project
 
@@ -64,7 +65,7 @@ Scripts in the `/init` subdirectory will be executed. A whole bunch of things wi
 
 Because the [dotfiles][dotfiles] script is completely self-contained, you should be able to delete everything else from your dotfiles repo fork, and it will still work. The only thing it really cares about are the `/copy`, `/link` and `/init` subdirectories, which will be ignored if they are empty or don't exist.
 
-If you modify things and notice a bug or an improvement, [file an issue](https://github.com/cowboy/dotfiles/issues) or [a pull request](https://github.com/cowboy/dotfiles/pulls) and let me know.
+If you modify things and notice a bug or an improvement, [file an issue](https://github.com/ricardorsierra/dotfiles/issues) or [a pull request](https://github.com/ricardorsierra/dotfiles/pulls) and let me know.
 
 Also, before installing, be sure to [read my gently-worded note](#heed-this-critically-important-warning-before-you-install).
 
@@ -78,41 +79,28 @@ The easiest way to install the XCode Command Line Tools in OSX 10.9+ is to open 
 
 _Tested in OSX 10.10_
 
-### Ubuntu Notes
+### Linux Notes
 
-You might want to set up your ubuntu server [like I do it](https://github.com/cowboy/dotfiles/wiki/ubuntu-setup), but then again, you might not.
+You might want to set up your ubuntu server [like I do it](https://github.com/ricardorsierra/dotfiles/wiki/ubuntu-setup), but then again, you might not.
 
 Either way, you should at least update/upgrade APT with `sudo apt-get -qq update && sudo apt-get -qq dist-upgrade` first.
 
 _Tested in Ubuntu 14.04 LTS_
+_Tested in Ubuntu 16.10 LTS_
+_Tested in KaliLinux 16.10 LTS_
 
-### Heed this critically important warning before you install
-
-**If you're not me, please _do not_ install dotfiles directly from this repo!**
-
-Why? Because I often completely break this repo while updating. Which means that if I do that and you run the `dotfiles` command, your home directory will burst into flames, and you'll have to go buy a new computer. No, not really, but it will be very messy.
-
-### Actual installation (for you)
+### Installation
 
 1. [Read my gently-worded note](#heed-this-critically-important-warning-before-you-install)
-1. Fork this repo
 1. Open a terminal/shell and do this:
 
 ```sh
-export github_user=YOUR_GITHUB_USER_NAME
-
-bash -c "$(curl -fsSL https://raw.github.com/$github_user/dotfiles/master/bin/dotfiles)" && source ~/.bashrc
+bash -c "$(curl -fsSL https://raw.github.com/ricardorsierra/dotfiles/master/bin/dotfiles)" && source ~/.bashrc
 ```
 
-Since you'll be using the [dotfiles][dotfiles] command on subsequent runs, you'll only have to export the `github_user` variable for the initial install.
+Since you'll be using the [dotfiles][dotfiles] command on subsequent runs.
 
 There's a lot of stuff that requires admin access via `sudo`, so be warned that you might need to enter your password here or there.
-
-### Actual installation (for me)
-
-```sh
-bash -c "$(curl -fsSL https://bit.ly/cowboy-dotfiles)" && source ~/.bashrc
-```
 
 ## Aliases and Functions
 To keep things easy, the `~/.bashrc` and `~/.bash_profile` files are extremely simple, and should never need to be modified. Instead, add your aliases, functions, settings, etc into one of the files in the `source` subdirectory, or add a new file. They're all automatically sourced when a new shell is opened. Take a look, I have [a lot of aliases and functions](source). I even have a [fancy prompt](source/50_prompt.sh) that shows the current directory, time and current git/svn repo status.
@@ -143,6 +131,7 @@ Check it out:
 ![My awesome bash prompt](http://farm8.staticflickr.com/7142/6754488927_563dd73553_b.jpg)
 
 ## Inspiration
+<https://github.com/cowboy/dotfiles>  
 <https://github.com/gf3/dotfiles>  
 <https://github.com/mathiasbynens/dotfiles>  
 (and 15+ years of accumulated crap)

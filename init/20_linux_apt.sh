@@ -1,18 +1,18 @@
 # Ubuntu-only stuff. Abort if not Ubuntu.
-is_ubuntu || return 1
+is_linux || return 1
 
 # If the old files isn't removed, the duplicate APT alias will break sudo!
 sudoers_old="/etc/sudoers.d/sudoers-cowboy"; [[ -e "$sudoers_old" ]] && sudo rm "$sudoers_old"
 
 # Installing this sudoers file makes life easier.
 sudoers_file="sudoers-dotfiles"
-sudoers_src=$DOTFILES/conf/ubuntu/$sudoers_file
+sudoers_src=$DOTFILES/conf/linux/$sudoers_file
 sudoers_dest="/etc/sudoers.d/$sudoers_file"
 if [[ ! -e "$sudoers_dest" || "$sudoers_dest" -ot "$sudoers_src" ]]; then
   cat <<EOF
-The sudoers file can be updated to allow "sudo apt-get" to be executed
+The sudoers file can be updated to allow "sudo apt-get" and "sudo yum" to be executed
 without asking for a password. You can verify that this worked correctly by
-running "sudo -k apt-get". If it doesn't ask for a password, and the output
+running "sudo -k apt-get"or "sudo -k yum". If it doesn't ask for a password, and the output
 looks normal, it worked.
 
 THIS SHOULD ONLY BE ATTEMPTED IF YOU ARE LOGGED IN AS ROOT IN ANOTHER SHELL.
@@ -34,8 +34,15 @@ fi
 
 # Update APT.
 e_header "Updating APT"
-sudo apt-get -qq update
-sudo apt-get -qq dist-upgrade
+
+
+if is_debian; then
+  sudo apt-get -qq update
+  sudo apt-get -qq dist-upgrade
+else
+  sudo yum -qq update
+  sudo yum -qq dist-upgrade
+fi
 
 # Install APT packages.
 packages=(
@@ -68,7 +75,11 @@ packages=($(setdiff "${packages[*]}" "$(dpkg --get-selections | grep -v deinstal
 if (( ${#packages[@]} > 0 )); then
   e_header "Installing APT packages: ${packages[*]}"
   for package in "${packages[@]}"; do
-    sudo apt-get -qq install "$package"
+    if is_debian; then
+      sudo apt-get -qq install "$package"
+    else
+      sudo yum -qq install "$package"
+    fi
   done
 fi
 
@@ -85,7 +96,11 @@ fi
 if [[ ! "$(type -P atom)" ]]; then
   e_header "Installing Atom IDE"
   (
-    sudo add-apt-repository ppa:webupd8team/atom -y && sudo apt-get -qq update && sudo apt-get install -qq atom -y
+    if is_debian; then
+      sudo add-apt-repository ppa:webupd8team/atom -y && sudo apt-get -qq update && sudo apt-get install -qq atom -y
+    else
+      sudo add-apt-repository ppa:webupd8team/atom -y && sudo yum -qq update && sudo yum install -qq atom -y
+    fi
   )
 fi
 
@@ -95,7 +110,11 @@ if [[ ! "$(type -P google-chrome)" ]]; then
   (
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
     sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-    sudo apt-get -qq update ; sudo apt-get -qq install google-chrome-stable -y
+    if is_debian; then
+      sudo apt-get -qq update ; sudo apt-get -qq install google-chrome-stable -y
+    else
+      sudo yum -qq update ; sudo yum -qq install google-chrome-stable -y
+    fi
   )
 fi
 

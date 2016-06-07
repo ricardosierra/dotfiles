@@ -9,7 +9,7 @@
 # [11:14:45] $
 #
 # Read more (and see a screenshot) in the "Prompt" section of
-# https://github.com/cowboy/dotfiles
+# https://github.com/ricardorsierra/dotfiles
 
 # ANSI CODES - SEPARATE MULTIPLE VALUES WITH ;
 #

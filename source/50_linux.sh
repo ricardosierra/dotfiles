@@ -1,11 +1,18 @@
 # Ubuntu-only stuff. Abort if not Ubuntu.
-is_ubuntu || return 1
+is_linux || return 1
 
 # Package management
-alias update="sudo apt-get -qq update && sudo apt-get upgrade"
-alias install="sudo apt-get install"
-alias remove="sudo apt-get remove"
-alias search="apt-cache search"
+if is_debian; then
+  alias update="sudo apt-get -qq update && sudo apt-get upgrade"
+  alias install="sudo apt-get install"
+  alias remove="sudo apt-get remove"
+  alias search="apt-cache search"
+else
+  alias update="sudo yum -qq update && sudo yum upgrade"
+  alias install="sudo yum install"
+  alias remove="sudo yum remove"
+  alias search="yum -C search"
+fi
 
 # Make 'less' more.
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
