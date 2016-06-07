@@ -70,7 +70,7 @@ function is_linux() {
   fi
 }
 function is_debian() {
-  if is_kali; then
+  if is_kali || is_ubuntu; then
     return 0
   fi
   [[ "$(cat /etc/issue 2> /dev/null)" =~ Debian ]] || return 1
