@@ -56,6 +56,7 @@ packages=(
   htop
   id3tool
   libssl-dev
+  meld
   mercurial
   nmap
   php

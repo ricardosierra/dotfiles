@@ -15,6 +15,8 @@
   g = grep -I
   lg = log -p
   pp = !"echo 'Pull'; git pull; echo 'Push'; git push"
+  files = "!git diff --name-status $1^ $1"
+  tests = !"echo 'Test Merge with $1'; git push origin $1; git checkout tests; git pull origin tests; git merge $1; git push origin tests"
   rb = rbranch
   rv = review
   st = status
@@ -39,6 +41,8 @@
   untracked = cyan
 [merge]
   log = true
+[diff]
+  external = meld_diff
 [difftool "Kaleidoscope"]
   cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
 [rerere]

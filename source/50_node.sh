@@ -34,6 +34,8 @@ npm_globals=(
   grunt-init
   linken
   node-inspector
+  phonegap@3.6.0-0.21.19
+  ripple-emulator@0.9.24
   yo
 )
 

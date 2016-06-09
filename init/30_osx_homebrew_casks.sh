@@ -41,6 +41,7 @@ casks=(
   launchbar
   macvim
   menumeters
+  meld
   midi-monitor
   moom
   omnidisksweeper
