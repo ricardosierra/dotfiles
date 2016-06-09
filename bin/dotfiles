@@ -358,27 +358,6 @@ if [[ ! "$(type -P git)" ]]; then
   exit 1
 fi
 
-# Initialize.
-if [[ ! -d $DOTFILES ]]; then
-  # $DOTFILES directory doesn't exist? Clone it!
-  new_dotfiles_install=1
-  prompt_delay=15
-  e_header "Downloading dotfiles"
-  git clone --recursive git://github.com/ricardorsierra/dotfiles.git $DOTFILES
-  cd $DOTFILES
-elif [[ "$1" != "restart" ]]; then
-  # Make sure we have the latest files.
-  e_header "Updating dotfiles"
-  cd $DOTFILES
-  prev_head="$(git rev-parse HEAD)"
-  git pull
-  git submodule update --init --recursive --quiet
-  if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
-    e_header "Changes detected, restarting script"
-    exec "$0" "restart"
-  fi
-fi
-
 #Download DockerFiles
 if [[ ! -d $DOCKERFILES ]]; then
   # $DOCKERFILES directory doesn't exist? Clone it!
@@ -391,6 +370,27 @@ elif [[ "$1" != "restart" ]]; then
   # Make sure we have the latest files.
   e_header "Updating dockerfiles"
   cd $DOCKERFILES
+  prev_head="$(git rev-parse HEAD)"
+  git pull
+  git submodule update --init --recursive --quiet
+  if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
+    e_header "Changes detected, restarting script"
+    exec "$0" "restart"
+  fi
+fi
+
+# Download DotFiles
+if [[ ! -d $DOTFILES ]]; then
+  # $DOTFILES directory doesn't exist? Clone it!
+  new_dotfiles_install=1
+  prompt_delay=15
+  e_header "Downloading dotfiles"
+  git clone --recursive git://github.com/ricardorsierra/dotfiles.git $DOTFILES
+  cd $DOTFILES
+elif [[ "$1" != "restart" ]]; then
+  # Make sure we have the latest files.
+  e_header "Updating dotfiles"
+  cd $DOTFILES
   prev_head="$(git rev-parse HEAD)"
   git pull
   git submodule update --init --recursive --quiet
