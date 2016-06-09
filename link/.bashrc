@@ -87,20 +87,37 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-	if [[ -f /usr/share/bash-completion/bash_completion ]]; then
-		. /usr/share/bash-completion/bash_completion
-	elif [[ -f /etc/bash_completion ]]; then
-		. /etc/bash_completion
-	fi
-fi
-for file in /etc/bash_completion.d/* ; do
-	source "$file"
-done
+#
+#I comment this because this cause one erro:
+# have: comando não encontrado
+# ++++++++++ return 127
+# ++++++++++ unset __grub_install_program
+# ++++++++++ __grub_mkfont_program=grub-mkfont
+# ++++++++++ have grub-mkfont
+# ++++++++++ '[' -x /usr/lib/command-not-found ']'
+# ++++++++++ /usr/lib/command-not-found -- have
+# Comando 'have' não encontrado, você quis dizer:
+#  Comando 'dave' do pacote 'libhttp-dav-perl' (universe)
+#  Comando 'havp' do pacote 'havp' (universe)
+#  Comando 'haxe' do pacote 'haxe' (universe)
+#  Comando 'save' do pacote 'atfs' (universe)
+# have: comando não encontrado
+#
+# if ! shopt -oq posix; then
+# 	if [[ -f /usr/share/bash-completion/bash_completion ]]; then
+# 		. /usr/share/bash-completion/bash_completion
+# 	elif [[ -f /etc/bash_completion ]]; then
+# 		. /etc/bash_completion
+# 	fi
+# fi
+# for file in /etc/bash_completion.d/* ; do
+# 	source "$file"
+# done
+#END THIS
 
-if [[ -f $HOME/.bash_profile ]]; then
-	source $HOME/.bash_profile
-fi
+# if [[ -f $HOME/.bash_profile ]]; then
+# 	source $HOME/.bash_profile
+# fi
 
 # Source all files in "source"
 function src() {

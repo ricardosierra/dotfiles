@@ -2,6 +2,9 @@
 /caches/
 /backups/
 
+#Personalite Configuration
+/link/.extra
+
 # Top secret stuff!
 /link/.ssh/authorized_keys
 /link/.ssh/id_*

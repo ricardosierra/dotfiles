@@ -41,7 +41,7 @@ alias dnr='docker network rm'
 alias dnl='docker network ls'
 alias dnc='docker network create'
 alias dni='docker network inspect'
-alias dnia ='docker network inspect $(docker network ls -q)'
+alias dnia='docker network inspect $(docker network ls -q)'
 alias dnrm='docker network rm $(docker network ls -q)'
 
 # Docker Engine aliases

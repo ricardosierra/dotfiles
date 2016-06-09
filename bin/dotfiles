@@ -20,6 +20,7 @@ exit; fi
 
 # Where the magic happens.
 export DOTFILES=~/.dotfiles
+export DOCKERFILES=~/.dockerfiles
 
 # Logging stuff.
 function e_header()   { echo -e "\n\033[1m$@\033[0m"; }
@@ -169,7 +170,7 @@ function _prompt_menu_add() {
 
 # CONFIGURE GIT CONFIG
 generate_custom_file_for_git () {
-  if ! [ -f copy/.gitconfig.local ]
+  if ! [ -f ~/.dotfiles/copy/.gitconfig.local ]
   then
     info 'setup gitconfig'
 
@@ -179,9 +180,9 @@ generate_custom_file_for_git () {
       git_credential='osxkeychain'
     fi
 
-    user ' - What is your github author name?'
+    user ' - What is your git author name?'
     read -e git_authorname
-    user ' - What is your github author email?'
+    user ' - What is your git author email?'
     read -e git_authoremail
 
     sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" ~/.dotfiles/copy/.gitconfig.local.example > ~/.dotfiles/copy/.gitconfig.local
@@ -369,6 +370,27 @@ elif [[ "$1" != "restart" ]]; then
   # Make sure we have the latest files.
   e_header "Updating dotfiles"
   cd $DOTFILES
+  prev_head="$(git rev-parse HEAD)"
+  git pull
+  git submodule update --init --recursive --quiet
+  if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
+    e_header "Changes detected, restarting script"
+    exec "$0" "restart"
+  fi
+fi
+
+#Download DockerFiles
+if [[ ! -d $DOCKERFILES ]]; then
+  # $DOCKERFILES directory doesn't exist? Clone it!
+  new_dockerfiles_install=1
+  prompt_delay=15
+  e_header "Downloading dockerfiles"
+  git clone --recursive git://github.com/ricardorsierra/dockerfiles.git $DOCKERFILES
+  cd $DOCKERFILES
+elif [[ "$1" != "restart" ]]; then
+  # Make sure we have the latest files.
+  e_header "Updating dockerfiles"
+  cd $DOCKERFILES
   prev_head="$(git rev-parse HEAD)"
   git pull
   git submodule update --init --recursive --quiet
