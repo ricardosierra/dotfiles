@@ -71,6 +71,20 @@ packages=(
   vim-gnome
 )
 
+# More APT packages
+if is_debian; then
+  packages+=(
+    php7.0-xml #precisa pro phpunit funcionar
+  )
+else
+  packages+=(
+    php70w-xml #precisa pro phpunit funcionar
+  )
+fi
+
+
+
+
 packages=($(setdiff "${packages[*]}" "$(dpkg --get-selections | grep -v deinstall | awk '{print $1}')"))
 
 if (( ${#packages[@]} > 0 )); then

@@ -23,7 +23,9 @@ fi
 # Easier navigation: .., ..., -
 alias ..='cd ..'
 alias ...='cd ../..'
+alias ....='cd ../../..'
 alias -- -='cd -'
+alias ~='cd ~/'
 
 # File size
 alias fs="stat -f '%z bytes'"
@@ -34,6 +36,8 @@ alias dsstore="find . -name '*.DS_Store' -type f -ls -delete"
 
 # Aliasing eachdir like this allows you to use aliases/functions as commands.
 alias eachdir=". eachdir"
+
+alias mine='sudo chown -R $USER'
 
 # Create a new directory and enter it
 function md() {

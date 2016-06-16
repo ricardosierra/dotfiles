@@ -52,9 +52,13 @@ function assert() {
 }
 
 
-###########################################
+#############################################################################
+#############################################################################
+#############################################################################
 #             OS detection
-###########################################
+#############################################################################
+#############################################################################
+#############################################################################
 function get_os() {
   for os in osx ubuntu debian; do
     is_$os; [[ $? == ${1:-0} ]] && echo $os
@@ -69,18 +73,28 @@ function is_linux() {
   if is_debian || is_redhat; then
     return 0
   fi
+  return 1
 }
 function is_debian() {
-  if is_kali || is_ubuntu; then
+  if is_kali || is_ubuntu || is_debianOS; then
     return 0
   fi
-  [[ "$(cat /etc/issue 2> /dev/null)" =~ Debian ]] || return 1
+  return 1
 }
 function is_redhat() {
-  if is_fedora; then
+  if is_fedora || is_centosOS || is_redhatOS; then
     return 0
   fi
+  return 1
+}
+function is_debianOS() {
+  [[ "$(cat /etc/issue 2> /dev/null)" =~ Debian ]] || return 1
+}
+function is_redhatOS() {
   [[ "$(cat /etc/issue 2> /dev/null)" =~ RedHat ]] || return 1
+}
+function is_centosOS() {
+  [[ "$(cat /etc/issue 2> /dev/null)" =~ Fedora ]] || return 1
 }
 function is_fedora() {
   [[ "$(cat /etc/issue 2> /dev/null)" =~ Fedora ]] || return 1
@@ -91,6 +105,9 @@ function is_ubuntu() {
 function is_kali() {
   [[ "$(cat /etc/issue 2> /dev/null)" =~ Kali ]] || return 1
 }
+#############################################################################
+#############################################################################
+#############################################################################
 
 # Remove an entry from $PATH
 # Based on http://stackoverflow.com/a/2108540/142339

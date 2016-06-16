@@ -1,3 +1,5 @@
+alias drun='docker run -it --rm'
+
 # Docker Machine
 alias dmachine='cd ~/Downloads/dmachine'
 alias dm='sudo docker-machine '

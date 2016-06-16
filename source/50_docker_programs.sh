@@ -1,7 +1,8 @@
 #!/bin/bash
 # Bash wrappers for docker run commands
 
-export DOCKER_REPO_PREFIX=jess
+export DOCKER_REPO_PREFIX=
+export DOCKERFILES_PATH=~/.dockerfiles
 
 #
 # Helper Functions
@@ -10,6 +11,12 @@ dcleanup(){
 	docker rm $(docker ps -aq 2>/dev/null) 2>/dev/null
 	docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
 	docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
+}
+images_build(){
+	local name=$1
+  if [[ "$(docker images -q $name 2> /dev/null)" == "" ]]; then
+    docker build -t $name ${DOCKERFILES_PATH}/$name
+  fi
 }
 del_stopped(){
 	local name=$1
@@ -70,7 +77,7 @@ nginx_config(){
 apt_file(){
 	docker run --rm -it \
 		--name apt-file \
-		${DOCKER_REPO_PREFIX}/apt-file
+		${DOCKER_REPO_PREFIX}apt-file
 }
 alias apt-file="apt_file"
 audacity(){
@@ -79,19 +86,20 @@ audacity(){
 	docker run -d \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v `pwd`:/home/root \
 		-e DISPLAY=unix$DISPLAY \
 		-e QT_DEVICE_PIXEL_RATIO \
 		--device /dev/snd \
 		--group-add audio \
 		--name audacity \
-		${DOCKER_REPO_PREFIX}/audacity
+		${DOCKER_REPO_PREFIX}audacity
 }
 aws(){
 	docker run -it --rm \
 		-v $HOME/.aws:/root/.aws \
 		--log-driver none \
 		--name aws \
-		${DOCKER_REPO_PREFIX}/awscli "$@"
+		${DOCKER_REPO_PREFIX}awscli "$@"
 }
 bees(){
 	docker run -it --rm \
@@ -101,7 +109,7 @@ bees(){
 		-v $HOME/.dev:/root/.ssh:ro \
 		--log-driver none \
 		--name bees \
-		${DOCKER_REPO_PREFIX}/beeswithmachineguns "$@"
+		${DOCKER_REPO_PREFIX}beeswithmachineguns "$@"
 }
 cadvisor(){
 	docker run -d \
@@ -129,7 +137,7 @@ cheese(){
 		--device /dev/snd \
 		--device /dev/dri \
 		--name cheese \
-		${DOCKER_REPO_PREFIX}/cheese
+		${DOCKER_REPO_PREFIX}cheese
 }
 chrome(){
 	# add flags for proxy if passed
@@ -168,7 +176,7 @@ chrome(){
 		--group-add audio \
 		--group-add video \
 		--name chrome \
-		${DOCKER_REPO_PREFIX}/chrome --user-data-dir=/data \
+		${DOCKER_REPO_PREFIX}chrome --user-data-dir=/data \
 		--proxy-server="$proxy" \
 		--host-resolver-rules="$map" $args
 
@@ -191,11 +199,11 @@ consul(){
 		--net host \
 		-e GOMAXPROCS=2 \
 		--name consul \
-		${DOCKER_REPO_PREFIX}/consul agent \
+		${DOCKER_REPO_PREFIX}consul agent \
 		-bootstrap-expect 1 \
 		-config-dir /etc/consul.d \
 		-data-dir /data \
-		-encrypt $(docker run --rm ${DOCKER_REPO_PREFIX}/consul keygen) \
+		-encrypt $(docker run --rm ${DOCKER_REPO_PREFIX}consul keygen) \
 		-ui-dir /usr/src/consul \
 		-server \
 		-dc neverland \
@@ -204,14 +212,30 @@ consul(){
 	sudo hostess add consul $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" consul)
 	browser-exec "http://consul:8500"
 }
+cordova(){
+  images_build cordova
+
+	del_stopped cordova
+
+	docker run -it --rm \
+		--privileged \
+    -v /dev/bus/usb:/dev/bus/usb \
+    -v $PWD:/src \
+		-w /src \
+		cordova "$@"
+}
 dcos(){
+  images_build dcos-cli
+
 	docker run -it --rm \
 		-v $HOME/.dcos:/root/.dcos \
 		-v $(pwd):/root/apps \
 		-w /root/apps \
-		${DOCKER_REPO_PREFIX}/dcos-cli "$@"
+		${DOCKER_REPO_PREFIX}dcos-cli "$@"
 }
 firefox(){
+  images_build firefox
+
 	del_stopped firefox
 
 	docker run -d \
@@ -231,28 +255,34 @@ firefox(){
 		--device /dev/snd \
 		--device /dev/dri \
 		--name firefox \
-		${DOCKER_REPO_PREFIX}/firefox "$@"
+		${DOCKER_REPO_PREFIX}firefox "$@"
 
 	# exit current shell
 	exit 0
 }
 gcalcli(){
+  images_build gcalcli
+
 	docker run --rm -it \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v $HOME/.gcalcli/home:/home/gcalcli/home \
 		-v $HOME/.gcalcli/work/oauth:/home/gcalcli/.gcalcli_oauth \
 		-v $HOME/.gcalcli/work/gcalclirc:/home/gcalcli/.gcalclirc \
 		--name gcalcli \
-		${DOCKER_REPO_PREFIX}/gcalcli "$@"
+		${DOCKER_REPO_PREFIX}gcalcli "$@"
 }
 gcloud(){
+  images_build gcloud
+
 	docker run --rm -it \
 		-v $HOME/.gcloud:/root/.config/gcloud \
 		-v $HOME/.ssh:/root/.ssh:ro \
 		--name gcloud \
-		${DOCKER_REPO_PREFIX}/gcloud "$@"
+		${DOCKER_REPO_PREFIX}gcloud "$@"
 }
 gimp(){
+  images_build gimp
+
 	del_stopped gimp
 
 	docker run -d \
@@ -264,27 +294,35 @@ gimp(){
 		-e GDK_SCALE \
 		-e GDK_DPI_SCALE \
 		--name gimp \
-		${DOCKER_REPO_PREFIX}/gimp
+		${DOCKER_REPO_PREFIX}gimp
 }
 hollywood(){
+  images_build hollywood
+
 	docker run --rm -it \
 		--name hollywood \
-		${DOCKER_REPO_PREFIX}/hollywood
+		${DOCKER_REPO_PREFIX}hollywood
 }
 htop(){
+  images_build htop
+
 	docker run --rm -it \
 		--pid host \
 		--net none \
 		--name htop \
-		${DOCKER_REPO_PREFIX}/htop
+		${DOCKER_REPO_PREFIX}htop
 }
 http(){
+  images_build httpie
+
 	docker run -t --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		--log-driver none \
-		${DOCKER_REPO_PREFIX}/httpie "$@"
+		${DOCKER_REPO_PREFIX}httpie "$@"
 }
 imagemin(){
+  images_build imagemin
+
 	local image=$1
 	local extension="${image##*.}"
 	local filename="${image%.*}"
@@ -292,9 +330,11 @@ imagemin(){
 	docker run --rm -it \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v $HOME/Pictures:/root/Pictures \
-		${DOCKER_REPO_PREFIX}/imagemin sh -c "imagemin /root/Pictures/${image} > /root/Pictures/${filename}_min.${extension}"
+		${DOCKER_REPO_PREFIX}imagemin sh -c "imagemin /root/Pictures/${image} > /root/Pictures/${filename}_min.${extension}"
 }
 irssi() {
+  images_build irssi
+
 	del_stopped irssi
 	# relies_on notify_osd
 
@@ -303,23 +343,29 @@ irssi() {
 		-v $HOME/.irssi:/home/user/.irssi \
 		--read-only \
 		--name irssi \
-		${DOCKER_REPO_PREFIX}/irssi
+		${DOCKER_REPO_PREFIX}irssi
 }
 john(){
+  images_build john
+
 	local file=$(realpath $1)
 
 	docker run --rm -it \
 		-v ${file}:/root/$(basename ${file}) \
-		${DOCKER_REPO_PREFIX}/john $@
+		${DOCKER_REPO_PREFIX}john $@
 }
 kernel_builder(){
+  images_build kernel-builder
+
 	docker run --rm -it \
 		-v /usr/src:/usr/src \
 		--cpu-shares=512 \
 		--name kernel-builder \
-		${DOCKER_REPO_PREFIX}/kernel-builder
+		${DOCKER_REPO_PREFIX}kernel-builder
 }
 kvm(){
+  images_build kvm
+
 	del_stopped kvm
 	relies_on pulseaudio
 
@@ -336,9 +382,11 @@ kvm(){
 		--group-add audio \
 		--name kvm \
 		--privileged \
-		${DOCKER_REPO_PREFIX}/kvm
+		${DOCKER_REPO_PREFIX}kvm
 }
 libreoffice(){
+  images_build libreoffice
+
 	del_stopped libreoffice
 
 	docker run -d \
@@ -349,28 +397,36 @@ libreoffice(){
 		-e GDK_SCALE \
 		-e GDK_DPI_SCALE \
 		--name libreoffice \
-		${DOCKER_REPO_PREFIX}/libreoffice
+		${DOCKER_REPO_PREFIX}libreoffice
 }
 lpass(){
+  images_build lpass
+
 	docker run --rm -it \
 		-v $HOME/.lpass:/root/.lpass \
 		--name lpass \
-		${DOCKER_REPO_PREFIX}/lpass "$@"
+		${DOCKER_REPO_PREFIX}lpass "$@"
 }
 lynx(){
+  images_build lynx
+
 	docker run --rm -it \
 		--name lynx \
-		${DOCKER_REPO_PREFIX}/lynx "$@"
+		${DOCKER_REPO_PREFIX}lynx "$@"
 }
 masscan(){
+  images_build masscan
+
 	docker run -it --rm \
 		--log-driver none \
 		--net host \
 		--cap-add NET_ADMIN \
 		--name masscan \
-		${DOCKER_REPO_PREFIX}/masscan "$@"
+		${DOCKER_REPO_PREFIX}masscan "$@"
 }
 mpd(){
+  images_build mpd
+
 	del_stopped mpd
 
 	# adding cap sys_admin so I can use nfs mount
@@ -384,9 +440,11 @@ mpd(){
 		-v $HOME/.mpd:/var/lib/mpd \
 		-v $HOME/.mpd.conf:/etc/mpd.conf \
 		--name mpd \
-		${DOCKER_REPO_PREFIX}/mpd
+		${DOCKER_REPO_PREFIX}mpd
 }
 mutt(){
+  images_build mutt
+
 	# subshell so we dont overwrite variables
 	(
 	local account=$1
@@ -413,19 +471,23 @@ mutt(){
 		-v $HOME/.gnupg:/home/user/.gnupg:ro \
 		-v /etc/localtime:/etc/localtime:ro \
 		--name mutt${account} \
-		${DOCKER_REPO_PREFIX}/mutt
+		${DOCKER_REPO_PREFIX}mutt
 	)
 }
 ncmpc(){
+  images_build ncmpc
+
 	del_stopped ncmpc
 
 	docker run --rm -it \
 		-v $HOME/.mpd/socket:/var/run/mpd/socket \
 		-e MPD_HOST=/var/run/mpd/socket \
 		--name ncmpc \
-		${DOCKER_REPO_PREFIX}/ncmpc "$@"
+		${DOCKER_REPO_PREFIX}ncmpc "$@"
 }
 neoman(){
+  images_build neoman
+
 	del_stopped neoman
 
 	docker run -d \
@@ -435,9 +497,11 @@ neoman(){
 		--device /dev/bus/usb \
 		--device /dev/usb \
 		--name neoman \
-		${DOCKER_REPO_PREFIX}/neoman
+		${DOCKER_REPO_PREFIX}neoman
 }
 nes(){
+  images_build nes
+
 	del_stopped nes
 	local game=$1
 
@@ -447,19 +511,46 @@ nes(){
 		--device /dev/dri \
 		--device /dev/snd \
 		--name nes \
-		${DOCKER_REPO_PREFIX}/nes /games/${game}.rom
+		${DOCKER_REPO_PREFIX}nes /games/${game}.rom
 }
+alias nb=netbeans
 netbeans(){
+  images_build netbeans
+
 	docker run -ti --rm \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-v `pwd`:/workspace \
-		fgrehm/netbeans:v8.0.1
+		-v `pwd`:/home/developer \
+		${DOCKER_REPO_PREFIX}netbeans
+}
+alias nb-php=netbeans_php
+alias netbeans-php=netbeans_php
+netbeans_php(){
+  images_build netbeans-php
+
+	docker run -ti --rm \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v `pwd`:/home/developer \
+		${DOCKER_REPO_PREFIX}netbeans-php
+}
+alias nb-java=netbeans_java
+alias netbeans-java=netbeans_java
+netbeans_java(){
+  images_build netbeans-java
+
+	docker run -ti --rm \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v `pwd`:/home/developer \
+		${DOCKER_REPO_PREFIX}netbeans-java
 }
 netcat(){
+  images_build netcat
+
 	docker run --rm -it \
 		--net host \
-		${DOCKER_REPO_PREFIX}/netcat "$@"
+		${DOCKER_REPO_PREFIX}netcat "$@"
 }
 nginx(){
 	del_stopped nginx
@@ -472,14 +563,18 @@ nginx(){
 		nginx
 
 	# add domain to hosts & open nginx
-	sudo hostess add jess 127.0.0.1
+	sudo hostess add sierra 127.0.0.1
 }
 nmap(){
+  images_build nmap
+
 	docker run --rm -it \
 		--net host \
-		${DOCKER_REPO_PREFIX}/nmap "$@"
+		${DOCKER_REPO_PREFIX}nmap "$@"
 }
 notify_osd(){
+  images_build notify-osd
+
 	del_stopped notify_osd
 
 	docker run -d \
@@ -491,7 +586,7 @@ notify_osd(){
 		-v /home/user/.cache/dconf \
 		-e DISPLAY=unix$DISPLAY \
 		--name notify_osd \
-		${DOCKER_REPO_PREFIX}/notify-osd
+		${DOCKER_REPO_PREFIX}notify-osd
 }
 alias notify-send=notify_send
 notify_send(){
@@ -501,6 +596,8 @@ notify_send(){
 	docker exec -i notify_osd notify-send "$1" "${args}"
 }
 pandoc(){
+  images_build pandoc
+
 	local file=${@: -1}
 	local lfile=$(readlink -m "$(pwd)/${file}")
 	local rfile=$(readlink -m "/$(basename $file)")
@@ -510,9 +607,11 @@ pandoc(){
 		-v ${lfile}:${rfile} \
 		-v /tmp:/tmp \
 		--name pandoc \
-		${DOCKER_REPO_PREFIX}/pandoc ${args} ${rfile}
+		${DOCKER_REPO_PREFIX}pandoc ${args} ${rfile}
 }
 pivman(){
+  images_build pivman
+
 	del_stopped pivman
 
 	docker run -d \
@@ -522,27 +621,33 @@ pivman(){
 		--device /dev/bus/usb \
 		--device /dev/usb \
 		--name pivman \
-		${DOCKER_REPO_PREFIX}/pivman
+		${DOCKER_REPO_PREFIX}pivman
 }
 pms(){
+  images_build pms
+
 	del_stopped pms
 
 	docker run --rm -it \
 		-v $HOME/.mpd/socket:/var/run/mpd/socket \
 		-e MPD_HOST=/var/run/mpd/socket \
 		--name pms \
-		${DOCKER_REPO_PREFIX}/pms "$@"
+		${DOCKER_REPO_PREFIX}pms "$@"
 }
 pond(){
+  images_build pond
+
 	del_stopped pond
 	relies_on torproxy
 
 	docker run --rm -it \
 		--net container:torproxy \
 		--name pond \
-		${DOCKER_REPO_PREFIX}/pond
+		${DOCKER_REPO_PREFIX}pond
 }
 privoxy(){
+  images_build privoxy
+
 	del_stopped privoxy
 	relies_on torproxy
 
@@ -552,11 +657,13 @@ privoxy(){
 		-v /etc/localtime:/etc/localtime:ro \
 		-p 8118:8118 \
 		--name privoxy \
-		${DOCKER_REPO_PREFIX}/privoxy
+		${DOCKER_REPO_PREFIX}privoxy
 
 	sudo hostess add privoxy $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" privoxy)
 }
 pulseaudio(){
+  images_build pulseaudio
+
 	del_stopped pulseaudio
 
 	docker run -d \
@@ -566,15 +673,17 @@ pulseaudio(){
 		--restart always \
 		--group-add audio \
 		--name pulseaudio \
-		${DOCKER_REPO_PREFIX}/pulseaudio
+		${DOCKER_REPO_PREFIX}pulseaudio
 }
 rainbowstream(){
+  images_build rainbowstream
+
 	docker run -it --rm \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v $HOME/.rainbow_oauth:/root/.rainbow_oauth \
 		-v $HOME/.rainbow_config.json:/root/.rainbow_config.json \
 		--name rainbowstream \
-		${DOCKER_REPO_PREFIX}/rainbowstream
+		${DOCKER_REPO_PREFIX}rainbowstream
 }
 registrator(){
 	del_stopped registrator
@@ -586,6 +695,8 @@ registrator(){
 		gliderlabs/registrator consul:
 }
 remmina(){
+  images_build remmina
+
 	del_stopped remmina
 
 	docker run -d \
@@ -597,9 +708,11 @@ remmina(){
 		-v $HOME/.remmina:/root/.remmina \
 		--name remmina \
 		--net host \
-		${DOCKER_REPO_PREFIX}/remmina
+		${DOCKER_REPO_PREFIX}remmina
 }
 ricochet(){
+  images_build ricochet
+
 	del_stopped ricochet
 
 	docker run -d \
@@ -611,9 +724,11 @@ ricochet(){
 		-e QT_DEVICE_PIXEL_RATIO \
 		--device /dev/dri \
 		--name ricochet \
-		${DOCKER_REPO_PREFIX}/ricochet
+		${DOCKER_REPO_PREFIX}ricochet
 }
 rstudio(){
+  images_build rstudio
+
 	del_stopped rstudio
 
 	docker run -d \
@@ -625,9 +740,11 @@ rstudio(){
 		-e QT_DEVICE_PIXEL_RATIO \
 		--device /dev/dri \
 		--name rstudio \
-		${DOCKER_REPO_PREFIX}/rstudio
+		${DOCKER_REPO_PREFIX}rstudio
 }
 s3cmdocker(){
+  images_build s3cmd
+
 	del_stopped s3cmd
 
 	docker run --rm -it \
@@ -635,9 +752,11 @@ s3cmdocker(){
 		-e AWS_SECRET_KEY="${DOCKER_AWS_ACCESS_SECRET}" \
 		-v $(pwd):/root/s3cmd-workspace \
 		--name s3cmd \
-		${DOCKER_REPO_PREFIX}/s3cmd "$@"
+		${DOCKER_REPO_PREFIX}s3cmd "$@"
 }
 scudcloud(){
+  images_build scudcloud
+
 	del_stopped scudcloud
 
 	docker run -d \
@@ -660,12 +779,14 @@ scudcloud(){
 		-v $HOME/.scudcloud:/home/jessie/.config/scudcloud \
 		--device /dev/snd \
 		--name scudcloud \
-		${DOCKER_REPO_PREFIX}/scudcloud
+		${DOCKER_REPO_PREFIX}scudcloud
 
 	# exit current shell
 	exit 0
 }
 shorewall(){
+  images_build shorewall
+
 	del_stopped shorewall
 
 	docker run --rm -it \
@@ -673,9 +794,11 @@ shorewall(){
 		--cap-add NET_ADMIN \
 		--privileged \
 		--name shorewall \
-		${DOCKER_REPO_PREFIX}/shorewall "$@"
+		${DOCKER_REPO_PREFIX}shorewall "$@"
 }
 skype(){
+  images_build skype
+
 	del_stopped skype
 	relies_on pulseaudio
 
@@ -690,9 +813,11 @@ skype(){
 		--group-add video \
 		--group-add audio \
 		--name skype \
-		${DOCKER_REPO_PREFIX}/skype
+		${DOCKER_REPO_PREFIX}skype
 }
 slack(){
+  images_build slack
+
 	del_stopped slack
 
 	sudo docker run -d \
@@ -706,9 +831,11 @@ slack(){
 		--group-add video \
 		-v /home/jessie/.slack:/root/.config/Slack \
 		--name slack \
-		${DOCKER_REPO_PREFIX}/slack
+		${DOCKER_REPO_PREFIX}slack
 }
 spotify(){
+  images_build spotify
+
 	del_stopped spotify
 
 	docker run -d \
@@ -722,17 +849,21 @@ spotify(){
 		--group-add audio \
 		--group-add video \
 		--name spotify \
-		${DOCKER_REPO_PREFIX}/spotify
+		${DOCKER_REPO_PREFIX}spotify
 }
 ssh2john(){
+  images_build john
+
 	local file=$(realpath $1)
 
 	docker run --rm -it \
 		-v ${file}:/root/$(basename ${file}) \
 		--entrypoint ssh2john \
-		${DOCKER_REPO_PREFIX}/john $@
+		${DOCKER_REPO_PREFIX}john $@
 }
 steam(){
+  images_build steam
+
 	del_stopped steam
 	relies_on pulseaudio
 
@@ -747,42 +878,52 @@ steam(){
 		-e PULSE_SERVER=pulseaudio \
 		--device /dev/dri \
 		--name steam \
-		${DOCKER_REPO_PREFIX}/steam
+		${DOCKER_REPO_PREFIX}steam
 }
 t(){
+  images_build t
+
 	docker run -t --rm \
 		-v $HOME/.trc:/root/.trc \
 		--log-driver none \
-		${DOCKER_REPO_PREFIX}/t "$@"
+		${DOCKER_REPO_PREFIX}t "$@"
 }
 tarsnap(){
+  images_build tarsnap
+
 	docker run --rm -it \
 		-v $HOME/.tarsnaprc:/root/.tarsnaprc \
 		-v $HOME/.tarsnap:/root/.tarsnap \
 		-v $HOME:/root/workdir \
-		${DOCKER_REPO_PREFIX}/tarsnap "$@"
+		${DOCKER_REPO_PREFIX}tarsnap "$@"
 }
 telnet(){
+  images_build telnet
+
 	docker run -it --rm \
 		--log-driver none \
-		${DOCKER_REPO_PREFIX}/telnet "$@"
+		${DOCKER_REPO_PREFIX}telnet "$@"
 }
 termboy(){
+  images_build termboy
+
 	del_stopped termboy
 	local game=$1
 
 	docker run --rm -it \
 		--device /dev/snd \
 		--name termboy \
-		${DOCKER_REPO_PREFIX}/nes /games/${game}.rom
+		${DOCKER_REPO_PREFIX}nes /games/${game}.rom
 }
 tor(){
+  images_build tor
+
 	del_stopped tor
 
 	docker run -d \
 		--net host \
 		--name tor \
-		${DOCKER_REPO_PREFIX}/tor
+		${DOCKER_REPO_PREFIX}tor
 
 	# set up the redirect iptables rules
 	sudo setup-tor-iptables
@@ -791,6 +932,8 @@ tor(){
 	browser-exec "https://check.torproject.org/"
 }
 torbrowser(){
+  images_build tor-browser
+
 	del_stopped torbrowser
 
 	docker run -d \
@@ -801,12 +944,14 @@ torbrowser(){
 		-e GDK_DPI_SCALE \
 		--device /dev/snd \
 		--name torbrowser \
-		${DOCKER_REPO_PREFIX}/tor-browser
+		${DOCKER_REPO_PREFIX}tor-browser
 
 	# exit current shell
 	exit 0
 }
 tormessenger(){
+  images_build tor-messenger
+
 	del_stopped tormessenger
 
 	docker run -d \
@@ -817,12 +962,14 @@ tormessenger(){
 		-e GDK_DPI_SCALE \
 		--device /dev/snd \
 		--name tormessenger \
-		${DOCKER_REPO_PREFIX}/tor-messenger
+		${DOCKER_REPO_PREFIX}tor-messenger
 
 	# exit current shell
 	exit 0
 }
 torproxy(){
+  images_build tor-proxy
+
 	del_stopped torproxy
 
 	docker run -d \
@@ -830,16 +977,20 @@ torproxy(){
 		-v /etc/localtime:/etc/localtime:ro \
 		-p 9050:9050 \
 		--name torproxy \
-		${DOCKER_REPO_PREFIX}/tor-proxy
+		${DOCKER_REPO_PREFIX}tor-proxy
 
 	sudo hostess add torproxy $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" torproxy)
 }
 traceroute(){
+  images_build traceroute
+
 	docker run --rm -it \
 		--net host \
-		${DOCKER_REPO_PREFIX}/traceroute "$@"
+		${DOCKER_REPO_PREFIX}traceroute "$@"
 }
 transmission(){
+  images_build transmission
+
 	del_stopped transmission
 
 	docker run -d \
@@ -850,13 +1001,15 @@ transmission(){
 		-p 51413:51413 \
 		-p 51413:51413/udp \
 		--name transmission \
-		${DOCKER_REPO_PREFIX}/transmission
+		${DOCKER_REPO_PREFIX}transmission
 
 
 	sudo hostess add transmission $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" transmission)
 	browser-exec "http://transmission:9091"
 }
 virsh(){
+  images_build libvirt-client
+
 	relies_on kvm
 
 	docker run -it --rm \
@@ -864,9 +1017,11 @@ virsh(){
 		-v /run/libvirt:/var/run/libvirt \
 		--log-driver none \
 		--net container:kvm \
-		${DOCKER_REPO_PREFIX}/libvirt-client "$@"
+		${DOCKER_REPO_PREFIX}libvirt-client "$@"
 }
 virt_viewer(){
+  images_build virt-viewer
+
 	relies_on kvm
 
 	docker run -it --rm \
@@ -878,10 +1033,12 @@ virt_viewer(){
 		--group-add audio \
 		--log-driver none \
 		--net container:kvm \
-		${DOCKER_REPO_PREFIX}/virt-viewer "$@"
+		${DOCKER_REPO_PREFIX}virt-viewer "$@"
 }
 alias virt-viewer="virt_viewer"
 visualstudio(){
+  images_build visualstudio
+
 	del_stopped visualstudio
 
 	docker run -d \
@@ -889,9 +1046,11 @@ visualstudio(){
 		-v /tmp/.X11-unix:/tmp/.X11-unix  \
 		-e DISPLAY=unix$DISPLAY \
 		--name visualstudio \
-		${DOCKER_REPO_PREFIX}/visualstudio
+		${DOCKER_REPO_PREFIX}visualstudio
 }
 vlc(){
+  images_build vlc
+
 	del_stopped vlc
 	relies_on pulseaudio
 
@@ -909,18 +1068,22 @@ vlc(){
 		-v $HOME/Torrents:/home/vlc/Torrents \
 		--device /dev/dri \
 		--name vlc \
-		${DOCKER_REPO_PREFIX}/vlc
+		${DOCKER_REPO_PREFIX}vlc
 }
 watchman(){
+  images_build watchman
+
 	del_stopped watchman
 
 	docker run -d \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v $HOME/Downloads:/root/Downloads \
 		--name watchman \
-		${DOCKER_REPO_PREFIX}/watchman --foreground
+		${DOCKER_REPO_PREFIX}watchman --foreground
 }
 wireshark(){
+  images_build wireshark
+
 	del_stopped wireshark
 
 	docker run -d \
@@ -929,15 +1092,19 @@ wireshark(){
 		-e DISPLAY=unix$DISPLAY \
 		--net host \
 		--name wireshark \
-		${DOCKER_REPO_PREFIX}/wireshark
+		${DOCKER_REPO_PREFIX}wireshark
 }
 wrk(){
+  images_build wrk
+
 	docker run -it --rm \
 		--log-driver none \
 		--name wrk \
-		${DOCKER_REPO_PREFIX}/wrk "$@"
+		${DOCKER_REPO_PREFIX}wrk "$@"
 }
 ykpersonalize(){
+  images_build ykpersonalize
+
 	del_stopped ykpersonalize
 
 	docker run --rm -it \
@@ -945,9 +1112,12 @@ ykpersonalize(){
 		--device /dev/usb \
 		--device /dev/bus/usb \
 		--name ykpersonalize \
-		${DOCKER_REPO_PREFIX}/ykpersonalize bash
+		${DOCKER_REPO_PREFIX}ykpersonalize bash
 }
+alias yubico-piv-tool="yubico_piv_tool"
 yubico_piv_tool(){
+  images_build yubico-piv-tool
+
 	del_stopped yubico-piv-tool
 
 	docker run --rm -it \
@@ -955,15 +1125,16 @@ yubico_piv_tool(){
 		--device /dev/usb \
 		--device /dev/bus/usb \
 		--name yubico-piv-tool \
-		${DOCKER_REPO_PREFIX}/yubico-piv-tool bash
+		${DOCKER_REPO_PREFIX}yubico-piv-tool bash
 }
-alias yubico-piv-tool="yubico_piv_tool"
 
 
 ###
 ### Awesome sauce by @jpetazzo
 ###
 command_not_found_handle () {
+  images_build $@
+
 	# Check if there is a container image with that name
 	if ! docker inspect --format '{{ .Author }}' "$1" >&/dev/null ; then
 		echo "$0: $1: command not found"
@@ -984,5 +1155,5 @@ command_not_found_handle () {
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /home:/home \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		"${DOCKER_REPO_PREFIX}/$@"
+		"${DOCKER_REPO_PREFIX}$@"
 }

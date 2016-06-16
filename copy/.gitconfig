@@ -42,7 +42,8 @@
 [merge]
   log = true
 [diff]
-  external = meld_diff
+  #git config --global diff.tool meld[diff]
+  external = git-meld
 [difftool "Kaleidoscope"]
   cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
 [rerere]
