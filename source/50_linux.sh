@@ -7,6 +7,11 @@ if is_debian; then
   alias install="sudo apt-get install"
   alias remove="sudo apt-get remove"
   alias search="apt-cache search"
+elif is_archlinux; then
+  alias update="sudo pacman -qq update && sudo pacman upgrade"
+  alias install="sudo pacman install"
+  alias remove="sudo pacman remove"
+  alias search="pacman -Q"
 else
   alias update="sudo yum -qq update && sudo yum upgrade"
   alias install="sudo yum install"

@@ -1,0 +1,16 @@
+export DOTFILES_LANGUAGE=CFG_LANGUAGE
+
+
+if [ "$DOTFILES_LANGUAGE" == "pt-BR" ]; then
+  export DOTFILES_FOLDER_WORKSPACE=Área\ de\ Trabalho
+	export DOTFILES_FOLDER_DOCUMENTS=Documentos
+  export DOTFILES_FOLDER_MUSIC=Música
+  export DOTFILES_FOLDER_VIDEO=Video
+	export DOTFILES_FOLDER_PICTURES=Imagens
+else
+  export DOTFILES_FOLDER_WORKSPACE=Dashboard
+	export DOTFILES_FOLDER_DOCUMENTS=Documents
+  export DOTFILES_FOLDER_MUSIC=Music
+  export DOTFILES_FOLDER_VIDEO=Video
+	export DOTFILES_FOLDER_PICTURES=Pictures
+fi

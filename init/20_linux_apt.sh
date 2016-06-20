@@ -39,6 +39,9 @@ e_header "Updating APT"
 if is_debian; then
   sudo apt-get -qq update
   sudo apt-get -qq dist-upgrade
+elif is_archlinux; then
+  sudo pacman -qq update
+  sudo pacman -qq dist-upgrade
 else
   sudo yum -qq update
   sudo yum -qq dist-upgrade
@@ -75,10 +78,17 @@ packages=(
 if is_debian; then
   packages+=(
     php7.0-xml #precisa pro phpunit funcionar
+    openssh-server
+  )
+elif is_archlinux; then
+  packages+=(
+    php7.0-xml #precisa pro phpunit funcionar
+    openssh
   )
 else
   packages+=(
     php70w-xml #precisa pro phpunit funcionar
+    openssh-server
   )
 fi
 
@@ -92,6 +102,8 @@ if (( ${#packages[@]} > 0 )); then
   for package in "${packages[@]}"; do
     if is_debian; then
       sudo apt-get -qq install "$package"
+    elif is_archlinux; then
+      sudo pacman -qq install "$package"
     else
       sudo yum -qq install "$package"
     fi
@@ -113,6 +125,8 @@ if [[ ! "$(type -P atom)" ]]; then
   (
     if is_debian; then
       sudo add-apt-repository ppa:webupd8team/atom -y && sudo apt-get -qq update && sudo apt-get install -qq atom -y
+    elif is_archlinux; then
+      echo 'Atom not can installed now'
     else
       sudo add-apt-repository ppa:webupd8team/atom -y && sudo yum -qq update && sudo yum install -qq atom -y
     fi
@@ -127,6 +141,8 @@ if [[ ! "$(type -P google-chrome)" ]]; then
     sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
     if is_debian; then
       sudo apt-get -qq update ; sudo apt-get -qq install google-chrome-stable -y
+    elif is_archlinux; then
+      sudo pacman -qq update ; sudo pacman -qq install google-chrome-stable -y
     else
       sudo yum -qq update ; sudo yum -qq install google-chrome-stable -y
     fi
@@ -138,5 +154,21 @@ if [[ ! "$(type -P fab)" ]]; then
   e_header "Installing Fabric"
   (
     sudo pip install fabric
+  )
+fi
+
+# Install Google Hangout
+if [[ ! "$(dpkg -l |grep google-talkplugin)" ]]; then
+  e_header "Installing Google Hangout"
+  (
+    if is_debian; then
+      wget https://dl.google.com/linux/direct/google-talkplugin_current_amd64.deb -O ~/Downloads/google-talkplugin.deb
+      sudo dpkg -i ~/Downloads/google-talkplugin.deb
+      rm ~/Downloads/google-talkplugin.deb
+    else
+      wget https://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm -O ~/Downloads/google-talkplugin.rpm
+      sudo dpkg -i ~/Downloads/google-talkplugin.rpm
+      rm ~/Downloads/google-talkplugin.rpm
+    fi
   )
 fi

@@ -132,7 +132,7 @@ cheese(){
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
-		-v $HOME/Pictures:/root/Pictures \
+		-v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
 		--device /dev/video0 \
 		--device /dev/snd \
 		--device /dev/dri \
@@ -162,7 +162,7 @@ chrome(){
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
 		-v $HOME/Downloads:/root/Downloads \
-		-v $HOME/Pictures:/root/Pictures \
+		-v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
 		-v $HOME/Torrents:/root/Torrents \
 		-v $HOME/.chrome:/data \
 		-v /dev/shm:/dev/shm \
@@ -247,7 +247,7 @@ firefox(){
 		-v $HOME/.firefox/cache:/root/.cache/mozilla \
 		-v $HOME/.firefox/mozilla:/root/.mozilla \
 		-v $HOME/Downloads:/root/Downloads \
-		-v $HOME/Pictures:/root/Pictures \
+		-v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
 		-v $HOME/Torrents:/root/Torrents \
 		-e DISPLAY=unix$DISPLAY \
 		-e GDK_SCALE \
@@ -289,7 +289,7 @@ gimp(){
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
-		-v $HOME/Pictures:/root/Pictures \
+		-v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
 		-v $HOME/.gtkrc:/root/.gtkrc \
 		-e GDK_SCALE \
 		-e GDK_DPI_SCALE \
@@ -329,7 +329,7 @@ imagemin(){
 
 	docker run --rm -it \
 		-v /etc/localtime:/etc/localtime:ro \
-		-v $HOME/Pictures:/root/Pictures \
+		-v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
 		${DOCKER_REPO_PREFIX}imagemin sh -c "imagemin /root/Pictures/${image} > /root/Pictures/${filename}_min.${extension}"
 }
 irssi() {
@@ -608,6 +608,18 @@ pandoc(){
 		-v /tmp:/tmp \
 		--name pandoc \
 		${DOCKER_REPO_PREFIX}pandoc ${args} ${rfile}
+}
+phonegap(){
+	  images_build phonegap
+
+		del_stopped phonegap
+
+		docker run -it --rm \
+			--privileged \
+	    -v /dev/bus/usb:/dev/bus/usb \
+	    -v $PWD:/data \
+			-w /data \
+			phonegap "$@"
 }
 pivman(){
   images_build pivman

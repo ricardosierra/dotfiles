@@ -69,12 +69,14 @@ function is_osx() {
   [[ "$OSTYPE" =~ ^darwin ]] || return 1
 }
 # LINUX
+# Globals
 function is_linux() {
-  if is_debian || is_redhat; then
+  if is_debian || is_redhat || is_archlinux; then
     return 0
   fi
   return 1
 }
+# SemiGlobals
 function is_debian() {
   if is_kali || is_ubuntu || is_debianOS; then
     return 0
@@ -87,6 +89,10 @@ function is_redhat() {
   fi
   return 1
 }
+function is_archlinux() {
+  [[ "$(cat /etc/issue 2> /dev/null)" =~ Arch ]] || return 1 # Aparece Arch Linux
+}
+# Especificos
 function is_debianOS() {
   [[ "$(cat /etc/issue 2> /dev/null)" =~ Debian ]] || return 1
 }
@@ -94,7 +100,7 @@ function is_redhatOS() {
   [[ "$(cat /etc/issue 2> /dev/null)" =~ RedHat ]] || return 1
 }
 function is_centosOS() {
-  [[ "$(cat /etc/issue 2> /dev/null)" =~ Fedora ]] || return 1
+  [[ "$(cat /etc/issue 2> /dev/null)" =~ CentOS ]] || return 1
 }
 function is_fedora() {
   [[ "$(cat /etc/issue 2> /dev/null)" =~ Fedora ]] || return 1
@@ -207,9 +213,28 @@ generate_custom_file_for_git () {
     success 'gitconfig'
   fi
 }
+# DOTFILES CONFIGURE
+generate_custom_config_for_dotfiles () {
+  if ! [ -f ~/.dotfiles/copy/.dotfilesconfig ]
+  then
+    info 'setup dotfilesconfig'
+
+    dotfiles_cfg_language=0;
+
+    while [ "$dotfiles_cfg_language" != "pt-BR" -a "$dotfiles_cfg_language" != "en-US" ]; do
+        user ' - What is your computer Language (pt-BR || en-US)?'
+        read -e dotfiles_cfg_language
+    done
+
+    sed -e "s/CFG_LANGUAGE/$dotfiles_cfg_language/g" ~/.dotfiles/copy/.dotfilesconfig.example > ~/.dotfiles/copy/.dotfilesconfig
+
+    success 'dotfilesconfig'
+  fi
+}
 
 # Configure All Files with end .example
 generate_custom_files () {
+  generate_custom_config_for_dotfiles
   generate_custom_file_for_git
 }
 
