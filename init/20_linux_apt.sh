@@ -65,11 +65,13 @@ packages=(
   php
   python
   python-pip
+  rxvt-unicode
   silversearcher-ag
   sl
   telnet
   tree
   xclip
+  xcompmgr
   vim
   vim-gnome
 )

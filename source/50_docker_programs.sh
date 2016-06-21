@@ -14,6 +14,10 @@ dcleanup(){
 }
 images_build(){
 	local name=$1
+	local version=$2
+  if [[ "$version" != "" ]]; then
+		name="${name}/${version}"
+	fi
   if [[ "$(docker images -q $name 2> /dev/null)" == "" ]]; then
     docker build -t $name ${DOCKERFILES_PATH}/$name
   fi
@@ -610,7 +614,7 @@ pandoc(){
 		${DOCKER_REPO_PREFIX}pandoc ${args} ${rfile}
 }
 phonegap(){
-	  images_build phonegap
+	  images_build phonegap 5.0.0
 
 		del_stopped phonegap
 
