@@ -71,7 +71,7 @@ packages=(
   telnet
   tree
   xclip
-  xcompmgr
+  #xcompmgr #compiz, nao funciona no ubuntu
   vim
   vim-gnome
 )
@@ -156,6 +156,22 @@ if [[ ! "$(type -P fab)" ]]; then
   e_header "Installing Fabric"
   (
     sudo pip install fabric
+  )
+fi
+
+# Install Fabric
+if [[ ! "$(type -P slack-desktop)" ]]; then
+  e_header "Installing Slack Desktop"
+  (
+    if is_debian; then
+      wget https://downloads.slack-edge.com/linux_releases/slack-desktop-2.0.6-amd64.deb -O ~/Downloads/slack-desktop.deb
+      sudo dpkg -i ~/Downloads/slack-desktop.deb
+      rm ~/Downloads/slack-desktop.deb
+    else
+      wget https://downloads.slack-edge.com/linux_releases/slack-2.0.6-0.1.fc21.x86_64.rpm -O ~/Downloads/slack-desktop.rpm
+      sudo dpkg -i ~/Downloads/slack-desktop.rpm
+      rm ~/Downloads/slack-desktop.rpm
+    fi
   )
 fi
 

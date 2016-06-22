@@ -12,14 +12,24 @@ dcleanup(){
 	docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
 	docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
 }
-images_build(){
+images_local_build(){
 	local name=$1
 	local version=$2
+	#Versão vira uma subpasta do repositorio
   if [[ "$version" != "" ]]; then
-		name="${name}/${version}"
+		directory="${name}/${version}"
+  else
+		directory="${name}"
 	fi
+	#Se a pasta não existe, returna sem buildar nada
+	if [ ! -d "${DOCKERFILES_PATH}/${directory}" ]; then
+		echo "Erro - Dockerfile not found: "$directory
+		return 1
+	fi
+
   if [[ "$(docker images -q $name 2> /dev/null)" == "" ]]; then
-    docker build -t $name ${DOCKERFILES_PATH}/$name
+		echo "Docker Build: ${directory}"
+    docker build -t $name ${DOCKERFILES_PATH}/${directory}
   fi
 }
 del_stopped(){
@@ -217,7 +227,7 @@ consul(){
 	browser-exec "http://consul:8500"
 }
 cordova(){
-  images_build cordova
+  images_local_build cordova
 
 	del_stopped cordova
 
@@ -226,10 +236,10 @@ cordova(){
     -v /dev/bus/usb:/dev/bus/usb \
     -v $PWD:/src \
 		-w /src \
-		cordova "$@"
+		cordova cordova "$@"
 }
 dcos(){
-  images_build dcos-cli
+  images_local_build dcos-cli
 
 	docker run -it --rm \
 		-v $HOME/.dcos:/root/.dcos \
@@ -237,8 +247,17 @@ dcos(){
 		-w /root/apps \
 		${DOCKER_REPO_PREFIX}dcos-cli "$@"
 }
+dia(){
+  images_local_build dia
+
+	docker run -ti --rm \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v `pwd`:/root \
+		${DOCKER_REPO_PREFIX}dia
+}
 firefox(){
-  images_build firefox
+  images_local_build firefox
 
 	del_stopped firefox
 
@@ -265,7 +284,7 @@ firefox(){
 	exit 0
 }
 gcalcli(){
-  images_build gcalcli
+  images_local_build gcalcli
 
 	docker run --rm -it \
 		-v /etc/localtime:/etc/localtime:ro \
@@ -276,7 +295,7 @@ gcalcli(){
 		${DOCKER_REPO_PREFIX}gcalcli "$@"
 }
 gcloud(){
-  images_build gcloud
+  images_local_build gcloud
 
 	docker run --rm -it \
 		-v $HOME/.gcloud:/root/.config/gcloud \
@@ -285,7 +304,7 @@ gcloud(){
 		${DOCKER_REPO_PREFIX}gcloud "$@"
 }
 gimp(){
-  images_build gimp
+  images_local_build gimp
 
 	del_stopped gimp
 
@@ -300,15 +319,24 @@ gimp(){
 		--name gimp \
 		${DOCKER_REPO_PREFIX}gimp
 }
+gitk(){
+  images_local_build gitk
+
+	docker run -ti --rm \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v `pwd`:/var/www \
+		${DOCKER_REPO_PREFIX}gitk
+}
 hollywood(){
-  images_build hollywood
+  images_local_build hollywood
 
 	docker run --rm -it \
 		--name hollywood \
 		${DOCKER_REPO_PREFIX}hollywood
 }
 htop(){
-  images_build htop
+  images_local_build htop
 
 	docker run --rm -it \
 		--pid host \
@@ -317,7 +345,7 @@ htop(){
 		${DOCKER_REPO_PREFIX}htop
 }
 http(){
-  images_build httpie
+  images_local_build httpie
 
 	docker run -t --rm \
 		-v /var/run/docker.sock:/var/run/docker.sock \
@@ -325,7 +353,7 @@ http(){
 		${DOCKER_REPO_PREFIX}httpie "$@"
 }
 imagemin(){
-  images_build imagemin
+  images_local_build imagemin
 
 	local image=$1
 	local extension="${image##*.}"
@@ -337,7 +365,7 @@ imagemin(){
 		${DOCKER_REPO_PREFIX}imagemin sh -c "imagemin /root/Pictures/${image} > /root/Pictures/${filename}_min.${extension}"
 }
 irssi() {
-  images_build irssi
+  images_local_build irssi
 
 	del_stopped irssi
 	# relies_on notify_osd
@@ -350,7 +378,7 @@ irssi() {
 		${DOCKER_REPO_PREFIX}irssi
 }
 john(){
-  images_build john
+  images_local_build john
 
 	local file=$(realpath $1)
 
@@ -359,7 +387,7 @@ john(){
 		${DOCKER_REPO_PREFIX}john $@
 }
 kernel_builder(){
-  images_build kernel-builder
+  images_local_build kernel-builder
 
 	docker run --rm -it \
 		-v /usr/src:/usr/src \
@@ -368,7 +396,7 @@ kernel_builder(){
 		${DOCKER_REPO_PREFIX}kernel-builder
 }
 kvm(){
-  images_build kvm
+  images_local_build kvm
 
 	del_stopped kvm
 	relies_on pulseaudio
@@ -389,7 +417,7 @@ kvm(){
 		${DOCKER_REPO_PREFIX}kvm
 }
 libreoffice(){
-  images_build libreoffice
+  images_local_build libreoffice
 
 	del_stopped libreoffice
 
@@ -404,7 +432,7 @@ libreoffice(){
 		${DOCKER_REPO_PREFIX}libreoffice
 }
 lpass(){
-  images_build lpass
+  images_local_build lpass
 
 	docker run --rm -it \
 		-v $HOME/.lpass:/root/.lpass \
@@ -412,14 +440,14 @@ lpass(){
 		${DOCKER_REPO_PREFIX}lpass "$@"
 }
 lynx(){
-  images_build lynx
+  images_local_build lynx
 
 	docker run --rm -it \
 		--name lynx \
 		${DOCKER_REPO_PREFIX}lynx "$@"
 }
 masscan(){
-  images_build masscan
+  images_local_build masscan
 
 	docker run -it --rm \
 		--log-driver none \
@@ -429,7 +457,7 @@ masscan(){
 		${DOCKER_REPO_PREFIX}masscan "$@"
 }
 mpd(){
-  images_build mpd
+  images_local_build mpd
 
 	del_stopped mpd
 
@@ -446,8 +474,17 @@ mpd(){
 		--name mpd \
 		${DOCKER_REPO_PREFIX}mpd
 }
+mysql-workbench(){
+  images_local_build mysql-workbench
+
+	docker run -ti --rm \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v `pwd`:/var/www \
+		${DOCKER_REPO_PREFIX}mysql-workbench
+}
 mutt(){
-  images_build mutt
+  images_local_build mutt
 
 	# subshell so we dont overwrite variables
 	(
@@ -479,7 +516,7 @@ mutt(){
 	)
 }
 ncmpc(){
-  images_build ncmpc
+  images_local_build ncmpc
 
 	del_stopped ncmpc
 
@@ -490,7 +527,7 @@ ncmpc(){
 		${DOCKER_REPO_PREFIX}ncmpc "$@"
 }
 neoman(){
-  images_build neoman
+  images_local_build neoman
 
 	del_stopped neoman
 
@@ -504,7 +541,7 @@ neoman(){
 		${DOCKER_REPO_PREFIX}neoman
 }
 nes(){
-  images_build nes
+  images_local_build nes
 
 	del_stopped nes
 	local game=$1
@@ -519,7 +556,7 @@ nes(){
 }
 alias nb=netbeans
 netbeans(){
-  images_build netbeans
+  images_local_build netbeans
 
 	docker run -ti --rm \
 		-e DISPLAY=$DISPLAY \
@@ -530,7 +567,7 @@ netbeans(){
 alias nb-php=netbeans_php
 alias netbeans-php=netbeans_php
 netbeans_php(){
-  images_build netbeans-php
+  images_local_build netbeans-php
 
 	docker run -ti --rm \
 		-e DISPLAY=$DISPLAY \
@@ -541,7 +578,7 @@ netbeans_php(){
 alias nb-java=netbeans_java
 alias netbeans-java=netbeans_java
 netbeans_java(){
-  images_build netbeans-java
+  images_local_build netbeans-java
 
 	docker run -ti --rm \
 		-e DISPLAY=$DISPLAY \
@@ -550,7 +587,7 @@ netbeans_java(){
 		${DOCKER_REPO_PREFIX}netbeans-java
 }
 netcat(){
-  images_build netcat
+  images_local_build netcat
 
 	docker run --rm -it \
 		--net host \
@@ -570,14 +607,14 @@ nginx(){
 	sudo hostess add sierra 127.0.0.1
 }
 nmap(){
-  images_build nmap
+  images_local_build nmap
 
 	docker run --rm -it \
 		--net host \
 		${DOCKER_REPO_PREFIX}nmap "$@"
 }
 notify_osd(){
-  images_build notify-osd
+  images_local_build notify-osd
 
 	del_stopped notify_osd
 
@@ -600,7 +637,7 @@ notify_send(){
 	docker exec -i notify_osd notify-send "$1" "${args}"
 }
 pandoc(){
-  images_build pandoc
+  images_local_build pandoc
 
 	local file=${@: -1}
 	local lfile=$(readlink -m "$(pwd)/${file}")
@@ -614,7 +651,7 @@ pandoc(){
 		${DOCKER_REPO_PREFIX}pandoc ${args} ${rfile}
 }
 phonegap(){
-	  images_build phonegap 5.0.0
+	  images_local_build phonegap 5.0.0
 
 		del_stopped phonegap
 
@@ -626,7 +663,7 @@ phonegap(){
 			phonegap "$@"
 }
 pivman(){
-  images_build pivman
+  images_local_build pivman
 
 	del_stopped pivman
 
@@ -640,7 +677,7 @@ pivman(){
 		${DOCKER_REPO_PREFIX}pivman
 }
 pms(){
-  images_build pms
+  images_local_build pms
 
 	del_stopped pms
 
@@ -651,7 +688,7 @@ pms(){
 		${DOCKER_REPO_PREFIX}pms "$@"
 }
 pond(){
-  images_build pond
+  images_local_build pond
 
 	del_stopped pond
 	relies_on torproxy
@@ -662,7 +699,7 @@ pond(){
 		${DOCKER_REPO_PREFIX}pond
 }
 privoxy(){
-  images_build privoxy
+  images_local_build privoxy
 
 	del_stopped privoxy
 	relies_on torproxy
@@ -678,7 +715,7 @@ privoxy(){
 	sudo hostess add privoxy $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" privoxy)
 }
 pulseaudio(){
-  images_build pulseaudio
+  images_local_build pulseaudio
 
 	del_stopped pulseaudio
 
@@ -692,7 +729,7 @@ pulseaudio(){
 		${DOCKER_REPO_PREFIX}pulseaudio
 }
 rainbowstream(){
-  images_build rainbowstream
+  images_local_build rainbowstream
 
 	docker run -it --rm \
 		-v /etc/localtime:/etc/localtime:ro \
@@ -711,7 +748,7 @@ registrator(){
 		gliderlabs/registrator consul:
 }
 remmina(){
-  images_build remmina
+  images_local_build remmina
 
 	del_stopped remmina
 
@@ -727,7 +764,7 @@ remmina(){
 		${DOCKER_REPO_PREFIX}remmina
 }
 ricochet(){
-  images_build ricochet
+  images_local_build ricochet
 
 	del_stopped ricochet
 
@@ -743,7 +780,7 @@ ricochet(){
 		${DOCKER_REPO_PREFIX}ricochet
 }
 rstudio(){
-  images_build rstudio
+  images_local_build rstudio
 
 	del_stopped rstudio
 
@@ -759,7 +796,7 @@ rstudio(){
 		${DOCKER_REPO_PREFIX}rstudio
 }
 s3cmdocker(){
-  images_build s3cmd
+  images_local_build s3cmd
 
 	del_stopped s3cmd
 
@@ -771,7 +808,7 @@ s3cmdocker(){
 		${DOCKER_REPO_PREFIX}s3cmd "$@"
 }
 scudcloud(){
-  images_build scudcloud
+  images_local_build scudcloud
 
 	del_stopped scudcloud
 
@@ -801,7 +838,7 @@ scudcloud(){
 	exit 0
 }
 shorewall(){
-  images_build shorewall
+  images_local_build shorewall
 
 	del_stopped shorewall
 
@@ -813,7 +850,7 @@ shorewall(){
 		${DOCKER_REPO_PREFIX}shorewall "$@"
 }
 skype(){
-  images_build skype
+  images_local_build skype
 
 	del_stopped skype
 	relies_on pulseaudio
@@ -832,7 +869,7 @@ skype(){
 		${DOCKER_REPO_PREFIX}skype
 }
 slack(){
-  images_build slack
+  images_local_build slack
 
 	del_stopped slack
 
@@ -850,7 +887,7 @@ slack(){
 		${DOCKER_REPO_PREFIX}slack
 }
 spotify(){
-  images_build spotify
+  images_local_build spotify
 
 	del_stopped spotify
 
@@ -868,7 +905,7 @@ spotify(){
 		${DOCKER_REPO_PREFIX}spotify
 }
 ssh2john(){
-  images_build john
+  images_local_build john
 
 	local file=$(realpath $1)
 
@@ -878,7 +915,7 @@ ssh2john(){
 		${DOCKER_REPO_PREFIX}john $@
 }
 steam(){
-  images_build steam
+  images_local_build steam
 
 	del_stopped steam
 	relies_on pulseaudio
@@ -897,7 +934,7 @@ steam(){
 		${DOCKER_REPO_PREFIX}steam
 }
 t(){
-  images_build t
+  images_local_build t
 
 	docker run -t --rm \
 		-v $HOME/.trc:/root/.trc \
@@ -905,7 +942,7 @@ t(){
 		${DOCKER_REPO_PREFIX}t "$@"
 }
 tarsnap(){
-  images_build tarsnap
+  images_local_build tarsnap
 
 	docker run --rm -it \
 		-v $HOME/.tarsnaprc:/root/.tarsnaprc \
@@ -914,14 +951,14 @@ tarsnap(){
 		${DOCKER_REPO_PREFIX}tarsnap "$@"
 }
 telnet(){
-  images_build telnet
+  images_local_build telnet
 
 	docker run -it --rm \
 		--log-driver none \
 		${DOCKER_REPO_PREFIX}telnet "$@"
 }
 termboy(){
-  images_build termboy
+  images_local_build termboy
 
 	del_stopped termboy
 	local game=$1
@@ -932,7 +969,7 @@ termboy(){
 		${DOCKER_REPO_PREFIX}nes /games/${game}.rom
 }
 tor(){
-  images_build tor
+  images_local_build tor
 
 	del_stopped tor
 
@@ -948,7 +985,7 @@ tor(){
 	browser-exec "https://check.torproject.org/"
 }
 torbrowser(){
-  images_build tor-browser
+  images_local_build tor-browser
 
 	del_stopped torbrowser
 
@@ -966,7 +1003,7 @@ torbrowser(){
 	exit 0
 }
 tormessenger(){
-  images_build tor-messenger
+  images_local_build tor-messenger
 
 	del_stopped tormessenger
 
@@ -984,7 +1021,7 @@ tormessenger(){
 	exit 0
 }
 torproxy(){
-  images_build tor-proxy
+  images_local_build tor-proxy
 
 	del_stopped torproxy
 
@@ -998,14 +1035,14 @@ torproxy(){
 	sudo hostess add torproxy $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" torproxy)
 }
 traceroute(){
-  images_build traceroute
+  images_local_build traceroute
 
 	docker run --rm -it \
 		--net host \
 		${DOCKER_REPO_PREFIX}traceroute "$@"
 }
 transmission(){
-  images_build transmission
+  images_local_build transmission
 
 	del_stopped transmission
 
@@ -1024,7 +1061,7 @@ transmission(){
 	browser-exec "http://transmission:9091"
 }
 virsh(){
-  images_build libvirt-client
+  images_local_build libvirt-client
 
 	relies_on kvm
 
@@ -1036,7 +1073,7 @@ virsh(){
 		${DOCKER_REPO_PREFIX}libvirt-client "$@"
 }
 virt_viewer(){
-  images_build virt-viewer
+  images_local_build virt-viewer
 
 	relies_on kvm
 
@@ -1053,7 +1090,7 @@ virt_viewer(){
 }
 alias virt-viewer="virt_viewer"
 visualstudio(){
-  images_build visualstudio
+  images_local_build visualstudio
 
 	del_stopped visualstudio
 
@@ -1065,7 +1102,7 @@ visualstudio(){
 		${DOCKER_REPO_PREFIX}visualstudio
 }
 vlc(){
-  images_build vlc
+  images_local_build vlc
 
 	del_stopped vlc
 	relies_on pulseaudio
@@ -1086,8 +1123,17 @@ vlc(){
 		--name vlc \
 		${DOCKER_REPO_PREFIX}vlc
 }
+warzone2100(){
+  images_local_build warzone2100
+
+	docker run -ti --rm \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v $HOME/warzone2100-3.1:/home/.warzone2100-3.1 \
+		${DOCKER_REPO_PREFIX}warzone2100
+}
 watchman(){
-  images_build watchman
+  images_local_build watchman
 
 	del_stopped watchman
 
@@ -1098,7 +1144,7 @@ watchman(){
 		${DOCKER_REPO_PREFIX}watchman --foreground
 }
 wireshark(){
-  images_build wireshark
+  images_local_build wireshark
 
 	del_stopped wireshark
 
@@ -1111,7 +1157,7 @@ wireshark(){
 		${DOCKER_REPO_PREFIX}wireshark
 }
 wrk(){
-  images_build wrk
+  images_local_build wrk
 
 	docker run -it --rm \
 		--log-driver none \
@@ -1119,7 +1165,7 @@ wrk(){
 		${DOCKER_REPO_PREFIX}wrk "$@"
 }
 ykpersonalize(){
-  images_build ykpersonalize
+  images_local_build ykpersonalize
 
 	del_stopped ykpersonalize
 
@@ -1132,7 +1178,7 @@ ykpersonalize(){
 }
 alias yubico-piv-tool="yubico_piv_tool"
 yubico_piv_tool(){
-  images_build yubico-piv-tool
+  images_local_build yubico-piv-tool
 
 	del_stopped yubico-piv-tool
 
@@ -1149,7 +1195,7 @@ yubico_piv_tool(){
 ### Awesome sauce by @jpetazzo
 ###
 command_not_found_handle () {
-  images_build $@
+  images_local_build $@
 
 	# Check if there is a container image with that name
 	if ! docker inspect --format '{{ .Author }}' "$1" >&/dev/null ; then
