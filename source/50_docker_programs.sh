@@ -480,7 +480,7 @@ mysql-workbench(){
 	docker run -ti --rm \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-v `pwd`:/var/www \
+		-v `pwd`:/root \
 		${DOCKER_REPO_PREFIX}mysql-workbench
 }
 mutt(){
@@ -651,7 +651,7 @@ pandoc(){
 		${DOCKER_REPO_PREFIX}pandoc ${args} ${rfile}
 }
 phonegap(){
-	  images_local_build phonegap 5.0.0
+	  images_local_build phonegap 3.6.0-0-21-19
 
 		del_stopped phonegap
 
@@ -1129,7 +1129,7 @@ warzone2100(){
 	docker run -ti --rm \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-v $HOME/warzone2100-3.1:/home/.warzone2100-3.1 \
+		-v `pwd`:/home/.warzone2100-3.1 \
 		${DOCKER_REPO_PREFIX}warzone2100
 }
 watchman(){
