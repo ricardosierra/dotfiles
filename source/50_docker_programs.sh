@@ -650,7 +650,7 @@ pandoc(){
 		--name pandoc \
 		${DOCKER_REPO_PREFIX}pandoc ${args} ${rfile}
 }
-phonegap(){
+phonegap_bk(){
 	  images_local_build phonegap 3.6.0-0-21-19
 
 		del_stopped phonegap

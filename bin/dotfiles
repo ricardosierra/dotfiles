@@ -215,7 +215,7 @@ generate_custom_file_for_git () {
 }
 # DOTFILES CONFIGURE
 generate_custom_config_for_dotfiles () {
-  if ! [ -f ~/.dotfiles/copy/.dotfilesconfig ]
+  if ! [ -f ~/.dotfiles/copy/.dotfilesconfig.local ]
   then
     info 'setup dotfilesconfig'
 
@@ -226,7 +226,7 @@ generate_custom_config_for_dotfiles () {
         read -e dotfiles_cfg_language
     done
 
-    sed -e "s/CFG_LANGUAGE/$dotfiles_cfg_language/g" ~/.dotfiles/copy/.dotfilesconfig.example > ~/.dotfiles/copy/.dotfilesconfig
+    sed -e "s/CFG_LANGUAGE/$dotfiles_cfg_language/g" ~/.dotfiles/copy/.dotfilesconfig.local.example > ~/.dotfiles/copy/.dotfilesconfig.local
 
     success 'dotfilesconfig'
   fi
