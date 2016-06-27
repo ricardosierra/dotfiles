@@ -226,7 +226,7 @@ consul(){
 	sudo hostess add consul $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" consul)
 	browser-exec "http://consul:8500"
 }
-cordova(){
+cordova_bk(){
   images_local_build cordova
 
 	del_stopped cordova
@@ -569,22 +569,37 @@ alias netbeans-php=netbeans_php
 netbeans_php(){
   images_local_build netbeans-php
 
-	docker run -ti --rm \
+	docker run -d -ti --rm \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v $HOME/NetBeansProjects:/root/NetBeansProjects \
 		-v `pwd`:/home/developer \
+		--name netbeans-php \
 		${DOCKER_REPO_PREFIX}netbeans-php
 }
 alias nb-java=netbeans_java
 alias netbeans-java=netbeans_java
 netbeans_java(){
-  images_local_build netbeans-java
+  #images_local_build netbeans-java
 
-	docker run -ti --rm \
-		-e DISPLAY=$DISPLAY \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-v `pwd`:/home/developer \
-		${DOCKER_REPO_PREFIX}netbeans-java
+	# docker run -ti --rm \
+	# 	-e DISPLAY=$DISPLAY \
+	# 	-v /tmp/.X11-unix:/tmp/.X11-unix \
+	# 	-v `pwd`:/home/developer \
+	# 	${DOCKER_REPO_PREFIX}netbeans-java
+
+  del_stopped netbeans-java
+
+  docker run -it --rm \
+			-e DISPLAY=$DISPLAY \
+			-v /tmp/.X11-unix:/tmp/.X11-unix \
+			-v $HOME/NetBeansProjects:/root/NetBeansProjects \
+      -v $HOME/.netbeans:/root/.netbeans \
+      -v $HOME/.m2:/root/.m2 \
+			-v $DOTFILES_FOLDER_PROJECTS:/root/Projects
+      -v `pwd`:/root/repo \
+      --name netbeans-java \
+      psharkey/netbeans-8.1
 }
 netcat(){
   images_local_build netcat
@@ -1191,31 +1206,31 @@ yubico_piv_tool(){
 }
 
 
-###
-### Awesome sauce by @jpetazzo
-###
-command_not_found_handle () {
-  images_local_build $@
-
-	# Check if there is a container image with that name
-	if ! docker inspect --format '{{ .Author }}' "$1" >&/dev/null ; then
-		echo "$0: $1: command not found"
-		return
-	fi
-
-	# Check that it's really the name of the image, not a prefix
-	if docker inspect --format '{{ .Id }}' "$1" | grep -q "^$1" ; then
-		echo "$0: $1: command not found"
-		return
-	fi
-
-	docker run -ti -u $(whoami) -w "$HOME" \
-		$(env | cut -d= -f1 | awk '{print "-e", $1}') \
-		--device /dev/snd \
-		-v /etc/passwd:/etc/passwd:ro \
-		-v /etc/group:/etc/group:ro \
-		-v /etc/localtime:/etc/localtime:ro \
-		-v /home:/home \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		"${DOCKER_REPO_PREFIX}$@"
-}
+# ###
+# ### Awesome sauce by @jpetazzo
+# ###
+# command_not_found_handle () {
+#   #images_local_build $@
+#
+# 	# Check if there is a container image with that name
+# 	if ! docker inspect --format '{{ .Author }}' "$1" >&/dev/null ; then
+# 		echo "$0: $1: command not found"
+# 		return
+# 	fi
+#
+# 	# Check that it's really the name of the image, not a prefix
+# 	if docker inspect --format '{{ .Id }}' "$1" | grep -q "^$1" ; then
+# 		echo "$0: $1: command not found"
+# 		return
+# 	fi
+#
+# 	docker run -ti -u $(whoami) -w "$HOME" \
+# 		$(env | cut -d= -f1 | awk '{print "-e", $1}') \
+# 		--device /dev/snd \
+# 		-v /etc/passwd:/etc/passwd:ro \
+# 		-v /etc/group:/etc/group:ro \
+# 		-v /etc/localtime:/etc/localtime:ro \
+# 		-v /home:/home \
+# 		-v /tmp/.X11-unix:/tmp/.X11-unix \
+# 		"${DOCKER_REPO_PREFIX}$@"
+# }
