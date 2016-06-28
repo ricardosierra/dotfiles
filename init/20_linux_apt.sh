@@ -190,3 +190,7 @@ if [[ ! "$(dpkg -l |grep google-talkplugin)" ]]; then
     fi
   )
 fi
+
+# ssh
+ssh-agent bash
+ssh-add /home/${USER}/.ssh/id_rsa

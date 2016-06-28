@@ -370,102 +370,107 @@ function do_stuff() {
   done
 }
 
-# Enough with the functions, let's do stuff.
 
-export prompt_delay=5
+main(){
+  # Enough with the functions, let's do stuff.
 
-generate_custom_files
+  export prompt_delay=5
 
-# Ensure that we can actually, like, compile anything.
-if [[ ! "$(type -P gcc)" ]] && is_osx; then
-  e_error "XCode or the Command Line Tools for XCode must be installed first."
-  exit 1
-fi
+  generate_custom_files
 
-# If Git is not installed, install it (Ubuntu only, since Git comes standard
-# with recent XCode or CLT)
-if [[ ! "$(type -P git)" ]] && is_linux; then
-  e_header "Installing Git"
-  if is_debian; then
-    sudo apt-get -qq install git-core
+  # Ensure that we can actually, like, compile anything.
+  if [[ ! "$(type -P gcc)" ]] && is_osx; then
+    e_error "XCode or the Command Line Tools for XCode must be installed first."
+    exit 1
   fi
-  if is_redhat; then
-    sudo yum install git-all
+
+  # If Git is not installed, install it (Ubuntu only, since Git comes standard
+  # with recent XCode or CLT)
+  if [[ ! "$(type -P git)" ]] && is_linux; then
+    e_header "Installing Git"
+    if is_debian; then
+      sudo apt-get -qq install git-core
+    fi
+    if is_redhat; then
+      sudo yum install git-all
+    fi
   fi
-fi
 
-# If Git isn't installed by now, something exploded. We gots to quit!
-if [[ ! "$(type -P git)" ]]; then
-  e_error "Git should be installed. It isn't. Aborting."
-  exit 1
-fi
-
-#Download DockerFiles
-if [[ ! -d $DOCKERFILES ]]; then
-  # $DOCKERFILES directory doesn't exist? Clone it!
-  new_dockerfiles_install=1
-  prompt_delay=15
-  e_header "Downloading dockerfiles"
-  git clone --recursive git://github.com/ricardorsierra/dockerfiles.git $DOCKERFILES
-  cd $DOCKERFILES
-elif [[ "$1" != "restart" ]]; then
-  # Make sure we have the latest files.
-  e_header "Updating dockerfiles"
-  cd $DOCKERFILES
-  prev_head="$(git rev-parse HEAD)"
-  git pull
-  git submodule update --init --recursive --quiet
-  if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
-    e_header "Changes detected, restarting script"
-    exec "$0" "restart"
+  # If Git isn't installed by now, something exploded. We gots to quit!
+  if [[ ! "$(type -P git)" ]]; then
+    e_error "Git should be installed. It isn't. Aborting."
+    exit 1
   fi
-fi
 
-# Download DotFiles
-if [[ ! -d $DOTFILES ]]; then
-  # $DOTFILES directory doesn't exist? Clone it!
-  new_dotfiles_install=1
-  prompt_delay=15
-  e_header "Downloading dotfiles"
-  git clone --recursive git://github.com/ricardorsierra/dotfiles.git $DOTFILES
-  cd $DOTFILES
-elif [[ "$1" != "restart" ]]; then
-  # Make sure we have the latest files.
-  e_header "Updating dotfiles"
-  cd $DOTFILES
-  prev_head="$(git rev-parse HEAD)"
-  git pull
-  git submodule update --init --recursive --quiet
-  if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
-    e_header "Changes detected, restarting script"
-    exec "$0" "restart"
+  #Download DockerFiles
+  if [[ ! -d $DOCKERFILES ]]; then
+    # $DOCKERFILES directory doesn't exist? Clone it!
+    new_dockerfiles_install=1
+    prompt_delay=15
+    e_header "Downloading dockerfiles"
+    git clone --recursive git://github.com/ricardorsierra/dockerfiles.git $DOCKERFILES
+    cd $DOCKERFILES
+  elif [[ "$1" != "restart" ]]; then
+    # Make sure we have the latest files.
+    e_header "Updating dockerfiles"
+    cd $DOCKERFILES
+    prev_head="$(git rev-parse HEAD)"
+    git pull
+    git submodule update --init --recursive --quiet
+    if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
+      e_header "Changes detected, restarting script"
+      exec "$0" "restart"
+    fi
   fi
-fi
 
-# Add binaries into the path
-[[ -d $DOTFILES/bin ]] && PATH=$DOTFILES/bin:$PATH
-export PATH
+  # Download DotFiles
+  if [[ ! -d $DOTFILES ]]; then
+    # $DOTFILES directory doesn't exist? Clone it!
+    new_dotfiles_install=1
+    prompt_delay=15
+    e_header "Downloading dotfiles"
+    git clone --recursive git://github.com/ricardorsierra/dotfiles.git $DOTFILES
+    cd $DOTFILES
+  elif [[ "$1" != "restart" ]]; then
+    # Make sure we have the latest files.
+    e_header "Updating dotfiles"
+    cd $DOTFILES
+    prev_head="$(git rev-parse HEAD)"
+    git pull
+    git submodule update --init --recursive --quiet
+    if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
+      e_header "Changes detected, restarting script"
+      exec "$0" "restart"
+    fi
+  fi
 
-# Tweak file globbing.
-shopt -s dotglob
-shopt -s nullglob
+  # Add binaries into the path
+  [[ -d $DOTFILES/bin ]] && PATH=$DOTFILES/bin:$PATH
+  export PATH
 
-# Create caches dir and init subdir, if they don't already exist.
-mkdir -p "$DOTFILES/caches/init"
+  # Tweak file globbing.
+  shopt -s dotglob
+  shopt -s nullglob
 
-# If backups are needed, this is where they'll go.
-backup_dir="$DOTFILES/backups/$(date "+%Y_%m_%d-%H_%M_%S")/"
-backup=
+  # Create caches dir and init subdir, if they don't already exist.
+  mkdir -p "$DOTFILES/caches/init"
 
-# Execute code for each file in these subdirectories.
-do_stuff "copy"
-do_stuff "link"
-do_stuff "init"
+  # If backups are needed, this is where they'll go.
+  backup_dir="$DOTFILES/backups/$(date "+%Y_%m_%d-%H_%M_%S")/"
+  backup=
 
-# Alert if backups were made.
-if [[ "$backup" ]]; then
-  echo -e "\nBackups were moved to ~/${backup_dir#$HOME/}"
-fi
+  # Execute code for each file in these subdirectories.
+  do_stuff "copy"
+  do_stuff "link"
+  do_stuff "init"
 
-# All done!
-e_header "All done!"
+  # Alert if backups were made.
+  if [[ "$backup" ]]; then
+    echo -e "\nBackups were moved to ~/${backup_dir#$HOME/}"
+  fi
+
+  # All done!
+  e_header "All done!"
+}
+
+main()

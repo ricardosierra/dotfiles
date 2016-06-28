@@ -7,6 +7,7 @@ export DOCKERFILES_PATH=~/.dockerfiles
 #
 # Helper Functions
 #
+
 dcleanup(){
 	docker rm $(docker ps -aq 2>/dev/null) 2>/dev/null
 	docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
@@ -569,10 +570,9 @@ alias netbeans-php=netbeans_php
 netbeans_php(){
   images_local_build netbeans-php
 
-	docker run -d -ti --rm \
+	docker run -ti --rm \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-v $HOME/NetBeansProjects:/root/NetBeansProjects \
 		-v `pwd`:/home/developer \
 		--name netbeans-php \
 		${DOCKER_REPO_PREFIX}netbeans-php
@@ -593,10 +593,10 @@ netbeans_java(){
   docker run -it --rm \
 			-e DISPLAY=$DISPLAY \
 			-v /tmp/.X11-unix:/tmp/.X11-unix \
-			-v $HOME/NetBeansProjects:/root/NetBeansProjects \
+			-v $HOME/NetBeansProjects-java:/root/NetBeansProjects \
       -v $HOME/.netbeans:/root/.netbeans \
       -v $HOME/.m2:/root/.m2 \
-			-v $DOTFILES_FOLDER_PROJECTS:/root/Projects
+			-v DOTFILES_FOLDER_PROJECTS:/root
       -v `pwd`:/root/repo \
       --name netbeans-java \
       psharkey/netbeans-8.1

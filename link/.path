@@ -1,3 +1,14 @@
+#RESET PATH
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+# Add binaries into the path
+PATH=$DOTFILES/bin:$PATH:/usr/bin:/sbin:bin
+export PATH
+
+# PROGRAMS VARIABLES
+export ANDROID_HOME="/home/$USER/$DOTFILES_FOLDER_PROGRAMS/android-sdk-linux"
+export ANDROID_PLATFORM_TOOLS="/home/$USER/$DOTFILES_FOLDER_PROGRAMS/android-sdk-linux/platform-tools/"
+export PATH="$PATH:$ANDROID_HOME:$ANDROID_PLATFORM_TOOLS"
+
 # go path
 export GOPATH=$HOME/.go
 

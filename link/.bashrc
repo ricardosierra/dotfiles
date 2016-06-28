@@ -11,14 +11,7 @@ esac
 # Where the magic happens.
 export DOTFILES=~/.dotfiles
 
-# Add binaries into the path
-PATH=$DOTFILES/bin:$PATH
-export PATH
-
-# PROGRAMS VARIABLES
-export ANDROID_HOME="/home/$USERNAME/${DOTFILES_FOLDER_PROGRAMS}/android-sdk-linux"
-export ANDROID_PLATFORM_TOOLS="/home/$USERNAME/${DOTFILES_FOLDER_PROGRAMS}/android-sdk-linux/platform-tools/"
-export PATH="$PATH:$ANDROID_HOME:$ANDROID_PLATFORM_TOOLS"
+source $HOME/.dotfilesconfig.local
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.

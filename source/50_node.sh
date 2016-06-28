@@ -1,3 +1,6 @@
+return 1
+
+
 export PATH
 PATH=~/.nave/installed/default/bin:"$(path_remove ~/.nave/installed/*/bin)"
 
@@ -35,6 +38,7 @@ npm_globals=(
   linken
   node-inspector
   phonegap@3.6.0-0.21.19
+  cordova@5.0.0
   ripple-emulator@0.9.24
   yo
 )
