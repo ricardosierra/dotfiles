@@ -50,7 +50,8 @@ fi
 # Install APT packages.
 packages=(
   ansible
-  build-essential
+  autoconf # for c compile
+  build-essential # for c compile
   docker.io
   cowsay
   git-core
@@ -58,6 +59,7 @@ packages=(
   chromium-browser
   htop
   id3tool
+  libxml2-dev 
   libssl-dev
   meld
   mercurial
@@ -69,6 +71,7 @@ packages=(
   silversearcher-ag
   sl
   telnet
+  thunderbird
   tree
   xclip
   #xcompmgr #compiz, nao funciona no ubuntu

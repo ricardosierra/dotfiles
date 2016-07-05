@@ -18,3 +18,10 @@ else
 	export DOTFILES_FOLDER_PROJECTS=Projects
 	export DOTFILES_FOLDER_PROGRAMS=Programs
 fi
+
+###
+### Gmail credentials for mutt
+###
+export GMAIL=YOUR_EMAIL
+export GMAIL_NAME="YOUR_NAME"
+export GMAIL_FROM=YOUR_FROM_EMAIL

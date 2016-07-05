@@ -37,12 +37,15 @@ set background=dark
 
 " Visual settings
 set cursorline " Highlight current line
+set ruler "Show cursor all time"
+set fileformats=unix,dos,mac " Prefer Unix over Windows over OS 9 formats
 set number " Enable line numbers.
 set showtabline=2 " Always show tab bar.
 set relativenumber " Use relative line numbers. Current line is still in status bar.
 set title " Show the filename in the window titlebar.
 set nowrap " Do not wrap lines.
-set noshowmode " Don't show the current mode (airline.vim takes care of us)
+set showcmd  " Show me what I'm typing
+set showmode " Show current mode.
 set laststatus=2 " Always show status line
 
 " Show absolute numbers in insert mode, otherwise relative line numbers.
@@ -231,6 +234,7 @@ let g:signify_vcs_list = ['git', 'hg', 'svn']
 map <leader>p <C-P>
 map <leader>r :CtrlPMRUFiles<CR>
 "let g:ctrlp_match_window_bottom = 0 " Show at top of window
+
 
 " Indent Guides
 let g:indent_guides_start_level = 2

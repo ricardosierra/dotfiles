@@ -4,9 +4,95 @@
 export DOCKER_REPO_PREFIX=
 export DOCKERFILES_PATH=~/.dockerfiles
 
+
+# All Docker Programs
+docker_programs=(
+    cordova
+    dcos-cli
+    dia
+    firefox
+    gcalcli
+    gcloud
+    gimp
+    gitk
+    hollywood
+    htopx
+    httpie
+    imagemin
+    irssi
+    john
+    kernel-builder
+    kvm
+    libreoffice
+    lpass
+    lynx
+    masscan
+    mpd
+    mysql-workbench
+    mutt
+    ncmpc
+    neoman
+    nes
+    netbeans
+    netbeans-php
+    netbeans-java
+    netcat
+    nginx
+    nmap
+    notify-osd
+    pandoc
+    phonegap
+    pivmanpms
+    pond
+    privoxy
+    pulseaudio
+    rainbowstream
+    registrator
+    remmina
+    ricochet
+    rstudio
+    s3cmd
+    scudcloud
+    shorewall
+    skype
+    slack
+    spotify
+    john
+    steam
+    t
+    tarsnap
+    telnet
+    termboy
+    thunderbird
+    tor
+    tor-browser
+    tor-messenger
+    tor-proxy
+    trceroute
+    transmission
+    libvirt-client
+    virt-viewer
+    visualstudio
+    vlc
+    warzone2100
+    watchman
+    wireshark
+    wrk
+    yhpersonalize
+    yubico-piv-tool
+)
+
 #
 # Helper Functions
 #
+
+
+docker_build_all(){
+    for elt in "${docker_programs[@]}";do 
+        echo "Fazendo Build de: $elt"
+        images_local_build $elt;
+    done
+}
 
 dcleanup(){
 	docker rm $(docker ps -aq 2>/dev/null) 2>/dev/null
@@ -929,6 +1015,7 @@ ssh2john(){
 		--entrypoint ssh2john \
 		${DOCKER_REPO_PREFIX}john $@
 }
+
 steam(){
   images_local_build steam
 
@@ -982,6 +1069,19 @@ termboy(){
 		--device /dev/snd \
 		--name termboy \
 		${DOCKER_REPO_PREFIX}nes /games/${game}.rom
+}
+
+thunderbird(){
+  images_local_build thunderbird
+
+	docker run -ti --rm \
+		-e DISPLAY=$DISPLAY \
+		--net host \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v $HOME/.thunderbird:/root/.thunderbird
+		-v $HOME/.cache/.thunderbird:/root/.cache/thunderbird
+		-v `pwd`:/var/www \
+		${DOCKER_REPO_PREFIX}thunderbird
 }
 tor(){
   images_local_build tor
@@ -1087,6 +1187,7 @@ virsh(){
 		--net container:kvm \
 		${DOCKER_REPO_PREFIX}libvirt-client "$@"
 }
+alias virt-viewer="virt_viewer"
 virt_viewer(){
   images_local_build virt-viewer
 
@@ -1103,7 +1204,6 @@ virt_viewer(){
 		--net container:kvm \
 		${DOCKER_REPO_PREFIX}virt-viewer "$@"
 }
-alias virt-viewer="virt_viewer"
 visualstudio(){
   images_local_build visualstudio
 

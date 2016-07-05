@@ -330,6 +330,27 @@ function link_do() {
   ln -sf ${2#$HOME/} ~/
 }
 
+
+function do_usr() {
+  for file in $(shell find $(CURDIR)/etc -type f -not -name ".*.swp"); do \
+    f=$$(echo $$file | sed -e 's|$(CURDIR)||'); \
+    echo "Testando envio, no futuro será enviado Fcomdoiscifroes: $$f f:  $f File:  $$file"
+    #sudo ln -f $$file $$f; \
+    
+    # Destination file already exists in ~/. Back it up!
+    if [[ -e "$$f" ]]; then
+      e_arrow "Backing up ~/$$file."
+      # Set backup flag, so a nice message can be shown at the end.
+      #backup=1
+      echo "Vai fazer Backup sim Arquivos: $f"
+      # Create backup dir if it doesn't already exist.
+      [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
+      # Backup file / link / whatever.
+      #mv "$dest" "$backup_dir"
+    fi
+  done
+}
+
 # Copy, link, init, etc.
 function do_stuff() {
   local base dest skip
