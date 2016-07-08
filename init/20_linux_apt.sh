@@ -55,21 +55,18 @@ packages=(
   docker.io
   cowsay
   git-core
-  gitk
   chromium-browser
-  htop
   id3tool
   libxml2-dev 
   libssl-dev
   meld
   mercurial
-  nmap
-  php
   python
   python-pip
   rxvt-unicode
   silversearcher-ag
   sl
+  sudo
   telnet
   thunderbird
   tree
@@ -82,16 +79,19 @@ packages=(
 # More APT packages
 if is_debian; then
   packages+=(
+    php7
     php7.0-xml #precisa pro phpunit funcionar
     openssh-server
   )
 elif is_archlinux; then
   packages+=(
+    php7
     php7.0-xml #precisa pro phpunit funcionar
     openssh
   )
 else
   packages+=(
+    php
     php70w-xml #precisa pro phpunit funcionar
     openssh-server
   )
@@ -121,20 +121,6 @@ if [[ ! "$(type -P git-extras)" ]]; then
   (
     cd $DOTFILES/vendor/git-extras &&
     sudo make install
-  )
-fi
-
-# Install Atom
-if [[ ! "$(type -P atom)" ]]; then
-  e_header "Installing Atom IDE"
-  (
-    if is_debian; then
-      sudo add-apt-repository ppa:webupd8team/atom -y && sudo apt-get -qq update && sudo apt-get install -qq atom -y
-    elif is_archlinux; then
-      echo 'Atom not can installed now'
-    else
-      sudo add-apt-repository ppa:webupd8team/atom -y && sudo yum -qq update && sudo yum install -qq atom -y
-    fi
   )
 fi
 

@@ -191,6 +191,10 @@ function _prompt_menu_add() {
   _prompt_menu_result=("${_prompt_menu_result[@]}" "${menu_options[i]}")
 }
 
+#############################################################################
+#############################################################################
+#############################################################################
+
 # CONFIGURE GIT CONFIG
 generate_custom_file_for_git () {
   if ! [ -f ~/.dotfiles/copy/.gitconfig.local ]
@@ -332,22 +336,24 @@ function link_do() {
 
 
 function do_usr() {
-  for file in $(shell find $(CURDIR)/etc -type f -not -name ".*.swp"); do \
-    f=$$(echo $$file | sed -e 's|$(CURDIR)||'); \
-    echo "Testando envio, no futuro será enviado Fcomdoiscifroes: $$f f:  $f File:  $$file"
-    #sudo ln -f $$file $$f; \
+  return;
+  for file in $(shell find $(CURDIR)/etc -type f -not -name ".*.swp"); do
+    echo "Testando envio, no futuro será enviado Fcomdoiscifroes: File:  $$file"
+    # f=$$(echo $$file | sed -e 's|$(CURDIR)||');
+    # echo "Testando envio, no futuro será enviado Fcomdoiscifroes: $$f f:  $f File:  $$file"
+    # #sudo ln -f $$file $$f;
     
-    # Destination file already exists in ~/. Back it up!
-    if [[ -e "$$f" ]]; then
-      e_arrow "Backing up ~/$$file."
-      # Set backup flag, so a nice message can be shown at the end.
-      #backup=1
-      echo "Vai fazer Backup sim Arquivos: $f"
-      # Create backup dir if it doesn't already exist.
-      [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
-      # Backup file / link / whatever.
-      #mv "$dest" "$backup_dir"
-    fi
+    # # Destination file already exists in ~/. Back it up!
+    # if [[ -e "$$f" ]]; then
+    #   e_arrow "Backing up ~/$$file."
+    #   # Set backup flag, so a nice message can be shown at the end.
+    #   #backup=1
+    #   echo "Vai fazer Backup sim Arquivos: $f"
+    #   # Create backup dir if it doesn't already exist.
+    #   [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
+    #   # Backup file / link / whatever.
+    #   #mv "$dest" "$backup_dir"
+    # fi
   done
 }
 
@@ -391,20 +397,53 @@ function do_stuff() {
   done
 }
 
-
-main(){
-  # Enough with the functions, let's do stuff.
-
-  export prompt_delay=5
-
-  generate_custom_files
-
-  # Ensure that we can actually, like, compile anything.
-  if [[ ! "$(type -P gcc)" ]] && is_osx; then
-    e_error "XCode or the Command Line Tools for XCode must be installed first."
-    exit 1
+function git_update_dockerfiles() {
+  #Download DockerFiles
+  if [[ ! -d $DOCKERFILES ]]; then
+    # $DOCKERFILES directory doesn't exist? Clone it!
+    new_dockerfiles_install=1
+    prompt_delay=15
+    e_header "Downloading dockerfiles"
+    git clone --recursive git://github.com/ricardorsierra/dockerfiles.git $DOCKERFILES
+    cd $DOCKERFILES
+  elif [[ "$1" != "restart" ]]; then
+    # Make sure we have the latest files.
+    e_header "Updating dockerfiles"
+    cd $DOCKERFILES
+    prev_head="$(git rev-parse HEAD)"
+    git pull origin master
+    git submodule update --init --recursive --quiet
+    if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
+      e_header "Changes detected, restarting script"
+      exec "$0" "restart"
+    fi
   fi
+}
 
+function git_update_dotfiles() {
+  # Download DotFiles
+  if [[ ! -d $DOTFILES ]]; then
+    # $DOTFILES directory doesn't exist? Clone it!
+    new_dotfiles_install=1
+    prompt_delay=15
+    e_header "Downloading dotfiles"
+    git clone --recursive git://github.com/ricardorsierra/dotfiles.git $DOTFILES
+    cd $DOTFILES
+  elif [[ "$1" != "restart" ]]; then
+    # Make sure we have the latest files.
+    e_header "Updating dotfiles"
+    cd $DOTFILES
+    prev_head="$(git rev-parse HEAD)"
+    git pull origin master
+    git submodule update --init --recursive --quiet
+    if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
+      e_header "Changes detected, restarting script"
+      exec "$0" "restart"
+    fi
+  fi
+}
+
+function install_git() {
   # If Git is not installed, install it (Ubuntu only, since Git comes standard
   # with recent XCode or CLT)
   if [[ ! "$(type -P git)" ]] && is_linux; then
@@ -422,52 +461,34 @@ main(){
     e_error "Git should be installed. It isn't. Aborting."
     exit 1
   fi
+}
 
-  #Download DockerFiles
-  if [[ ! -d $DOCKERFILES ]]; then
-    # $DOCKERFILES directory doesn't exist? Clone it!
-    new_dockerfiles_install=1
-    prompt_delay=15
-    e_header "Downloading dockerfiles"
-    git clone --recursive git://github.com/ricardorsierra/dockerfiles.git $DOCKERFILES
-    cd $DOCKERFILES
-  elif [[ "$1" != "restart" ]]; then
-    # Make sure we have the latest files.
-    e_header "Updating dockerfiles"
-    cd $DOCKERFILES
-    prev_head="$(git rev-parse HEAD)"
-    git pull
-    git submodule update --init --recursive --quiet
-    if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
-      e_header "Changes detected, restarting script"
-      exec "$0" "restart"
-    fi
-  fi
-
-  # Download DotFiles
-  if [[ ! -d $DOTFILES ]]; then
-    # $DOTFILES directory doesn't exist? Clone it!
-    new_dotfiles_install=1
-    prompt_delay=15
-    e_header "Downloading dotfiles"
-    git clone --recursive git://github.com/ricardorsierra/dotfiles.git $DOTFILES
-    cd $DOTFILES
-  elif [[ "$1" != "restart" ]]; then
-    # Make sure we have the latest files.
-    e_header "Updating dotfiles"
-    cd $DOTFILES
-    prev_head="$(git rev-parse HEAD)"
-    git pull
-    git submodule update --init --recursive --quiet
-    if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
-      e_header "Changes detected, restarting script"
-      exec "$0" "restart"
-    fi
-  fi
-
+function install_dotfile_bin() {
   # Add binaries into the path
   [[ -d $DOTFILES/bin ]] && PATH=$DOTFILES/bin:$PATH
   export PATH
+  # browser-exec with default browser
+  sudo ln -sf $DOTFILES/bin/browser-exec /usr/local/bin/xdg-open;
+}
+
+
+main(){
+  # Enough with the functions, let's do stuff.
+
+  export prompt_delay=5
+
+  generate_custom_files
+
+  # Ensure that we can actually, like, compile anything.
+  if [[ ! "$(type -P gcc)" ]] && is_osx; then
+    e_error "XCode or the Command Line Tools for XCode must be installed first."
+    exit 1
+  fi
+
+  install_git
+  git_update_dockerfiles
+  git_update_dotfiles
+  install_dotfile_bin
 
   # Tweak file globbing.
   shopt -s dotglob
@@ -494,4 +515,4 @@ main(){
   e_header "All done!"
 }
 
-main()
+main

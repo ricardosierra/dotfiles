@@ -7,6 +7,15 @@ export DOCKERFILES_PATH=~/.dockerfiles
 
 # All Docker Programs
 docker_programs=(
+	apt_file
+	atom
+	audacity
+	aws
+	bees
+	cadvisor
+	cheese
+	chrome
+	consul
     cordova
     dcos-cli
     dia
@@ -57,6 +66,7 @@ docker_programs=(
     skype
     slack
     spotify
+    sublime-text-3
     john
     steam
     t
@@ -176,12 +186,24 @@ nginx_config(){
 # Container Aliases
 #
 apt_file(){
+  	images_local_build apt-file
 	docker run --rm -it \
 		--name apt-file \
 		${DOCKER_REPO_PREFIX}apt-file
 }
+alias a=atom
+atom(){
+  images_local_build atom
+
+	docker run -ti --rm \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v `pwd`:/var/www \
+		${DOCKER_REPO_PREFIX}atom
+}
 alias apt-file="apt_file"
 audacity(){
+  	images_local_build chrome
 	del_stopped audacity
 
 	docker run -d \
@@ -196,6 +218,7 @@ audacity(){
 		${DOCKER_REPO_PREFIX}audacity
 }
 aws(){
+  	images_local_build aws
 	docker run -it --rm \
 		-v $HOME/.aws:/root/.aws \
 		--log-driver none \
@@ -203,6 +226,7 @@ aws(){
 		${DOCKER_REPO_PREFIX}awscli "$@"
 }
 bees(){
+  	images_local_build bees
 	docker run -it --rm \
 		-e NOTARY_TOKEN \
 		-v $HOME/.bees:/root/.bees \
@@ -213,6 +237,7 @@ bees(){
 		${DOCKER_REPO_PREFIX}beeswithmachineguns "$@"
 }
 cadvisor(){
+  	images_local_build cadvisor
 	docker run -d \
 		--restart always \
 		-v /:/rootfs:ro \
@@ -227,6 +252,7 @@ cadvisor(){
 	browser-exec "http://cadvisor:8080"
 }
 cheese(){
+  	images_local_build cheese
 	del_stopped cheese
 
 	docker run -d \
@@ -241,6 +267,7 @@ cheese(){
 		${DOCKER_REPO_PREFIX}cheese
 }
 chrome(){
+  	images_local_build chrome
 	# add flags for proxy if passed
 	local proxy=
 	local map=
@@ -283,6 +310,7 @@ chrome(){
 
 }
 consul(){
+  	images_local_build consul
 	del_stopped consul
 
 	# check if we passed args and if consul is running
@@ -1004,6 +1032,23 @@ spotify(){
 		--group-add video \
 		--name spotify \
 		${DOCKER_REPO_PREFIX}spotify
+}
+
+alias s=sublime-text-3
+alias subl=sublime-text-3
+alias subl=sublime-text-3
+alias sublime=sublime-text-3
+sublime-text-3(){
+
+  images_local_build sublime-text-3
+
+	docker run -ti --rm \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v $HOME/.config/sublime-text-3/:/root/.config/sublime-text-3 \
+		-v $HOME/$DOTFILES_FOLDER_PROJECTS:/root/development \
+		-v `pwd`:/var/www \
+		${DOCKER_REPO_PREFIX}sublime-text-3
 }
 ssh2john(){
   images_local_build john
