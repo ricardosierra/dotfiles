@@ -36,3 +36,9 @@ done
 
 # print a fortune when the terminal opens
 #fortune -a -s | lolcat
+
+###-tns-completion-start-###
+if [ -f /home/sierra/.tnsrc ]; then 
+    source /home/sierra/.tnsrc 
+fi
+###-tns-completion-end-###

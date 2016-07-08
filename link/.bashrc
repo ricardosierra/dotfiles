@@ -135,3 +135,9 @@ function dotfiles() {
 }
 
 src
+
+###-tns-completion-start-###
+if [ -f /home/sierra/.tnsrc ]; then 
+    source /home/sierra/.tnsrc 
+fi
+###-tns-completion-end-###
