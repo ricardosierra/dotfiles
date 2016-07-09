@@ -2,6 +2,7 @@
 
 OSX / Ubuntu / Fedora / KaliLinux / Debian dotfiles.
 Is a fork from "Cowboy" Ben Alman.
+And more inspiration by jfrazelle
 
 ## About this project
 
@@ -20,6 +21,7 @@ When [dotfiles][dotfiles] is run for the first time, it does a few things:
 1. In Ubuntu, Git is installed if necessary via APT (it's already there in OSX).
 1. This repo is cloned into your user directory, under `~/.dotfiles`.
 1. Files in `/copy` are copied into `~/`. ([read more](#the-copy-step))
+1. Subdirectories in `/copy` are copied into `/`
 1. Files in `/link` are symlinked into `~/`. ([read more](#the-link-step))
 1. You are prompted to choose scripts in `/init` to be executed. The installer attempts to only select relevant scripts, based on the detected OS and the script filename.
 1. Your chosen init scripts are executed (in alphanumeric order, hence the funky names). ([read more](#the-init-step))
@@ -53,8 +55,8 @@ Scripts in the `/init` subdirectory will be executed. A whole bunch of things wi
 * Homebrew casks via the [init/30_osx_homebrew_casks.sh](init/30_osx_homebrew_casks.sh) script
 * [Fonts](/cowboy/dotfiles/tree/master/conf/osx/fonts) via the [init/50_osx_fonts.sh](init/50_osx_fonts.sh) script
 
-#### Ubuntu
-* APT packages and git-extras via the [init/20_ubuntu_apt.sh](init/20_ubuntu_apt.sh) script
+#### Linux (Ubuntu and Debian)
+* APT packages and git-extras via the [init/20_linux_apt.sh](init/20_ubuntu_apt.sh) script
 
 #### Both
 * Node.js, npm and nave via the [init/50_node.sh](init/50_node.sh) script
@@ -131,12 +133,8 @@ Check it out:
 ![My awesome bash prompt](http://farm8.staticflickr.com/7142/6754488927_563dd73553_b.jpg)
 
 ## Inspiration
+<https://github.com/jfrazelle/dotfiles>  
 <https://github.com/cowboy/dotfiles>  
 <https://github.com/gf3/dotfiles>  
 <https://github.com/mathiasbynens/dotfiles>  
 (and 15+ years of accumulated crap)
-
-## License
-Copyright (c) 2014 "Cowboy" Ben Alman  
-Licensed under the MIT license.  
-<http://benalman.com/about/license/>

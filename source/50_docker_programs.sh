@@ -195,16 +195,18 @@ alias a=atom
 atom(){
   images_local_build atom
 
-	docker run -ti --rm \
+	docker run -d -ti --rm \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/var/www \
-		${DOCKER_REPO_PREFIX}atom
+		${DOCKER_REPO_PREFIX}atom "$@"
 }
 alias apt-file="apt_file"
 audacity(){
-  	images_local_build chrome
+  	images_local_build audacity
 	del_stopped audacity
+
+	relies_on pulseaudio
 
 	docker run -d \
 		-v /etc/localtime:/etc/localtime:ro \
@@ -213,6 +215,8 @@ audacity(){
 		-e DISPLAY=unix$DISPLAY \
 		-e QT_DEVICE_PIXEL_RATIO \
 		--device /dev/snd \
+		--link pulseaudio:pulseaudio \
+		-e PULSE_SERVER=pulseaudio \
 		--group-add audio \
 		--name audacity \
 		${DOCKER_REPO_PREFIX}audacity
@@ -267,7 +271,7 @@ cheese(){
 		${DOCKER_REPO_PREFIX}cheese
 }
 chrome(){
-  	images_local_build chrome
+  	images_local_build chrome stable
 	# add flags for proxy if passed
 	local proxy=
 	local map=
@@ -341,7 +345,7 @@ consul(){
 	sudo hostess add consul $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" consul)
 	browser-exec "http://consul:8500"
 }
-cordova_bk(){
+cordova(){
   images_local_build cordova
 
 	del_stopped cordova
@@ -365,7 +369,7 @@ dcos(){
 dia(){
   images_local_build dia
 
-	docker run -ti --rm \
+	docker run -d -ti --rm \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/root \
@@ -437,11 +441,11 @@ gimp(){
 gitk(){
   images_local_build gitk
 
-	docker run -ti --rm \
+	docker run -d -ti --rm \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/var/www \
-		${DOCKER_REPO_PREFIX}gitk
+		${DOCKER_REPO_PREFIX}gitk "$@"
 }
 hollywood(){
   images_local_build hollywood
@@ -779,7 +783,7 @@ pandoc(){
 		--name pandoc \
 		${DOCKER_REPO_PREFIX}pandoc ${args} ${rfile}
 }
-phonegap_bk(){
+phonegap(){
 	  images_local_build phonegap 3.6.0-0-21-19
 
 		del_stopped phonegap
@@ -988,11 +992,11 @@ skype(){
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
-		--link pulseaudio:pulseaudio \
-		-e PULSE_SERVER=pulseaudio \
 		--security-opt seccomp:unconfined \
 		--device /dev/video0 \
 		--group-add video \
+		--link pulseaudio:pulseaudio \
+		-e PULSE_SERVER=pulseaudio \
 		--group-add audio \
 		--name skype \
 		${DOCKER_REPO_PREFIX}skype
@@ -1001,6 +1005,7 @@ slack(){
   images_local_build slack
 
 	del_stopped slack
+	relies_on pulseaudio
 
 	sudo docker run -d \
 		-v /etc/localtime:/etc/localtime:ro \
@@ -1009,11 +1014,13 @@ slack(){
 		--device /dev/snd \
 		--device /dev/dri \
 		--device /dev/video0 \
+		--link pulseaudio:pulseaudio \
+		-e PULSE_SERVER=pulseaudio \
 		--group-add audio \
 		--group-add video \
 		-v /home/jessie/.slack:/root/.config/Slack \
 		--name slack \
-		${DOCKER_REPO_PREFIX}slack
+		${DOCKER_REPO_PREFIX}slack "$@"
 }
 spotify(){
   images_local_build spotify
@@ -1042,13 +1049,14 @@ sublime-text-3(){
 
   images_local_build sublime-text-3
 
-	docker run -ti --rm \
+	docker run -d -ti \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v $HOME/.config/sublime-text-3/:/root/.config/sublime-text-3 \
 		-v $HOME/$DOTFILES_FOLDER_PROJECTS:/root/development \
-		-v `pwd`:/var/www \
-		${DOCKER_REPO_PREFIX}sublime-text-3
+		-v `pwd`:/root/www \
+		-v /var/run/dbus:/var/run/dbus \
+		${DOCKER_REPO_PREFIX}sublime-text-3 "$@"
 }
 ssh2john(){
   images_local_build john
