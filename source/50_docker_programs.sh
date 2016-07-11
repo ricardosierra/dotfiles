@@ -7,7 +7,7 @@ export DOCKERFILES_PATH=~/.dockerfiles
 
 # All Docker Programs
 docker_programs=(
-	apt_file
+	"apt-file"
 	atom
 	audacity
 	aws
@@ -37,18 +37,18 @@ docker_programs=(
     lynx
     masscan
     mpd
-    mysql-workbench
-    mutt
+    "mysql-workbench"
+    "mutt"
     ncmpc
     neoman
     nes
     netbeans
-    netbeans-php
-    netbeans-java
+    "netbeans-php"
+    "netbeans-java"
     netcat
     nginx
     nmap
-    notify-osd
+    "notify-osd"
     pandoc
     phonegap
     pivmanpms
@@ -66,7 +66,7 @@ docker_programs=(
     skype
     slack
     spotify
-    sublime-text-3
+    "sublime-text-3"
     john
     steam
     t
@@ -78,10 +78,10 @@ docker_programs=(
     tor-browser
     tor-messenger
     tor-proxy
-    trceroute
+    traceroute
     transmission
-    libvirt-client
-    virt-viewer
+    "libvirt-client"
+    "virt-viewer"
     visualstudio
     vlc
     warzone2100
@@ -441,7 +441,7 @@ gimp(){
 gitk(){
   images_local_build gitk
 
-	docker run -d -ti --rm \
+	docker run -d -ti \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/var/www \
