@@ -1,16 +1,21 @@
 #RESET PATH
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
 # Add binaries into the path
-PATH=$DOTFILES/bin:$PATH:/usr/bin:/sbin:bin
+PATH="$DOTFILES/bin:$PATH"
+echo "PAssou aqui1 $PATH";
 export PATH
+echo "PAssou aqui2 $PATH";
 
 # PROGRAMS VARIABLES
 export ANDROID_HOME="/home/$USER/$DOTFILES_FOLDER_PROGRAMS/android-sdk-linux"
 export ANDROID_PLATFORM_TOOLS="/home/$USER/$DOTFILES_FOLDER_PROGRAMS/android-sdk-linux/platform-tools/"
 export PATH="$PATH:$ANDROID_HOME:$ANDROID_PLATFORM_TOOLS"
 
+#OTHERS PROGRAMS
+export PATH="$HOME/.composer/vendor/bin:$PATH"
 # go path
 export GOPATH=$HOME/.go
+export PATH=/usr/local/go/bin:$PATH:$GOPATH/bin:/usr/share/bcc/tools
 
 # update path
-export PATH=/usr/local/bin:/usr/local/go/bin:$PATH:$GOPATH/bin:/usr/share/bcc/tools:/sbin
+echo "PAssou aqui3 $PATH";

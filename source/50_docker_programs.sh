@@ -195,7 +195,7 @@ alias a=atom
 atom(){
   images_local_build atom
 
-	docker run -d -ti --rm \
+	docker run -d -ti \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/var/www \
@@ -313,6 +313,22 @@ chrome(){
 		--host-resolver-rules="$map" $args
 
 }
+clementine(){
+  images_local_build clementine
+
+	relies_on pulseaudio
+
+	docker run -d \
+		-v /etc/localtime:/etc/localtime:ro \
+		-e DISPLAY=$DISPLAY \
+		--device /dev/snd \
+		--link pulseaudio:pulseaudio \
+		-e PULSE_SERVER=pulseaudio \
+		--group-add audio \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v $HOME/Musicas:/root/Music \
+		${DOCKER_REPO_PREFIX}clementine "$@"
+}
 consul(){
   	images_local_build consul
 	del_stopped consul
@@ -369,7 +385,7 @@ dcos(){
 dia(){
   images_local_build dia
 
-	docker run -d -ti --rm \
+	docker run -d -ti \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/root \
