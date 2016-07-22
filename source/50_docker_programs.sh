@@ -19,6 +19,7 @@ docker_programs=(
 	consul
     cordova
     dcos-cli
+    dbvis
     dia
     firefox
     gcalcli
@@ -384,6 +385,15 @@ dcos(){
 		-v $(pwd):/root/apps \
 		-w /root/apps \
 		${DOCKER_REPO_PREFIX}dcos-cli "$@"
+}
+dbvis(){
+  images_local_build dbvis
+
+	docker run -d -ti \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v `pwd`:/root \
+		${DOCKER_REPO_PREFIX}dbvis
 }
 dia(){
   images_local_build dia

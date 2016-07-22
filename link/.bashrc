@@ -13,6 +13,14 @@ export DOTFILES=~/.dotfiles
 
 source $HOME/.dotfilesconfig.local
 
+# Welcome Mensage
+if [ "$DOTFILES_LANGUAGE" == "pt-BR" ]; then
+	cowsay "Seja Bem Vindo $USER! Hoje é $(date '+%A, %d de %B de %Y às %T')"
+else
+	cowsay "Welcome $USER! It's now $(date '+%A, %B %d %Y %r')"
+fi
+
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -141,3 +149,8 @@ if [ -f /home/sierra/.tnsrc ]; then
     source /home/sierra/.tnsrc 
 fi
 ###-tns-completion-end-###
+
+### GIT COMPLETIONS
+if [ -f ~/.git-completion.bash ]; then
+ . ~/.git-completion.bash
+fi

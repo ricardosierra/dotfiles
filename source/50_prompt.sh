@@ -5,8 +5,7 @@
 # http://benalman.com/about/license/
 #
 # Example:
-# [master:!?][cowboy@CowBook:~/.dotfiles]
-# [11:14:45] $
+# [master:!?][sierra@pcDoSierra][17:17:12]:~/Development/Projects $
 #
 # Read more (and see a screenshot) in the "Prompt" section of
 # https://github.com/ricardorsierra/dotfiles
@@ -22,34 +21,40 @@
 # 32  42  green     36  46  cyan
 # 33  43  yellow    37  47  white
 
-if [[ ! "${prompt_colors[@]}" ]]; then
-  prompt_colors=(
-    "36" # information color
-    "37" # bracket color
-    "31" # error color
-  )
+# DEFAULT COLORS
+if [[ ! "${reset}" ]]; then
 
   if [[ "$SSH_TTY" ]]; then
     # connected via ssh
-    prompt_colors[0]="32"
+    reset="\[\e[32m\]"
   elif [[ "$USER" == "root" ]]; then
     # logged in as root
-    prompt_colors[0]="35"
+    reset="\[\e[35m\]"
+  else
+    # logged in as default user
+    reset="\[\e[36m\]"
   fi
-fi
 
-# Inside a prompt function, run this alias to setup local $c0-$c9 color vars.
-alias prompt_getcolors='prompt_colors[9]=; local i; for i in ${!prompt_colors[@]}; do local c$i="\[\e[0;${prompt_colors[$i]}m\]"; done'
+  bracket="\[\e[37m\]"
+  error="\[\e[31m\]"
+
+  green="\[\e[32m\]"
+  magenta="\[\e[35m\]"
+  blue="\[\e[34m\]"
+  cyan="\[\e[36m\]"
+  white="\[\e[37m\]"
+  yellow="\[\e[33m\]"
+  purple="\[\e[35m\]"
+  bold=$(tput bold)
+fi
 
 # Exit code of previous command.
 function prompt_exitcode() {
-  prompt_getcolors
   [[ $1 != 0 ]] && echo " $c2$1$c9"
 }
 
 # Git status.
 function prompt_git() {
-  prompt_getcolors
   local status output flags branch
   status="$(git status 2>/dev/null)"
   [[ $? != 0 ]] && return;
@@ -64,14 +69,13 @@ function prompt_git() {
       END {print r}'
   )"
   if [[ "$flags" ]]; then
-    output="$output$c1:$c0$flags"
+    output="$output$c1:${reset}$flags"
   fi
-  echo "$c1[$c0$output$c1]$c9"
+  echo "$c1[${green}${output}${c1}]$c9"
 }
 
 # hg status.
 function prompt_hg() {
-  prompt_getcolors
   local summary output bookmark flags
   summary="$(hg summary 2>/dev/null)"
   [[ $? != 0 ]] && return;
@@ -85,20 +89,19 @@ function prompt_hg() {
   )"
   output="$output:$bookmark"
   if [[ "$flags" ]]; then
-    output="$output$c1:$c0$flags"
+    output="$output$c1:${reset}$flags"
   fi
-  echo "$c1[$c0$output$c1]$c9"
+  echo "$c1[${reset}$output$c1]$c9"
 }
 
 # SVN info.
 function prompt_svn() {
-  prompt_getcolors
   local info="$(svn info . 2> /dev/null)"
   local last current
   if [[ "$info" ]]; then
     last="$(echo "$info" | awk '/Last Changed Rev:/ {print $4}')"
     current="$(echo "$info" | awk '/Revision:/ {print $2}')"
-    echo "$c1[$c0$last$c1:$c0$current$c1]$c9"
+    echo "$c1[${reset}$last$c1:${reset}$current$c1]$c9"
   fi
 }
 
@@ -119,25 +122,33 @@ function prompt_command() {
   # While the simple_prompt environment var is set, disable the awesome prompt.
   [[ "$simple_prompt" ]] && PS1='\n$ ' && return
 
-  prompt_getcolors
   # http://twitter.com/cowboy/status/150254030654939137
   PS1="\n"
+
   # svn: [repo:lastchanged]
   PS1="$PS1$(prompt_svn)"
+
   # git: [branch:flags]
   PS1="$PS1$(prompt_git)"
+
   # hg:  [branch:flags]
   PS1="$PS1$(prompt_hg)"
+
   # misc: [cmd#:hist#]
-  # PS1="$PS1$c1[$c0#\#$c1:$c0!\!$c1]$c9"
-  # path: [user@host:path]
-  PS1="$PS1$c1[$c0\u$c1@$c0\h$c1:$c0\w$c1]$c9"
-  PS1="$PS1\n"
+  #PS1="$PS1$c1[${reset}#\#$c1:${reset}!\!$c1]$c9"
+
+  # [user@host:path]
+  PS1="$PS1$c1[${reset}\u$c1@${reset}\h$c1]"
+
   # date: [HH:MM:SS]
-  PS1="$PS1$c1[$c0$(date +"%H$c1:$c0%M$c1:$c0%S")$c1]$c9"
+  PS1="$PS1$c1[${yellow}$(date +"%H$c1:${yellow}%M$c1:${yellow}%S")$c1]$c9"
+
+  # [path]
+  PS1="$PS1:${reset}\w${reset}"
+  
   # exit code: 127
   PS1="$PS1$(prompt_exitcode "$exit_code")"
-  PS1="$PS1 \$ "
+  PS1="$PS1 $c1\$ "
 }
 
 PROMPT_COMMAND="prompt_command"
