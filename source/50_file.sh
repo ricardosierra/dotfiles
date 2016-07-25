@@ -39,6 +39,9 @@ alias eachdir=". eachdir"
 
 alias mine='sudo chown -R $USER'
 
+# Enter in Directory without cd
+shopt -s autocd
+
 # Create a new directory and enter it
 function md() {
   mkdir -p "$@" && cd "$@"
