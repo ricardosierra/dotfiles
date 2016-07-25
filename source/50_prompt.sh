@@ -69,9 +69,9 @@ function prompt_git() {
       END {print r}'
   )"
   if [[ "$flags" ]]; then
-    output="$output$c1:${reset}$flags"
+    output="$output${bracket}:${reset}$flags"
   fi
-  echo "$c1[${green}${output}${c1}]$c9"
+  echo "${bracket}[${green}${output}${bracket}]$c9"
 }
 
 # hg status.
@@ -89,9 +89,9 @@ function prompt_hg() {
   )"
   output="$output:$bookmark"
   if [[ "$flags" ]]; then
-    output="$output$c1:${reset}$flags"
+    output="$output${bracket}:${reset}$flags"
   fi
-  echo "$c1[${reset}$output$c1]$c9"
+  echo "${bracket}[${reset}$output${bracket}]$c9"
 }
 
 # SVN info.
@@ -101,7 +101,7 @@ function prompt_svn() {
   if [[ "$info" ]]; then
     last="$(echo "$info" | awk '/Last Changed Rev:/ {print $4}')"
     current="$(echo "$info" | awk '/Revision:/ {print $2}')"
-    echo "$c1[${reset}$last$c1:${reset}$current$c1]$c9"
+    echo "${bracket}[${reset}$last${bracket}:${reset}$current${bracket}]$c9"
   fi
 }
 
@@ -135,20 +135,20 @@ function prompt_command() {
   PS1="$PS1$(prompt_hg)"
 
   # misc: [cmd#:hist#]
-  #PS1="$PS1$c1[${reset}#\#$c1:${reset}!\!$c1]$c9"
+  #PS1="$PS1${bracket}[${reset}#\#${bracket}:${reset}!\!${bracket}]$c9"
 
   # [user@host:path]
-  PS1="$PS1$c1[${reset}\u$c1@${reset}\h$c1]"
+  PS1="$PS1${bracket}[${reset}\u${bracket}@${reset}\h${bracket}]"
 
   # date: [HH:MM:SS]
-  PS1="$PS1$c1[${yellow}$(date +"%H$c1:${yellow}%M$c1:${yellow}%S")$c1]$c9"
+  PS1="$PS1${bracket}[${yellow}$(date +"%H${bracket}:${yellow}%M${bracket}:${yellow}%S")${bracket}]${reset}"
 
   # [path]
   PS1="$PS1:${reset}\w${reset}"
   
   # exit code: 127
   PS1="$PS1$(prompt_exitcode "$exit_code")"
-  PS1="$PS1 $c1\$ "
+  PS1="$PS1 ${bracket}\$ "
 }
 
 PROMPT_COMMAND="prompt_command"
