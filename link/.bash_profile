@@ -1,11 +1,13 @@
 if [ -f ~/.bashrc ]; then
   source ~/.bashrc
 fi
+cowsay "Bash já executado as $(date '+%A, %d de %B de %Y às %T')"
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you donâ€™t want to commit.
 for file in ~/.{bash_prompt,aliases,functions,dotfilesconfig.local,path,dockerfunc,exports}; do
-  echo $file
+    echo $file
+    cowsay "${file} já executado as $(date '+%A, %d de %B de %Y às %T')"
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
 done
 unset file
@@ -38,7 +40,7 @@ done
 #fortune -a -s | lolcat
 
 ###-tns-completion-start-###
-if [ -f /home/sierra/.tnsrc ]; then 
-    source /home/sierra/.tnsrc 
+if [ -f /home/sierra/.tnsrc ]; then
+    source /home/sierra/.tnsrc
 fi
 ###-tns-completion-end-###

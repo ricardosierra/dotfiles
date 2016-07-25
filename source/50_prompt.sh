@@ -145,9 +145,9 @@ function prompt_command() {
 
   # [path]
   PS1="$PS1:${reset}\w${reset}"
-  
+
   # exit code: 127
-  PS1="$PS1$(prompt_exitcode "$exit_code")"
+  PS1="$PS1${error}$(prompt_exitcode "$exit_code")"
   PS1="$PS1 ${bracket}\$ "
 }
 

@@ -21,10 +21,6 @@ else
 fi
 
 
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
-
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
 #shopt -s globstar
@@ -145,8 +141,8 @@ function dotfiles() {
 src
 
 ###-tns-completion-start-###
-if [ -f /home/sierra/.tnsrc ]; then 
-    source /home/sierra/.tnsrc 
+if [ -f /home/sierra/.tnsrc ]; then
+    source /home/sierra/.tnsrc
 fi
 ###-tns-completion-end-###
 

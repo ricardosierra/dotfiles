@@ -17,6 +17,7 @@
   pp = !"echo 'Pull'; git pull; echo 'Push'; git push"
   files = "!git diff --name-status $1^ $1"
   tests = !"echo 'Test Merge with $1'; git push origin $1; git checkout tests; git pull origin tests; git merge $1; git push origin tests"
+  teste = !"echo 'Test Merge with $1'; git push origin $1; git checkout teste; git pull origin teste; git merge $1; git push origin teste"
   new = !"echo 'New branch $1'; git checkout master; git pull origin master; git checkout -b $1;"
   update = !"echo 'Update branch $1'; git checkout master; git pull origin master; git checkout $1; git merge master;"
   rb = rbranch
