@@ -31,7 +31,6 @@ casks=(
   duet
   easysimbl
   fastscripts
-  firefox
   google-chrome
   gyazo
   hermes
@@ -51,11 +50,8 @@ casks=(
   scroll-reverser
   seil
   sharemouse
-  skype
-  slack
   sonos
   sourcetree
-  spotify
   star-realms
   steam
   synology-assistant
