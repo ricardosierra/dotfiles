@@ -161,3 +161,43 @@ if is_osx; then
     fi
   }
 fi
+
+# Use Git’s colored diff when available
+hash git &>/dev/null
+if [ $? -eq 0 ]; then
+	diff() {
+		git diff --no-index --color-words "$@"
+	}
+fi
+
+# Create a git.io short URL
+gitio() {
+	if [ -z "${1}" -o -z "${2}" ]; then
+		echo "Usage: \`gitio slug url\`"
+		return 1
+	fi
+	curl -i http://git.io/ -F "url=${2}" -F "code=${1}"
+}
+
+
+# Call from a local repo to open the repository on github/bitbucket in browser
+repo() {
+	local giturl=$(git config --get remote.origin.url | sed 's/git@/\/\//g' | sed 's/.git$//' | sed 's/https://g' | sed 's/:/\//g')
+	if [[ $giturl == "" ]]; then
+		echo "Not a git repository or no remote.origin.url is set."
+	else
+		local gitbranch=$(git rev-parse --abbrev-ref HEAD)
+		local giturl="http:${giturl}"
+
+		if [[ $gitbranch != "master" ]]; then
+			if echo "${giturl}" | grep -i "bitbucket" > /dev/null ; then
+				local giturl="${giturl}/branch/${gitbranch}"
+			else
+				local giturl="${giturl}/tree/${gitbranch}"
+			fi
+		fi
+
+		echo $giturl
+		open $giturl
+	fi
+}

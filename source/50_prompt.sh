@@ -10,6 +10,12 @@
 # Read more (and see a screenshot) in the "Prompt" section of
 # https://github.com/ricardorsierra/dotfiles
 
+if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
+	export TERM='gnome-256color';
+elif infocmp xterm-256color >/dev/null 2>&1; then
+	export TERM='xterm-256color';
+fi;
+
 # ANSI CODES - SEPARATE MULTIPLE VALUES WITH ;
 #
 #  0  reset          4  underline
@@ -22,31 +28,35 @@
 # 33  43  yellow    37  47  white
 
 # DEFAULT COLORS
-if [[ ! "${reset}" ]]; then
+bold=$(tput bold)
+reset="\[\e[0m\]";
+black="\[\e[1;30m\]";
+blue="\[\e[1;34m\]";
+cyan="\[\e[1;36m\]";
+green="\[\e[1;32m\]";
+orange="\[\e[1;33m\]";
+purple="\[\e[1;35m\]";
+red="\[\e[1;31m\]";
+violet="\[\e[1;35m\]";
+white="\[\e[1;37m\]";
+yellow="\[\e[1;33m\]";
+bracket=$white
+error=$red
+# Highlight the user name when logged in as root.
+if [[ "${USER}" == "root" ]]; then
+	userStyle="${purple}";
+	reset="${purple}";
 
-  if [[ "$SSH_TTY" ]]; then
-    # connected via ssh
-    reset="\[\e[32m\]"
-  elif [[ "$USER" == "root" ]]; then
-    # logged in as root
-    reset="\[\e[35m\]"
-  else
-    # logged in as default user
-    reset="\[\e[36m\]"
-  fi
-
-  bracket="\[\e[37m\]"
-  error="\[\e[31m\]"
-
-  green="\[\e[32m\]"
-  magenta="\[\e[35m\]"
-  blue="\[\e[34m\]"
-  cyan="\[\e[36m\]"
-  white="\[\e[37m\]"
-  yellow="\[\e[33m\]"
-  purple="\[\e[35m\]"
-  bold=$(tput bold)
-fi
+else
+	userStyle="${blue}";
+	reset="${blue}";
+fi;
+# Highlight the hostname when connected via SSH.
+if [[ "${SSH_TTY}" ]]; then
+	hostStyle="${bold}${green}";
+else
+	hostStyle="${blue}";
+fi;
 
 # Exit code of previous command.
 function prompt_exitcode() {
@@ -138,7 +148,7 @@ function prompt_command() {
   #PS1="$PS1${bracket}[${reset}#\#${bracket}:${reset}!\!${bracket}]$c9"
 
   # [user@host:path]
-  PS1="$PS1${bracket}[${reset}\u${bracket}@${reset}\h${bracket}]"
+  PS1="$PS1${bracket}[${userStyle}\u${bracket}@${hostStyle}\h${bracket}]"
 
   # date: [HH:MM:SS]
   PS1="$PS1${bracket}[${yellow}$(date +"%H${bracket}:${yellow}%M${bracket}:${yellow}%S")${bracket}]${reset}"
@@ -149,6 +159,9 @@ function prompt_command() {
   # exit code: 127
   PS1="$PS1${error}$(prompt_exitcode "$exit_code")"
   PS1="$PS1 ${bracket}\$ "
+
+  PS2="${yellow}→ ${reset}";
+  export PS2;
 }
 
 PROMPT_COMMAND="prompt_command"

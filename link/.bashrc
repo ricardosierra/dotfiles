@@ -150,3 +150,7 @@ fi
 if [ -f ~/.git-completion.bash ]; then
  . ~/.git-completion.bash
 fi
+
+if [ -f ~/.bashrc ]; then
+  source ~/.bash_profile
+fi
