@@ -49,10 +49,12 @@ fi
 
 # Install APT packages.
 packages=(
+  apparmor
+  apt-transport-https
   ansible
   autoconf # for c compile
   build-essential # for c compile
-  docker.io
+  ca-certificates
   cowsay
   git-core
   chromium-browser

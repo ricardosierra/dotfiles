@@ -53,7 +53,6 @@ casks=(
   sonos
   sourcetree
   star-realms
-  steam
   synology-assistant
   teamspeak-client
   teamviewer

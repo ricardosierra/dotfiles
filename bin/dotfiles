@@ -60,9 +60,13 @@ function assert() {
 #############################################################################
 #############################################################################
 function get_os() {
-  for os in osx ubuntu debian; do
+  for os in osx windows ubuntu debian; do
     is_$os; [[ $? == ${1:-0} ]] && echo $os
   done
+}
+# WINDOWS
+function is_windows() {
+     [[ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]] || return 1
 }
 # MAC
 function is_osx() {
@@ -342,7 +346,7 @@ function do_usr() {
     # f=$$(echo $$file | sed -e 's|$(CURDIR)||');
     # echo "Testando envio, no futuro será enviado Fcomdoiscifroes: $$f f:  $f File:  $$file"
     # #sudo ln -f $$file $$f;
-    
+
     # # Destination file already exists in ~/. Back it up!
     # if [[ -e "$$f" ]]; then
     #   e_arrow "Backing up ~/$$file."

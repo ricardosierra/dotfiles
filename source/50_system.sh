@@ -1,6 +1,3 @@
-# Ubuntu-only stuff. Abort if not Ubuntu.
-is_linux || return 1
-
 # Package management
 if is_debian; then
   alias update="sudo apt-get -qq update && sudo apt-get upgrade"
@@ -12,7 +9,7 @@ elif is_archlinux; then
   alias install="sudo pacman install"
   alias remove="sudo pacman remove"
   alias search="pacman -Q"
-else
+elif is_linux; then
   alias update="sudo yum -qq update && sudo yum upgrade"
   alias install="sudo yum install"
   alias remove="sudo yum remove"

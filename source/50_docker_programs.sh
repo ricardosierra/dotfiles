@@ -97,10 +97,11 @@ docker_programs=(
 #
 # Helper Functions
 #
-
+alias de="docker_exec"
+alias docker_exec="docker exec -it $1 bash"
 
 docker_build_all(){
-    for elt in "${docker_programs[@]}";do 
+    for elt in "${docker_programs[@]}";do
         echo "Fazendo Build de: $elt"
         images_local_build $elt;
     done
