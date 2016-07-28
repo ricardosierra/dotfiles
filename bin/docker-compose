@@ -12,6 +12,9 @@
 # the $COMPOSE_OPTIONS environment variable.
 #
 
+# Desable docker notary TRUST because this cause one erro in docker-compose
+export DOCKER_CONTENT_TRUST=0
+
 set -e
 
 VERSION="1.7.1"
