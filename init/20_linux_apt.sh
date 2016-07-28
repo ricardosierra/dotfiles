@@ -79,7 +79,7 @@ packages=(
 )
 
 # More APT packages
-if is_debian; then
+if is_debianOS || is_kali; then
   packages+=(
     php7
     php7.0-xml #precisa pro phpunit funcionar
@@ -94,7 +94,7 @@ elif is_archlinux; then
 else
   packages+=(
     php
-    php70w-xml #precisa pro phpunit funcionar
+    #php70w-xml #precisa pro phpunit funcionar
     openssh-server
   )
 fi

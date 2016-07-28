@@ -1,3 +1,7 @@
+# Desable docker notary TRUST because this cause one erro in docker-compose 
+export DOCKER_CONTENT_TRUST=0
+
+
 alias drun='docker run -it --rm'
 
 # Docker Machine
@@ -16,6 +20,8 @@ alias mstar='docker-machine start '
 alias mstop='docker-machine stop '
 
 # GetIP addresses
+alias dc="dockexec"
+alias docker_exec="dockexec"
 dockexecl() { docker exec -i -t $(docker ps -l -q) bash ;}
 dockexec() { docker exec -i -t $@ bash ;}
 alias dockip='docker inspect --format "{{ .NetworkSettings.IPAddress }}"'
@@ -128,3 +134,91 @@ delimg() { docker rmi $(docker images | grep $@ | awk '{print $3}') ;}
 alias conns="sudo lsof -a -p $(pidof docker) | wc -l"
 # Same as above for unclosed threads but more generic name to pid match such as docker-dev-1.x
 alias conns2="lsof -a -p $(ps -e | grep docker | awk '{print $1}' | head -n1) | wc  -l"
+
+#
+# Helper Functions
+#
+docker_build_all(){
+    for elt in "${docker_programs[@]}";do
+        echo "Fazendo Build de: $elt"
+        images_local_build $elt;
+    done
+}
+
+dcleanup(){
+	docker rm $(docker ps -aq 2>/dev/null) 2>/dev/null
+	docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
+	docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
+}
+images_local_build(){
+	local name=$1
+	local version=$2
+	#Versão vira uma subpasta do repositorio
+  if [[ "$version" != "" ]]; then
+		directory="${name}/${version}"
+  else
+		directory="${name}"
+	fi
+	#Se a pasta não existe, returna sem buildar nada
+	if [ ! -d "${DOCKERFILES_PATH}/${directory}" ]; then
+		echo "Erro - Dockerfile not found: "$directory
+		return 1
+	fi
+
+  if [[ "$(docker images -q $name 2> /dev/null)" == "" ]]; then
+		echo "Docker Build: ${directory}"
+    docker build -t $name ${DOCKERFILES_PATH}/${directory}
+  fi
+}
+del_stopped(){
+	local name=$1
+	local state=$(docker inspect --format "{{.State.Running}}" $name 2>/dev/null)
+
+	if [[ "$state" == "false" ]]; then
+		docker rm $name
+	fi
+}
+relies_on(){
+	local containers=$@
+
+	for container in $containers; do
+		local state=$(docker inspect --format "{{.State.Running}}" $container 2>/dev/null)
+
+		if [[ "$state" == "false" ]] || [[ "$state" == "" ]]; then
+			echo "$container is not running, starting it for you."
+			$container
+		fi
+	done
+}
+# creates an nginx config for a local route
+nginx_config(){
+	server=$1
+	route=$2
+
+	cat >${HOME}/.nginx/conf.d/${server}.conf <<-EOF
+	upstream ${server} { server ${route}; }
+	server {
+	server_name ${server};
+	location / {
+	proxy_pass  http://${server};
+	proxy_http_version 1.1;
+	proxy_set_header Upgrade \$http_upgrade;
+	proxy_set_header Connection "upgrade";
+	proxy_set_header Host \$http_host;
+	proxy_set_header X-Forwarded-Proto \$scheme;
+	proxy_set_header X-Forwarded-For \$remote_addr;
+	proxy_set_header X-Forwarded-Port \$server_port;
+	proxy_set_header X-Request-Start \$msec;
+}
+	}
+	EOF
+
+	# restart nginx
+	docker restart nginx
+
+	# add host to /etc/hosts
+	sudo hostess add $server 127.0.0.1
+
+	# open browser
+	browser-exec "http://${server}"
+}
