@@ -74,6 +74,7 @@ packages=(
   tree
   xclip
   #xcompmgr #compiz, nao funciona no ubuntu
+  secure-delete # command srm (replaces a file before removing thus to avoid any type of file recovery)
   vim
   vim-gnome
 )

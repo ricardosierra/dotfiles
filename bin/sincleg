@@ -1,0 +1,89 @@
+#!/bin/bash
+# sincleg - Sincronizador de Legenda
+# Autor: Daemonio ( undefinido at gmail com )
+# Wed Jan 13 11:46:56 BRST 2010
+# Mon Jan 18 19:14:05 BRST 2010
+# Thu Jan 28 19:57:43 BRST 2010
+#
+# == Uso ==
+# $ cat legenda.srt | ./sincleg '+1000' > nova_legenda.srt
+#          ou
+# $ ./sincleg '+1000' < legenda.srt > nova_legenda.srt
+#
+# O segundo parametro e' o ajuste em milisegundos.
+# Nos exemplos acima, as legendas foram adiantadas em 1 segundo.
+# Para atrasar use o sinal '-', como em:
+# $ ./sincleg '-3123' < legenda.srt > nova_legenda.srt
+# Nesse caso as legendas foram atrasadas em 3,123 segundos.
+#
+# = Observacao =
+# Se o arquivo de legenda estiver no formato de texto windows (com o ^M
+# no final), entao uma conversao para o formato unix tera que ser
+# feita. Para isso, basta voce utilizar o programa fromdos.
+# $ fromdos < legenda.srt > lengenda2.srt
+# $ ./sincleg '+1000' < lengeda2.srt > nova_lengenda.srt
+#          ou
+# $ fromdos < legenda.srt | ./sincleg '+1000' > nova_legenda.srt
+#
+# == Geral ==
+# O trabalho todo e' feito pelo bc. Entao ele reporta a maioria
+# dos erros que ocorre durante a execucao do script.
+# O script em geral nao faz verificacao do parametro passado e muito
+# menos verifica se o tempo total retornado e' valido (tempo negativo,
+# por exemplo). Entao cabe ao usuario passar os parametros corretos
+# (somente numeros e subtrair um tempo inferior que o tempo da legenda)
+#
+# A variavel FORMAT contem a regexp para casar a linha que
+# contem o tempo das legendas.
+#
+FORMAT='[0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3}'
+FORMAT="^${FORMAT} --> ${FORMAT}"
+LINE=
+TIME=
+NEW_TIME=
+MILI=
+
+get_new_time() {
+
+   local S=
+
+   #
+   # NEW_TIME ira conter o tempo total (tempo da legenda +
+   # parametro do usuario) em segundos. Essa variavel e' do tipo
+   # float com tres casas apos o ponto (scale=3).
+   # Veja que antes do ponto e' a quantidade inteira em segundos e
+   # apos o ponto e' a quantidade em milisegundos.
+   # ${NEW_TIME%.*} --> segundos (a parte inteira)
+   # ${NEW_TIME#*.} --> milisegundos
+   #
+   NEW_TIME=`echo $TIME |
+   sed -e 's@\([0-9]*\):\([0-9]*\):\([0-9]*\),\(.*\)@scale=3; \1*3600+\2*60+\3+\4/1000@'\
+       -e  "s,$, + $MILI/1000," | bc`
+
+   #
+   # Conversao do tempo total em segundos para o
+   # formato da legenda.
+   #
+   S=${NEW_TIME%.*}
+   echo "print h=$S/3600,\":\",($S-last)/60,\":\",$S-(h*3600)-(last*60)" | bc |
+   sed -e "s/$/,${NEW_TIME#*.}/" -e 's/\b[0-9]\b/0&/g'
+
+}
+
+MILI=${1:-0}
+MILI=${MILI#*+}
+
+while read LINE
+do
+   #if echo $LINE | grep -qE "$FORMAT"
+   if [[ $LINE =~ $FORMAT ]]
+   then
+      for TIME in ${LINE/ -->/}
+      do
+         get_new_time
+         echo
+      done | sed 'N;s/\n/ --> /'
+   else
+      echo $LINE
+   fi
+done
