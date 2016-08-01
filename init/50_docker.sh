@@ -72,6 +72,4 @@ install_docker() {
     fi
 }
 
-
-echo "Aquiii"
 install_docker

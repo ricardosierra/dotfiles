@@ -7,6 +7,7 @@ export DOCKERFILES_PATH=~/.dockerfiles
 
 # All Docker Programs
 docker_programs=(
+	"android-studio"
 	"apt-file"
 	atom
 	audacity
@@ -97,6 +98,16 @@ docker_programs=(
 #
 # Container Aliases
 #
+android-studio(){
+	del_stopped android-studio
+
+	sudo docker run -ti --rm \
+   		-e DISPLAY=$DISPLAY \
+   		--privileged \
+		-v /dev/bus/usb:/dev/bus/usb \
+   		-v /tmp/.X11-unix:/tmp/.X11-unix \
+   		kelvinlawson/android-studio
+}
 apt_file(){
   	images_local_build apt-file
 	docker run --rm -it \
