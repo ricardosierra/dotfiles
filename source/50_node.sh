@@ -1,8 +1,5 @@
-return 1
-
-
-export PATH
-PATH=~/.nave/installed/default/bin:"$(path_remove ~/.nave/installed/*/bin)"
+export PATH="~/.nave/installed/default/bin:$PATH"
+#PATH=~/.nave/installed/default/bin:"$(path_remove ~/.nave/installed/*/bin)"
 
 # Set a specific version of node as the "default" for "nave use default"
 function nave_default() {
@@ -40,6 +37,7 @@ npm_globals=(
   phonegap@3.6.0-0.21.19
   cordova@5.0.0
   ripple-emulator@0.9.24
+  tns-android
   yo
 )
 

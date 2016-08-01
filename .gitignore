@@ -23,4 +23,7 @@
 *LOCAL*
 *.local
 
+#npm
+npm-debug.log
+
 /init/60_fidelize.sh
