@@ -65,22 +65,11 @@ function prompt_exitcode() {
 
 # Git status.
 function prompt_git() {
-  local status output flags branch
-  status="$(git status 2>/dev/null)"
+  local status output
+  status="$(git branch 2>/dev/null)"
   [[ $? != 0 ]] && return;
-  output="$(echo "$status" | awk '/# Initial commit/ {print "(init)"}')"
-  [[ "$output" ]] || output="$(echo "$status" | awk '/# On branch/ {print $4}')"
-  [[ "$output" ]] || output="$(git branch | perl -ne '/^\* \(detached from (.*)\)$/ ? print "($1)" : /^\* (.*)/ && print $1')"
-  flags="$(
-    echo "$status" | awk 'BEGIN {r=""} \
-        /^(# )?Changes to be committed:$/        {r=r "+"}\
-        /^(# )?Changes not staged for commit:$/  {r=r "!"}\
-        /^(# )?Untracked files:$/                {r=r "?"}\
-      END {print r}'
-  )"
-  if [[ "$flags" ]]; then
-    output="$output${bracket}:${reset}$flags"
-  fi
+  output="$(git branch | perl -ne '/^\* \(detached from (.*)\)$/ ? print "($1)" : /^\* (.*)/ && print $1')"
+
   echo "${bracket}[${green}${output}${bracket}]$c9"
 }
 

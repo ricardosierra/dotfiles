@@ -140,7 +140,7 @@ function dotfiles() {
 
 src
 
-###-tns-completion-start-###
+### TNS (Native Script) COMPLETIONS
 if [ -f /home/sierra/.tnsrc ]; then
     source /home/sierra/.tnsrc
 fi
@@ -149,6 +149,11 @@ fi
 ### GIT COMPLETIONS
 if [ -f ~/.git-completion.bash ]; then
  . ~/.git-completion.bash
+fi
+
+### DOCKER COMPLETIONS
+if [ -f ~/.docker-completion.bash ]; then
+ . ~/.docker-completion.bash
 fi
 
 if [ -f ~/.bashrc ]; then
