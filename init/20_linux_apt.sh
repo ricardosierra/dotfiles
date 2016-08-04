@@ -63,6 +63,9 @@ packages=(
   libssl-dev
   meld
   mercurial
+  network-manage
+  network-manager-openvpn
+  network-manager-openvpn-gnome
   python
   python-pip
   rxvt-unicode

@@ -270,7 +270,8 @@ dataurl() {
 	if [[ $mimeType == text/* ]]; then
 		mimeType="${mimeType};charset=utf-8"
 	fi
-	echo "data:${mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')"
+    localbase64="data:${mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')"
+	echo "$localbase64" | xclip -selection clipboard | echo '=> Base64 copied to pasteboard.'
 }
 
 # Use feh to nicely view images
