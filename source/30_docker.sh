@@ -1,4 +1,4 @@
-# Desable docker notary TRUST because this cause one erro in docker-compose 
+# Desable docker notary TRUST because this cause one erro in docker-compose
 export DOCKER_CONTENT_TRUST=0
 
 
@@ -134,6 +134,10 @@ delimg() { docker rmi $(docker images | grep $@ | awk '{print $3}') ;}
 alias conns="sudo lsof -a -p $(pidof docker) | wc -l"
 # Same as above for unclosed threads but more generic name to pid match such as docker-dev-1.x
 alias conns2="lsof -a -p $(ps -e | grep docker | awk '{print $1}' | head -n1) | wc  -l"
+
+#docker-compose
+alias up='docker-compose up'
+alias down='docker-compose down'
 
 #
 # Helper Functions
