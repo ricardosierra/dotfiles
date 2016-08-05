@@ -59,11 +59,11 @@ packages=(
   git-core
   chromium-browser
   id3tool
-  libxml2-dev
-  libssl-dev
+  #libxml2-dev # todo not identify by dpkg
+  #libssl-dev # todo not identify by dpkg
   meld
   mercurial
-  network-manage
+  network-manager
   network-manager-openvpn
   network-manager-openvpn-gnome
   python
@@ -112,7 +112,7 @@ if (( ${#packages[@]} > 0 )); then
   e_header "Installing APT packages: ${packages[*]}"
   for package in "${packages[@]}"; do
     if is_debian; then
-      sudo apt-get -qq install "$package"
+      sudo apt-get install "$package"
     elif is_archlinux; then
       sudo pacman -qq install "$package"
     else
@@ -171,5 +171,4 @@ if [[ ! "$(dpkg -l |grep google-talkplugin)" ]]; then
 fi
 
 # ssh
-ssh-agent bash
 ssh-add /home/${USER}/.ssh/id_rsa

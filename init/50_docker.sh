@@ -27,7 +27,7 @@ install_docker() {
         version=$(cut -d ':' -f 2 <<< $release | xargs)
         if [ $version == '12.04' ]; then
             package="deb https://apt.dockerproject.org/repo ubuntu-precise main"
-        if [ $version == '14.04' ]; then
+        elif [ $version == '14.04' ]; then
             package="deb https://apt.dockerproject.org/repo ubuntu-trusty main"
         elif [ $version == '15.10' ]; then
             package="deb https://apt.dockerproject.org/repo ubuntu-wily main"
@@ -62,7 +62,7 @@ install_docker() {
         $path $URL $SAIDA
     }
 
-    printf "Instalando o Docker.\n"
+    e_header "Installing Docker"
     if (is_osx); then
         install_docker_mac
     elif (is_windows); then
@@ -72,4 +72,7 @@ install_docker() {
     fi
 }
 
-install_docker
+# Install Docker
+if [[ ! "$(type -P docker)" ]]; then
+  install_docker
+fi
