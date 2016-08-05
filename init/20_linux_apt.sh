@@ -1,4 +1,4 @@
-# Ubuntu-only stuff. Abort if not Ubuntu.
+# Linux-only stuff. Abort if not Linux.
 is_linux || return 1
 
 # If the old files isn't removed, the duplicate APT alias will break sudo!
@@ -80,6 +80,7 @@ packages=(
   secure-delete # command srm (replaces a file before removing thus to avoid any type of file recovery)
   vim
   vim-gnome
+  virtualbox
 )
 
 # More APT packages
@@ -112,11 +113,11 @@ if (( ${#packages[@]} > 0 )); then
   e_header "Installing APT packages: ${packages[*]}"
   for package in "${packages[@]}"; do
     if is_debian; then
-      sudo apt-get install "$package"
+      sudo apt-get install "$package" -y
     elif is_archlinux; then
-      sudo pacman -qq install "$package"
+      sudo pacman -qq install "$package" -y
     else
-      sudo yum -qq install "$package"
+      sudo yum -qq install "$package" -y
     fi
   done
 fi
