@@ -2,9 +2,6 @@
 /caches/
 /backups/
 
-#Personalite Configuration
-/link/.extra
-
 # Top secret stuff!
 /link/.ssh/authorized_keys
 /link/.ssh/id_*
@@ -22,6 +19,8 @@
 # Ignore any file with LOCAL in the name (good for per-machine vars/functions)
 *LOCAL*
 *.local
+!/copy/.local
+!/link/.local
 
 #npm
 npm-debug.log

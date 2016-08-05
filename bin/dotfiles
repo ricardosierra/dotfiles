@@ -317,15 +317,26 @@ function init_do() {
 # Copy files.
 function copy_header() { e_header "Copying files into home directory"; }
 function copy_test() {
-  if [[ -e "$2" && ! "$(cmp "$1" "$2" 2> /dev/null)" ]]; then
+  if [ -d $1 ]; then
+    return ;
+  elif [[ -e "$2" && ! "$(cmp "$1" "$2" 2> /dev/null)" ]]; then
     echo "same file"
   elif [[ "$1" -ot "$2" ]]; then
     echo "destination file newer"
   fi
 }
 function copy_do() {
-  e_success "Copying ~/$1."
-  cp "$2" ~/
+  if [ -d $2 ]; then
+    if [ -d ~/$1 ]; then
+      do_stuff "copy" "$1"
+    else
+      e_success "Copying directory: ~/$1"
+      cp -r $2 ~/$1
+    fi
+  else
+    e_success "Copying file: ~/$1."
+    cp $2 ~/$1
+  fi
 }
 
 # Link files.
@@ -334,25 +345,44 @@ function link_test() {
   [[ "$1" -ef "$2" ]] && echo "same file"
 }
 function link_do() {
-  e_success "Linking ~/$1."
-  ln -sf ${2#$HOME/} ~/
+  if [ -d $2 ]; then
+    if [ -d ~/$1 ]; then
+      do_stuff "link" "$1"
+    else
+      e_success "Linking directory: ~/$1"
+      ln -sf ~/${2#$HOME/} ~/$1
+    fi
+  else
+      e_success "Linking file: ~/$1."
+      ln -sf ~/${2#$HOME/} ~/$1
+  fi
 }
 
 # Copy, link, init, etc.
+# Use do_stuff {function} {extra_folder}
 function do_stuff() {
   local base dest skip
   local files=($DOTFILES/$1/*)
+  local subfolder=($2)
+
+  if [ "$subfolder" != "" ]; then
+      files=($DOTFILES/$1/$subfolder/*)
+      subfolder=($subfolder/)
+  fi
+
   [[ $(declare -f "$1_files") ]] && files=($($1_files "${files[@]}"))
   # No files? abort.
   if (( ${#files[@]} == 0 )); then return; fi
 
-  # Run _header function only if declared.
-  [[ $(declare -f "$1_header") ]] && "$1_header"
+  # Run _header function only if declared and no subfolder
+  if [ "$subfolder" == "" ]; then
+    [[ $(declare -f "$1_header") ]] && "$1_header"
+  fi
   # Iterate over files.
   for file in "${files[@]}"; do
     if [[ ! "$file" == *example ]]
     then
-      base="$(basename $file)"
+      base="${subfolder}$(basename $file)"
       dest="$HOME/$base"
       # Run _test function only if declared.
       if [[ $(declare -f "$1_test") ]]; then
@@ -362,15 +392,20 @@ function do_stuff() {
           e_error "Skipping ~/$base, $skip."
           continue
         fi
-        # Destination file already exists in ~/. Back it up!
+        # Destination file/folder already exists in ~/.
         if [[ -e "$dest" ]]; then
-          e_arrow "Backing up ~/$base."
-          # Set backup flag, so a nice message can be shown at the end.
-          backup=1
           # Create backup dir if it doesn't already exist.
           [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
-          # Backup file / link / whatever.
-          mv "$dest" "$backup_dir"
+          # Create backup subfolder dir if it doesn't already exist.
+          [[ -e "${backup_dir}${subfolder}" ]] || mkdir -p "${backup_dir}${subfolder}"
+          # Destination is file? Back it up!
+          if [ ! -d $dest ]; then
+            # Set backup flag, so a nice message can be shown at the end.
+            backup=1
+            e_arrow "Backing file ~/$base."
+            # Backup file / link / whatever.
+            mv "$dest" "${backup_dir}${subfolder}"
+          fi
         fi
       fi
       # Do stuff.
