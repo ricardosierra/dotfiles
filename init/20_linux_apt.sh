@@ -63,7 +63,7 @@ packages=(
   libssl-dev
   meld
   mercurial
-  network-manage
+  network-manager
   network-manager-openvpn
   network-manager-openvpn-gnome
   python
