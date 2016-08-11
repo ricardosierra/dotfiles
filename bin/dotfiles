@@ -3,17 +3,6 @@
 
 echo 'Dotfiles - Ricardo R. Sierra - http://ricardosierra.com.br/'
 
-if [[ "$1" == "-h" || "$1" == "--help" ]]; then cat <<HELP
-
-Usage: $(basename "$0")
-
-See the README for documentation.
-https://github.com/ricardorsierra/dotfiles
-
-Is a fork then "Cowbow" Ben Alman <http://benalman.com/about/license/>
-HELP
-exit; fi
-
 ###########################################
 # GENERAL PURPOSE EXPORTED VARS / FUNCTIONS
 ###########################################
@@ -272,7 +261,7 @@ function setdiff() {
 }
 
 # If this file was being sourced, exit now.
-[[ "$1" == "source" ]] && return
+[[ "$1" == "source" ]] && return 1;
 
 
 ###########################################
@@ -341,9 +330,6 @@ function copy_do() {
 
 # Link files.
 function link_header() { e_header "Linking files into home directory"; }
-function link_test() {
-  [[ "$1" -ef "$2" ]] && echo "same file"
-}
 function link_do() {
   if [ -d $2 ]; then
     if [ -d ~/$1 ]; then
@@ -356,6 +342,24 @@ function link_do() {
       e_success "Linking file: ~/$1."
       ln -sf ~/${2#$HOME/} ~/$1
   fi
+}
+
+# Help files.
+function helper_header() {
+cat <<-HELP
+Usage:
+    $(basename "$0") install
+
+Description:
+    See the README for documentation.
+    https://github.com/ricardorsierra/dotfiles
+
+    Is a fork then "Cowbow" Ben Alman <http://benalman.com/about/license/>
+
+HELP
+}
+function helper_do() {
+  source "$2"
 }
 
 # Copy, link, init, etc.
@@ -488,7 +492,6 @@ function install_dotfile_bin() {
   sudo ln -sf $DOTFILES/bin/browser-exec /usr/local/bin/xdg-open;
 }
 
-
 main(){
   # Enough with the functions, let's do stuff.
 
@@ -532,4 +535,10 @@ main(){
   e_header "All done!"
 }
 
+# Help Function
+if [[ ARGV.include == "-h" || ARGV.include == "--help" || "$1" == "help" || "$1" == "h" || "$1" == "--help" || "$1" == "-h" || "$1" == "" ]]; then
+    do_stuff helper
+    exit;
+fi
+# Execute Program
 main
