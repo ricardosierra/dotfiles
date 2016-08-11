@@ -1,0 +1,34 @@
+#!/bin/bash
+# JPGCONVERT
+#----------------------------
+# by http://twitter.com/c0l2e
+#    ronartos@gmail.com
+#============================
+# converts images with resolution higher than 1024x1024 to lower at least 50% or original
+ 
+LOCATION=$1
+TARGET_FILES=`find "$LOCATION" -iname "*.JPG" | sed 's/ /|/g'`
+ 
+for files in $TARGET_FILES
+  do
+       #TESTFILE=`echo "$files" | sed 's/|/ /g' | xargs file -b | awk '{print $1}'`
+       TEST1=`echo $files | sed 's/|/ /g'`  #$TESTFILE
+       TEST2=`file "$TEST1" -b | awk '{print $1}'`
+       if [ "$TEST2" = "JPEG" ]; then
+            #echo $TEST1
+            OLDEXT="jpg"
+            NEWEXT="png"
+            find "$TEST1" -iname "*.$OLDEXT" |
+            while read F
+            do
+                 NEWFILE="${F/%${OLDEXT}/${NEWEXT}}"
+                 #echo "mv \"${F}\" \"${NEWFILE}\""
+                 convert "$F" "$NEWFILE"
+                 CHECKSIZE=`file "$NEWFILE" -b | sed 's/ //g' | sed 's/,/ /g' | awk  '{print $2}' | sed 's/x/ /g' | awk '{print $1}'`
+                 if [ $CHECKSIZE -ge  1024  ]; then
+                    convert  "$F" -resize 50% "$F"
+                 fi
+                 rm "$NEWFILE"
+            done
+       fi
+  done
