@@ -137,6 +137,8 @@ alias conns2="lsof -a -p $(ps -e | grep docker | awk '{print $1}' | head -n1) | 
 alias up='docker-compose up'
 alias down='docker-compose down'
 
+alias images='docker images'
+
 #
 # Helper Functions
 #

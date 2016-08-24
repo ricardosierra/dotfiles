@@ -6,14 +6,14 @@
 # Thu Jan 28 19:57:43 BRST 2010
 #
 # == Uso ==
-# $ cat legenda.srt | ./sincleg '+1000' > nova_legenda.srt
+# $ cat legenda.srt | sincleg '+1000' > nova_legenda.srt
 #          ou
-# $ ./sincleg '+1000' < legenda.srt > nova_legenda.srt
+# $ sincleg '+1000' < legenda.srt > nova_legenda.srt
 #
 # O segundo parametro e' o ajuste em milisegundos.
 # Nos exemplos acima, as legendas foram adiantadas em 1 segundo.
 # Para atrasar use o sinal '-', como em:
-# $ ./sincleg '-3123' < legenda.srt > nova_legenda.srt
+# $ sincleg '-3123' < legenda.srt > nova_legenda.srt
 # Nesse caso as legendas foram atrasadas em 3,123 segundos.
 #
 # = Observacao =
@@ -21,9 +21,9 @@
 # no final), entao uma conversao para o formato unix tera que ser
 # feita. Para isso, basta voce utilizar o programa fromdos.
 # $ fromdos < legenda.srt > lengenda2.srt
-# $ ./sincleg '+1000' < lengeda2.srt > nova_lengenda.srt
+# $ sincleg '+1000' < lengeda2.srt > nova_lengenda.srt
 #          ou
-# $ fromdos < legenda.srt | ./sincleg '+1000' > nova_legenda.srt
+# $ fromdos < legenda.srt | sincleg '+1000' > nova_legenda.srt
 #
 # == Geral ==
 # O trabalho todo e' feito pelo bc. Entao ele reporta a maioria
