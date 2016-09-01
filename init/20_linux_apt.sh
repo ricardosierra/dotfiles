@@ -56,6 +56,9 @@ packages=(
   build-essential # for c compile
   ca-certificates
   cowsay
+  gedit
+  gedit-developer-plugins
+  gedit-plugins
   git-core
   chromium-browser
   id3tool
