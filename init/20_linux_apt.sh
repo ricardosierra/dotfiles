@@ -71,6 +71,7 @@ packages=(
   rxvt-unicode
   silversearcher-ag
   sl
+  ssh
   sudo
   telnet
   thunderbird

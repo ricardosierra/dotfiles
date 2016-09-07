@@ -547,6 +547,13 @@ masscan(){
 		--name masscan \
 		${DOCKER_REPO_PREFIX}masscan "$@"
 }
+maltego(){
+  	echo "Running maltego with docker..."
+	docker run -d -ti \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		sierratecnologia/maltego "$@"
+}
 mpd(){
   images_local_build mpd
 
@@ -712,7 +719,9 @@ nginx(){
 	sudo hostess add sierra 127.0.0.1
 }
 nmap(){
-  images_local_build nmap
+	echo "Running Nmap with docker..."
+
+  	images_local_build nmap
 
 	docker run --rm -it \
 		--net host \
