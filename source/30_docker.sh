@@ -92,13 +92,6 @@ alias dnip='docker inspect $(docker ps -qa) | grep IPA | grep [0-9]'
 # Example Docker network inspect all network subnets
 alias dnnet='docker network inspect $(docker network ls -q) | grep "Subnet\|Gateway"'
 
-# Delete all containers matching the passed paramater
-# Example: "delcon ubuntu" or 'anything matching in docker ps output'
-delcon() { docker rm -f $(docker ps  -a | grep $@ | awk '{print $1}') ;}
-
-# Stop all containers matching the passed paramater.
-stopcon() { docker stop $(docker ps  -a | grep $@ | awk '{print $1}') ;}
-
 # On demand foreground OS bash shells that delete on shell exit
 alias alpinerm='docker run -it --rm alpine /bin/sh'
 alias ubunturm='docker run -it --rm ubuntu'
@@ -124,7 +117,12 @@ alias fedorad='docker run -itd fedora'
 alias busyd='docker run -itd busybox'
 
 # Delete all containers matching the passed paramater
-delimg() { docker rmi $(docker images | grep $@ | awk '{print $3}') ;}
+# Example: "delcon ubuntu" or 'anything matching in docker ps output'
+delcon() { docker rm -f $(docker ps  -a | grep $@ | awk '{print $1}') ;}
+
+# Stop all containers matching the passed paramater.
+stopcon() { docker stop $(docker ps  -a | grep $@ | awk '{print $1}') ;}
+
 # Delete all with a <none> label bad makes will orphan a 'none' img
 delnone() { docker rmi $(docker images | grep none | awk '{print $3}') ;}
 # Delete all images matching the arg passed after 'delimg none'
@@ -138,6 +136,8 @@ alias conns2="lsof -a -p $(ps -e | grep docker | awk '{print $1}' | head -n1) | 
 #docker-compose
 alias up='docker-compose up'
 alias down='docker-compose down'
+
+alias images='docker images'
 
 #
 # Helper Functions

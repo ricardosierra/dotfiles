@@ -417,7 +417,7 @@ gitk(){
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/var/www \
-		${DOCKER_REPO_PREFIX}gitk "$@"
+		sierratecnologia/gitk "$@"
 }
 hollywood(){
   images_local_build hollywood
@@ -665,14 +665,12 @@ netbeans(){
 alias nb-php=netbeans_php
 alias netbeans-php=netbeans_php
 netbeans_php(){
-  images_local_build netbeans-php
-
 	docker run -ti --rm \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/home/developer \
 		--name netbeans-php \
-		${DOCKER_REPO_PREFIX}netbeans-php
+		sierratecnologia/netbeans-php
 }
 alias nb-java=netbeans_java
 alias netbeans-java=netbeans_java

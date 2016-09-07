@@ -4,6 +4,8 @@
 alias g='git'
 function ga() { git add "${@:-.}"; } # Add all files by default
 alias gp='git push'
+alias pull='git pull'
+alias push='git push'
 alias gpa='gp --all'
 alias gu='git pull'
 alias gl='git log'

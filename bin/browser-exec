@@ -34,8 +34,8 @@ browser_exec(){
 				sudo nsenter -t "$chrome_pid" --pid --user --net --uts --mount --ipc /usr/bin/google-chrome --user-data-dir=/data "$@" 2>/dev/null
 			else
 				# neither are currently running so lets start chrome and open the page
-				source $HOME/.dockerfunc
-				chrome "$@"
+				source "$HOME/.dotfiles/source/30_docker.sh"
+        firefox "$@"
 			fi
 		fi
 	fi
