@@ -156,6 +156,9 @@ if [ -f ~/.docker-completion.bash ]; then
  . ~/.docker-completion.bash
 fi
 
+# Add Identify SSH
+ssh-add
+
 if [ -f ~/.bashrc ]; then
   source ~/.bash_profile
 fi

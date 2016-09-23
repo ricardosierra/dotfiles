@@ -55,13 +55,14 @@ packages=(
   autoconf # for c compile
   build-essential # for c compile
   ca-certificates
+  chromium-browser
   cowsay
   gedit
   gedit-developer-plugins
   gedit-plugins
   git-core
-  chromium-browser
   id3tool
+  imagemagick
   #libxml2-dev # todo not identify by dpkg
   #libssl-dev # todo not identify by dpkg
   meld

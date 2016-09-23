@@ -3,6 +3,7 @@ export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/g
 
 # Add binaries into the path
 export PATH="$DOTFILES/bin:$PATH"
+export PATH="$DOTFILES/bin/sed:$PATH"
 
 # PROGRAMS VARIABLES
 export ANDROID_HOME="/home/$USER/$DOTFILES_FOLDER_PROGRAMS/android-sdk-linux"
