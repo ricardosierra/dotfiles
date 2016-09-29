@@ -1,0 +1,16 @@
+#! /bin/sh
+NOME_ISO=$1
+# grava uma imagem iso no cd
+# sintaxe:
+# 
+# grava_iso <arquivo.iso>
+
+if [ ! -f "$NOME_ISO" ]; then
+	echo "Imagem nao pode ser encontrada!"
+	echo $NOME_ISO
+else
+	echo "Gravando o disco ..."
+	cdrecord -v blank=fast speed=12 dev=0,1,0
+	cdrecord -v speed=12 dev=0,1,0 $NOME_ISO
+fi
+echo "Terminado!"

@@ -1,0 +1,74 @@
+#!/bin/sh
+#####Simples script para compartilhar a internet(via NAT) através de uma rede ad-roc.###### 
+# Verifica se o script está sendo executado pelo root. 
+# Por enquanto ele não funciona através do sudo por causa do uso do echo para 
+# escrever em arquivos de configuração.
+if [ "`id -u`" != "0" ]; then
+echo 'Este script precisa ser executado como root. Digite "su -" para se logar
+como root e execute o script novamente. 
+Se você está usando o Ubuntu, defina a senha de root usando o comando 
+"sudo passwd" e em seguida logue-se usando o "su -". Fechando...'
+read pausa
+exit
+fi
+
+nopw(){
+ clear
+ echo '
+ Digite um IP para a rede(ex: 10.0.0.1):
+ Obs: os outros devem utilizar um IP nesta faixa para se conectar à rede
+ e com este IP(da rede) como getway. O DNS deve ser o mesmo
+ deste PC(depois você pode visualizar o DNS digitando: cat /etc/resolv.conf).
+ '
+ read ip
+ echo 'Digite a sub-mask da rede(ex: 255.255.255.0):
+ Obs: os outros devem utilizar esta mesma máscara.'
+ read mask
+ ifconfig $intw down
+ iwconfig $intw mode Ad-Hoc
+ iwconfig $intw essid $essid
+ iwconfig $intw key off
+ ifconfig $intw $ip netmask $mask
+ modprobe iptable_nat
+ echo 1 > /proc/sys/net/ipv4/ip_forward
+ iptables -t nat -A POSTROUTING -o $inte -j MASQUERADE 
+
+ echo 'Done! A rede já deve estar disponivél. Basta agora configurar os 
+ outros dispositivos para se conectarem.'
+ exit
+}
+
+echo 'Digite a interface Wi-Fi(ex: wlan0):'
+read intw
+echo 'Digite a interface conectada à internet(ex: eth0):'
+read inte
+echo 'Digite o ESSID(nome) da rede à utilizar:'
+read essid
+echo 'Utilizar senha? s/n:'
+read resp
+[ "$resp" = "n" ] && nopw
+echo 'Digite a senha da rede com 5 digitos(ex: senha;wgx43):'
+read senha
+clear
+echo '
+Digite um IP para a rede(ex: 10.0.0.1):
+Obs: os outros devem utilizar um IP nesta faixa para se conectar à rede
+e com este IP(da rede) como getway. O DNS deve ser o mesmo
+deste PC(depois você pode visualizar o DNS digitando: cat /etc/resolv.conf).
+'
+read ip
+echo 'Digite a sub-mask da rede(ex: 255.255.255.0):
+Obs: os outros devem utilizar esta mesma máscara.'
+read mask
+ifconfig $intw down
+iwconfig $intw mode Ad-Hoc
+iwconfig $intw essid $essid
+iwconfig $intw key restricted s:$senha
+ifconfig $intw $ip netmask $mask
+modprobe iptable_nat
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING -o $inte -j MASQUERADE
+
+echo 'Done! A rede já deve estar disponivél. Basta agora configurar os 
+outros dispositivos para se conectarem.'
+exit

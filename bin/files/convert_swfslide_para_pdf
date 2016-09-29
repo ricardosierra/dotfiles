@@ -1,0 +1,202 @@
+#!/bin/bash
+
+LOG=/tmp/$0$( date +%F_%Hh_%Mm_%Ss )_pid_$$.log
+#So funciona se for utilizado em conjunto com echo -e
+COR_AMARELO="\033[1;33m"
+COR_NORMAL="\033[0m"
+
+VERSAO="0.1"
+
+
+function converte(){
+
+lista_arq=`ls *.swf 2> /dev/null` 
+if [ "`echo -n $lista_arq | grep "" -c`" == "0" ]; then
+	echo "Falhou! o diretorio $1 NÂO contem arquivos swf"; #exit 1; 
+	para="sim"
+else
+	
+	
+	echo -e "$COR_AMARELO Convertendo, aguarde...$COR_NORMAL"
+	#fsiaula1-1234156835989975-1-slide-8.swf
+	rm -r temp 1> /dev/null 2> /dev/null
+	for arq_atual in $lista_arq; do
+		#nome_arquivo_tmp=`echo $arq_atual | sed s,.swf,"",g`
+		arq=`echo -n $arq_atual | tail -c7 | head -c1`
+		#echo $arq
+		if [ "`echo -n $arq`"  == "e" ]; then
+			num_saida="0`echo -n $arq_atual | tail -c5 | head -c1`"
+			#echo "com zero"
+		else
+			num_saida="`echo -n $arq_atual | tail -c6 | head -c2`"
+			#echo "SEM zero"
+		fi
+	nome_saida="saida-$num_saida.png"
+	
+	mkdir -p temp
+	#echo "Convertendo $arq_atual para $nome_saida"
+	#echo -e "\n\n"$num_saida
+	#echo $nome_saida
+	#echo $arq_atual
+	swfrender $arq_atual -o "temp/$nome_saida" 1> /dev/null 2> /dev/null
+	
+	done;
+	
+	cd temp 
+	if [ "`echo $2`" == "" ]; then
+		nome_pdf="output.pdf"
+	else
+		nome_pdf="$2.pdf"
+	fi
+	
+	echo -e " Gerando arquivo PDF com o nome:$COR_AMARELO $nome_pdf$COR_NORMAL"
+	convert *.png $nome_pdf 1> /dev/null 2> /dev/null
+	mv $nome_pdf "$dir_atual/"
+	cd ..
+	rm -r temp 1> /dev/null 2> /dev/null
+	echo -e " Arquivo salvo em$COR_AMARELO $dir_atual/$nome_pdf$COR_NORMAL "
+
+fi
+
+}
+
+
+
+
+function converter_agora(){
+para="nao"
+
+
+test -e $1
+if [ "`echo $?`" == "0" ]; then
+	echo -e " Entrando em:$COR_AMARELO $1$COR_NORMAL"
+	cd $1 1> /dev/null 2> /dev/null
+	converte $1 $2
+else
+	echo "erro"
+fi
+
+
+cd $dir_atual
+
+
+}
+
+function mode_de_uso(){
+#
+if [ "`echo $0 | grep "/" -c`" = 1 ]; then
+	THIS=`echo -n "$0" | cut -c3-`
+else
+	THIS=$0
+fi
+
+	echo -e "\n$THIS   - Versao $VERSAO"
+	echo -e "\nconverte swf slides para pdf"
+	echo -e "use:"
+	echo "	$THIS diretorio_que_contem_os_arquivos"
+	echo "	$THIS diretorio_que_contem_os_arquivos nome_da_saida"
+	echo "	$THIS diretorio_1 diretorio_2 diretorio_3"
+	echo -e "---------------------------------------------
+\nBaixe os slides bloqueados para download do slideshare.net com o Downthemall, 
+utilizando o Greasemonkey como o script Slideshare downloader
+instale primeiro o Greasemonkey e o Downthemall
+
+		https://addons.mozilla.org/pt-BR/firefox/addon/greasemonkey/
+		https://addons.mozilla.org/pt-BR/firefox/addon/downthemall/
+
+apos isso entre em:
+
+		http://userscripts.org/scripts/show/30646
+
+e clique em install
+
+O scritp SlideshareDownloader abilita 3 novos links no Slideshare.
+Utilize o ultimo link \"Download\" para abrir a janela listando 
+os arquivos swf de cada slide.
+
+para baixar, clique com o botao direito do mouse, na parte superior em branco da janela
+e depois clique em \"DownThemAll!...\"
+
+Na parte inferior da janela que se abriu, em Filtragem Rapida, escreva swf,
+Escolha um local para baixar
+
+
+Aperte \"q\" para sair dessa mensagem
+"
+}
+
+
+
+function verifica_instala_prerequisitos(){
+
+	PACK_NECESSARIOS=""
+
+	if [ "`dpkg --get-selections | grep "imagemagick" | awk '{print $2}'`" != "install" ]; then
+		PACK_NECESSARIOS="$PACK_NECESSARIOS imagemagick "
+	fi
+
+	if [ "`dpkg --get-selections | grep "swftools" | awk '{print $2}'`" != "install" ]; then
+		echo "Incluia manualmente o seguinte repositorio em seu source.list"
+		echo "deb http://archive.canonical.com/ubuntu/ lucid partner"
+		echo "Testado somente no Ubuntu 10.10"
+		PACK_NECESSARIOS="$PACK_NECESSARIOS swftools "
+	fi
+
+
+	if [ "`echo $PACK_NECESSARIOS`x" != "x" ]; then
+		echo "Serao instalados os seguintes pacotes: $PACK_NECESSARIOS"
+		echo -e "$COR_AMARELO Por favor entre com a senha de super usuario(root): $COR_NORMAL"
+		su -c "apt-get update && apt-get install $PACK_NECESSARIOS" 2> $LOG
+		verifica_instala_prerequisitos
+	fi
+}
+
+
+
+#---------inicia aqui-------------------
+verifica_instala_prerequisitos
+if [ "`echo $1`" == "" ]; then
+	mode_de_uso | less
+
+else
+	dir_atual=`pwd`
+
+	
+#	if [ $# -le 2 ]; then
+#		converter_agora $1 $2
+#	else
+	
+
+		while [ -n "$1" ]; do
+			dir_n=$1
+			#echo "$1"
+	
+			ok="false"
+			i=1
+			if [ "`echo $dir_n | grep "/" -c`" == 0 ]; then
+				dir_n="`pwd`/$dir_n"
+			fi
+			while [ "`echo $ok`" != "true" ]; do
+				if [ "`echo $dir_n | tail -c$i | head -c1`" == "/" ]; then
+					nu=`expr $i - 1`
+					nome_arq="`echo $dir_n | tail -c$nu`"
+					ok="true"
+					break;
+				else
+					i=`expr $i + 1`
+					
+					if [ "`echo $i`"  == "500" ]; then
+	
+						break;
+					fi
+				fi
+			done;
+
+			converter_agora $dir_n "$nome_arq"
+		#"shift 1", faz iteração sobre os parametros $1, $2, $3...$x e salva o item atual em $1
+		shift 1
+		done;
+#	fi
+fi
+
+

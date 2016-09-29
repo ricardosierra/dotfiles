@@ -1,0 +1,97 @@
+#!/bin/bash
+
+echo "
+#######################################################
+#######################################################
+########### L4S - Encrypted Filesystem ################
+#######################################################
+#######################################################
+############# www.linux4sec.com.br ####################
+#######################################################
+#######################################################
+#######################################################
+
+
+"
+echo "    
+
+    Digite \"criar\" para  criar um novo arquivo,   
+     digite \"montar\" para montar uma unidade     
+ ou digite \"desmontar\" para desmontar a unidade  
+
+"
+
+echo "
+"
+read opcao
+
+if [ "$opcao" == "criar" ];then
+#COMANDOS PARA CRIAR
+echo "Digite o tamanho da unidade em MB:"
+read tamanho
+
+echo "Digite o nome do arquivo a ser gerado:"
+read nome
+
+dd if=/dev/zero of="$nome".l4s bs=1k count="$tamanho"k 2>&1&>/dev/null
+loop=$(losetup -f) 2>&1&>/dev/null
+losetup $loop "$nome".l4s 2>&1&>/dev/null
+cryptsetup --verbose --cipher aes-xts-plain64 --key-size 512 --hash sha512 --iter-time 5000 --use-random --verify-passphrase luksFormat $loop |echo "Digite \"YES\" para iniciar"
+cryptsetup luksOpen $loop l4senc
+mke2fs -b 1024 -m1 -j /dev/mapper/l4senc 2>&1&>/dev/null
+mkdir /mnt/l4senc 2>&1&>/dev/null
+mount -t ext3 -o defaults /dev/mapper/l4senc /mnt/l4senc 2>&1&>/dev/null
+umount /mnt/l4senc 2>&1&>/dev/null
+cryptsetup luksClose /dev/mapper/l4senc 2>&1&>/dev/null
+losetup -d /dev/loop* 2>&1&>/dev/null
+echo "
+
+Arquivo "$nome".l4s criado, guarde seu arquivo de unidade criptografada, e nunca crie outro com o mesmo nome e na mesma pasta, pois o atual poderá ser substituido!
+
+"
+
+ 
+
+
+elif [ "$opcao" == "montar" ];then
+#COMANDOS PARA MONTAR
+if [ -z $1 ];then
+echo "
+
+Para montar, use: l4sencfs arquivo.l4s
+
+"
+exit
+
+else
+umount /mnt/l4senc 2>&1&>/dev/null
+cryptsetup luksClose /dev/mapper/l4senc 2>&1&>/dev/null
+losetup -d /dev/loop* 2>&1&>/dev/null
+loop=$(losetup -f) 2>&1&>/dev/null
+losetup $loop $1 2>&1&>/dev/null
+cryptsetup luksOpen $loop l4senc
+mkdir /mnt/l4senc 2>&1&>/dev/null
+mount -t ext3 -o defaults /dev/mapper/l4senc /mnt/l4senc 2>&1&>/dev/null
+echo "
+
+Unidade montada em /mnt/l4senc
+
+"
+fi
+
+elif [ "$opcao" == "desmontar" ];then
+umount /mnt/l4senc 2>&1&>/dev/null
+cryptsetup luksClose /dev/mapper/l4senc 2>&1&>/dev/null
+losetup -d /dev/loop* 2>&1&>/dev/null
+echo " 
+
+Unidade desmontada.
+
+"
+
+
+
+else
+echo "Opcao invalida!"
+
+fi

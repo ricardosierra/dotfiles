@@ -80,6 +80,7 @@ packages=(
   telnet
   thunderbird
   texlive-binaries
+  translate-shell
   tree
   xclip
   #xcompmgr #compiz, nao funciona no ubuntu

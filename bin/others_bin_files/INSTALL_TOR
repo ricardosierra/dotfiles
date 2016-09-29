@@ -1,0 +1,39 @@
+#!/bin/bash
+arq=$(/usr/bin/arch)
+
+32bits() {
+echo "32bits"
+
+sudo rm -Rf /opt/tor-browser*
+sudo rm -Rf /usr/bin/tor-browser
+sudo rm -Rf /usr/share/applications/torbrowser.desktop
+wget https://dist.torproject.org/torbrowser/5.0.7/tor-browser-linux32-5.0.7_pt-PT.tar.xz -O tor-browser.tar.xz
+sudo tar -xvJf tor-browser.tar.xz -C /opt/
+sudo mv /opt/tor-browser*/ /opt/tor-browser
+sudo ln -sf /opt/tor-browser/Browser/start-tor-browser /usr/bin/torbrowser
+
+
+}
+
+64bits() {
+echo "64 bits"
+
+sudo rm -Rf /opt/tor-browser*
+sudo rm -Rf /usr/bin/tor-browser
+sudo rm -Rf /usr/share/applications/torbrowser.desktop
+wget https://dist.torproject.org/torbrowser/5.0.7/tor-browser-linux64-5.0.7_pt-PT.tar.xz -O tor-browser.tar.xz
+sudo tar -xvJf tor-browser.tar.xz -C /opt/
+sudo mv /opt/tor-browser*/ /opt/tor-browser
+sudo ln -sf /opt/tor-browser/Browser/start-tor-browser /usr/bin/torbrowser
+
+
+}
+
+
+if [ $arq = "x86_64" ]; then
+    64bits
+else
+    32bits
+fi
+
+

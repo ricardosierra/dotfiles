@@ -1,0 +1,40 @@
+#!/bin/bash
+
+function run(){
+  echo -e "\n[+] $smtp:$porta => $user:$pass"
+  echo -e "[*] To: $rcpt | Message size: ${#send}"
+  echo -e "[*] Subject: $subj\n"
+  echo -e "Sending ..."
+  exec 5<>/dev/tcp/$smtp/$port
+  echo -e "EHLO $smtp" >&5
+  echo "auth login" >&5
+  echo -n "$user" | base64 >&5
+  echo -n "$pass" | base64 >&5
+  echo "MAIL FROM: $user" >&5
+  echo "RCPT TO: $rcpt" >&5
+  echo 'data' >&5
+  echo "From:<$user>" >&5
+  echo "Content-Type: text/html" >&5
+  echo "To:<$rcpt>" >&5
+  echo -e "Subject: $subj\n" >&5
+  echo -e "$send\n.\nQUIT" >&5
+  cat <&5
+}
+
+if [ $# != 7 ];then
+  echo "{Send authenticated email (auth login)}"
+  echo "Autor: MMxM | hc0der.blogspot.com"
+  echo "How to use:"
+  echo -e "\n\t$0 <smtp-server> <smtp-port> <user> <pass> <rcpt> <message.html> <subject>\n"
+  exit
+else
+  smtp=$1
+  port=$2
+  user=$3
+  pass=$4
+  rcpt=$5
+  send=$(cat $6)
+  subj=$7
+  run;
+  exit
+fi

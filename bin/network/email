@@ -1,0 +1,22 @@
+#!/bin/bash
+# Autor: Ivan Moretto
+# Data: 17/03/2015
+
+# Sintaxe do comando:   ./email.sh "Assunto" "Corpo do Email" arquivo_anexo.
+
+EMAIL_TO="email de destino, podem ser colocados varios separados por espaco"
+IPEXTERNO=`links -dump ip.dnsexit.com`  # obtem o IP valido na internet
+ASSUNTO="$HOSTNAME($IPEXTERNO) - $1"
+MENSAGEM=$2
+
+if [ "$1" == "" ] ;then
+        ASSUNTO="$HOSTNAME - SEM ASSUNTO"
+fi
+if [ "$2" == "" ] ;then
+        MENSAGEM="SEM MENSAGEM"
+fi
+if [ "$3" != "" ] ;then
+        MENSAGEM="$2 ^M ^M ========= ANEXO: $3  ======== ^M^M `cat $3`"
+fi
+
+echo $MENSAGEM|mail -s "$ASSUNTO" $EMAIL_TO

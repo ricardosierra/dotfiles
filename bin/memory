@@ -1,0 +1,23 @@
+#!/bin/bash
+# Script criado em:22/03/2011
+# Versao Beta
+#Criado por:Alexandre
+
+clear
+while : ; do
+
+total=$(top | free '/Men:/ { print $1 }')
+usada=$(top | free '/Men:/ { print $2 }')
+
+echo " $total de uso da Men: ${usada}..."
+#(Exibe a seguinte mensagen)........................................#
+ 
+
+
+ echo " dados de uso atual em tempo real" 
+  echo " Alexandre"
+ 
+sleep 10  
+clear 
+done
+

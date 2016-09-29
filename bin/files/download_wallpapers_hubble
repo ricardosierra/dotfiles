@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cd ~;
+
+[[ -d "WALLPAPERS" ]] || mkdir WALLPAPERS;
+
+cd ~/WALLPAPERS;
+
+for ANO in {1995..2012}; do
+for NUMERO in {0,1,2,3}{4,6,7,9} {1,2}{1,2,3,8} {1,2,3}{0,5} {0,4}{1,5}; do
+for FORMATO in 640 800 1024 1280 1152x864 1280x768 1280x800 1280x960 1440x960 1680x1050 1920x1200 2048x1280 2560x1024; do
+
+wget -c -t 0 http://imgsrc.hubblesite.org/hu/db/images/hs-"$ANO"-"$NUMERO"-a-"$FORMATO"_wallpaper.jpg
+[[ $? -ne 0 ]] && break; 
+
+#echo http://imgsrc.hubblesite.org/hu/db/images/hs-"$ANO"-"$NUMERO"-a-"$FORMATO"_wallpaper.jpg
+
+done;
+done;
+done;
+
+

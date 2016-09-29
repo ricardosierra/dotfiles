@@ -1,0 +1,52 @@
+#!/bin/bash
+
+clear
+ls
+echo "Digite o nome da pasta de Origem"
+read origem 
+echo "Digite o percentual esperado"
+read perc 
+
+lstarqs=/tmp/listaarqs
+arqcmp=/tmp/arquivocomp
+arqtmp=/tmp/arquivotemp
+resultado=checa
+
+rm $resultado$origem
+ls $origem > $lstarqs
+if test -s $lstarqs
+clear
+then
+    while test -s $lstarqs
+    do
+        var1=`head -1 $lstarqs`
+        sed -i '1d' $lstarqs
+        for var2 in $(cat $lstarqs)
+        do
+            sort $origem/$var1 $origem/$var2 | awk 'seen[$0]++ == 1' > $arqtmp
+	    wc -l $origem/$var1 > $arqcmp
+	    wc -l $origem/$var2 >> $arqcmp
+	    wc -l $arqtmp >> $arqcmp
+            val1=`awk 'NR==1{print $1}' $arqcmp`
+            val2=`awk 'NR==2{print $1}' $arqcmp`
+            val3=`awk 'NR==3{print $1}' $arqcmp`
+            med=$[($val1+$val2)/2]
+            res=$[$val3*100/$med]
+            if test $res -gt $perc #maior
+            #if test $res -lt $perc #menor
+            then
+	        echo $var1 vs $var2 >> $resultado$origem
+                echo $res% de igualdade >> $resultado$origem
+                echo "=======================" >> $resultado$origem
+	        echo $var1 vs $var2
+                echo $res% de igualdade
+                echo "======================="
+            fi
+        done
+    done
+rm -f $lstarqs
+rm -f $arqcmp
+rm -f $arqtmp
+fi
+exit
+
