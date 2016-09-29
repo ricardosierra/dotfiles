@@ -1,0 +1,105 @@
+#!/bin/bash
+
+export num
+export nova
+export extensao
+export arquivo
+export newNameFile
+
+#Definições:
+arquivo=lista.txt
+
+if [[ "$1" == "--help" ]]; then
+	echo "Converte todos os arquivos da Pasta atual"
+	echo " \n"
+	echo "Accept Convert Extensions: bzlib cairo djvu fftw fontconfig freetype jbig jng jpeg lcms lqr ltdl lzma openexr pangocairo png rsvg tiff wmf x xml zlib"
+	echo "Extra Convertions:"
+	echo "    mp3 -> wav"
+	echo " \n"
+	echo "Usage: multi_convert extensaoAntiga extensaoNova"
+	exit;
+fi
+
+# Dependencias
+if [[ ! "$(type -P ebb)" ]]; then
+	echo "Comando ebb não encontrado, por favor o instale usando o comando abaixo:"
+	echo "sudo apt install texlive-binaries"
+	exit;
+fi
+
+#-----------------------------------------------------------
+if [[ -z "$1" ]]; then
+	echo -n "Digite a extensão que você quer converter (ex: pdf, eps, png e etc): " && read extensao
+else
+	extensao="$1"
+fi
+if [[ -z "$2" ]]; then
+	echo -n "Digite a nova extensão:" && read nova
+else
+	nova="$2"
+fi
+#-----------------------------------------------------------
+
+num=$(ls -l | awk '{print $9}' | wc -l) #Numero de linhas
+if [ -e $arquivo ]; then rm $arquivo; fi
+ls -l | awk '{print $9}' | sed '/^$/d' >> $arquivo
+
+
+#-----------------------------------------------------------
+# save and change IFS 
+OLDIFS=$IFS
+IFS=$'\n'
+# read all file name into an array
+fileArray=($(find $DIR -type f))
+# restore it 
+IFS=$OLDIFS
+
+# get length of an array
+tLen=${#fileArray[@]}
+#Lendo arquivos
+for (( i=0; i<${tLen}; i++ ));
+do
+  file[$i]="$fileArray"
+  echo "Arq: $fileArray"
+  est="${file[$i]}"
+  echo "Est: $est"
+  name=$(echo ${file[$i]} | rev)
+  echo "Name: $name"
+  nome[$i]=$(echo ${name##*.} | rev)
+  es[$i]=$(echo ${est##*.})
+  echo "nome: ${nome[$i]}"
+  echo "es: ${es[$i]}"
+done < $arquivo
+#-----------------------------------------------------------
+
+
+#-----------------------------------------------------------
+#Criando diretorio de Backup
+[[ -d backup ]] || mkdir backup 
+
+#Convertendo arquivos
+for (( j=1 ; j<=$num ; j++ ))
+do
+  echo "ESCREVENDOa"
+  echo "$extensao"
+  echo "${es[$j]}"
+  if [ "${es[$j]}" == "$extensao" ]
+  then
+	  newNameFile=$(echo ${nome[$j]}"."$nova)
+	  echo "ESCREVENDO"
+	  echo "$newNameFile"
+	  echo "Convertendo ${file[$j]} para $newNameFile"
+	  [[ "${es[$j]}" == "png" ]] || ebb "$newNameFile"
+	  [[ "${es[$j]}" == "jpeg" ]] || ebb "$newNameFile"
+	  
+	  if [[ "${es[$j]}" == "mp3" -e "${es[$j]}" == "wav" ]]; then
+	  	lame --decode "${es[$j]}" `echo "$1" | sed 's/.mp3$/.wav/'`;
+	  else
+	  	convert "${file[$j]}" "$newNameFile"
+	  fi
+	  
+	  echo "Movendo ${file[$j]} para backup/"
+	  mv "${file[$j]}" backup/
+  fi
+done
+#-----------------------------------------------------------

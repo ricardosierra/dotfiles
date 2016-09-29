@@ -61,6 +61,7 @@ packages=(
   gedit-developer-plugins
   gedit-plugins
   git-core
+  gocr
   id3tool
   imagemagick
   #libxml2-dev # todo not identify by dpkg
@@ -78,6 +79,7 @@ packages=(
   sudo
   telnet
   thunderbird
+  texlive-binaries
   tree
   xclip
   #xcompmgr #compiz, nao funciona no ubuntu

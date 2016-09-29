@@ -1,6 +1,0 @@
-#!/bin/sh
-# 
-echo "Mudando para modo Produção em $1"
-
-sed -i "s/define('YII_DEBUG', true)/define('YII_DEBUG', false)/" $1
-sed -i "s/define('_ENVIRONMENT_', 'development')/define('_ENVIRONMENT_', 'production')/" $1
