@@ -4,20 +4,12 @@
 #Criado por:Alexandre
 
 clear
-while : ; do
+#while : ; do
 
-total=$(top | free '/Men:/ { print $1 }')
-usada=$(top | free '/Men:/ { print $2 }')
+total=$(top | free -m | tr -s ' ' | sed '/^Mem/!d' | cut -d" " -f2)
+usada=$(top | free -m | tr -s ' ' | sed '/^Mem/!d' | cut -d" " -f3)
 
-echo " $total de uso da Men: ${usada}..."
-#(Exibe a seguinte mensagen)........................................#
- 
+echo "Usado  $total do total ${usada} de memória ram." 
 
-
- echo " dados de uso atual em tempo real" 
-  echo " Alexandre"
- 
-sleep 10  
-clear 
-done
+#done
 

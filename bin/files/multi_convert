@@ -59,16 +59,11 @@ tLen=${#fileArray[@]}
 #Lendo arquivos
 for (( i=0; i<${tLen}; i++ ));
 do
-  file[$i]="$fileArray"
-  echo "Arq: $fileArray"
-  est="${file[$i]}"
-  echo "Est: $est"
-  name=$(echo ${file[$i]} | rev)
-  echo "Name: $name"
-  nome[$i]=$(echo ${name##*.} | rev)
-  es[$i]=$(echo ${est##*.})
-  echo "nome: ${nome[$i]}"
-  echo "es: ${es[$i]}"
+	file[$i]="${fileArray[$i]}"
+	est="${file[$i]}"
+	name=$(echo ${file[$i]} | rev)
+	nome[$i]=$(echo ${name} | cut -c 5- | rev)
+	es[$i]=$(echo ${est##*.})
 done < $arquivo
 #-----------------------------------------------------------
 
@@ -80,26 +75,21 @@ done < $arquivo
 #Convertendo arquivos
 for (( j=1 ; j<=$num ; j++ ))
 do
-  echo "ESCREVENDOa"
-  echo "$extensao"
-  echo "${es[$j]}"
-  if [ "${es[$j]}" == "$extensao" ]
-  then
-	  newNameFile=$(echo ${nome[$j]}"."$nova)
-	  echo "ESCREVENDO"
-	  echo "$newNameFile"
-	  echo "Convertendo ${file[$j]} para $newNameFile"
-	  [[ "${es[$j]}" == "png" ]] || ebb "$newNameFile"
-	  [[ "${es[$j]}" == "jpeg" ]] || ebb "$newNameFile"
-	  
-	  if [[ "${es[$j]}" == "mp3" -e "${es[$j]}" == "wav" ]]; then
-	  	lame --decode "${es[$j]}" `echo "$1" | sed 's/.mp3$/.wav/'`;
-	  else
-	  	convert "${file[$j]}" "$newNameFile"
-	  fi
-	  
-	  echo "Movendo ${file[$j]} para backup/"
-	  mv "${file[$j]}" backup/
-  fi
+	if [ "${es[$j]}" == "$extensao" ]
+	then
+		newNameFile=$(echo ${nome[$j]}"."$nova)
+		echo "Convertendo ${file[$j]} para $newNameFile"
+		# Mp3 for Wav file
+		if [[ "${es[$j]}" == "mp3" && "${es[$j]}" == "wav" ]]; then
+			lame --decode "${es[$j]}" `echo "$1" | sed 's/.mp3$/.wav/'`;
+		else
+			convert "${file[$j]}" "$newNameFile"
+			[[ "${es[$j]}" == "png" ]] || ebb "$newNameFile"
+			[[ "${es[$j]}" == "jpeg" ]] || ebb "$newNameFile"
+		fi
+
+		echo "Movendo ${file[$j]} para backup/"
+		mv "${file[$j]}" backup/
+	fi
 done
 #-----------------------------------------------------------
