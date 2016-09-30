@@ -3,13 +3,12 @@
 # Versao Beta
 #Criado por:Alexandre
 
-clear
 #while : ; do
 
 total=$(top | free -m | tr -s ' ' | sed '/^Mem/!d' | cut -d" " -f2)
 usada=$(top | free -m | tr -s ' ' | sed '/^Mem/!d' | cut -d" " -f3)
 
-echo "Usado  $total do total ${usada} de memória ram." 
+echo "Memória: $usada / ${total}" 
 
 #done
 
