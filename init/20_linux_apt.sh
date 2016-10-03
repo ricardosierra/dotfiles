@@ -89,6 +89,12 @@ packages=(
   vim
   vim-gnome
   virtualbox
+  # Support Shell Script
+  dialog
+
+  # Files Converts
+  pdftk
+  unoconv
 )
 
 # More APT packages
