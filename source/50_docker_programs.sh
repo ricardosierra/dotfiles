@@ -7,17 +7,17 @@ export DOCKERFILES_PATH=~/.dockerfiles
 
 # All Docker Programs
 docker_programs=(
-	"android-studio"
-	"apt-file"
-	atom
-	audacity
-	aws
-	bees
-	cadvisor
-	cheese
-	chrome
-	clementine
-	consul
+    "android-studio"
+    "apt-file"
+    atom
+    audacity
+    aws
+    bees
+    cadvisor
+    cheese
+    chrome
+    clementine
+    consul
     cordova
     dcos-cli
     dbvis
@@ -28,7 +28,7 @@ docker_programs=(
     gimp
     gitk
     hollywood
-    htopx
+    htop
     httpie
     imagemin
     irssi
@@ -47,7 +47,6 @@ docker_programs=(
     nes
     netbeans
     "netbeans-php"
-    "netbeans-java"
     netcat
     nginx
     nmap
@@ -654,13 +653,11 @@ nes(){
 }
 alias nb=netbeans
 netbeans(){
-  images_local_build netbeans
-
 	docker run -ti --rm \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/home/developer \
-		${DOCKER_REPO_PREFIX}netbeans
+		sierratecnologia/netbeans
 }
 alias nb-php=netbeans_php
 alias netbeans-php=netbeans_php
@@ -671,30 +668,6 @@ netbeans_php(){
 		-v `pwd`:/home/developer \
 		--name netbeans-php \
 		sierratecnologia/netbeans-php
-}
-alias nb-java=netbeans_java
-alias netbeans-java=netbeans_java
-netbeans_java(){
-  #images_local_build netbeans-java
-
-	# docker run -ti --rm \
-	# 	-e DISPLAY=$DISPLAY \
-	# 	-v /tmp/.X11-unix:/tmp/.X11-unix \
-	# 	-v `pwd`:/home/developer \
-	# 	${DOCKER_REPO_PREFIX}netbeans-java
-
-  del_stopped netbeans-java
-
-  docker run -it --rm \
-			-e DISPLAY=$DISPLAY \
-			-v /tmp/.X11-unix:/tmp/.X11-unix \
-			-v $HOME/NetBeansProjects-java:/root/NetBeansProjects \
-      -v $HOME/.netbeans:/root/.netbeans \
-      -v $HOME/.m2:/root/.m2 \
-			-v DOTFILES_FOLDER_PROJECTS:/root
-      -v `pwd`:/root/repo \
-      --name netbeans-java \
-      psharkey/netbeans-8.1
 }
 netcat(){
   images_local_build netcat

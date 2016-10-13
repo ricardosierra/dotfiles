@@ -92,6 +92,9 @@ packages=(
   # Support Shell Script
   dialog
 
+  # IOT
+  youtube-dl
+
   # Files Converts
   pdftk
   unoconv
