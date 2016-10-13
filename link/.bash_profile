@@ -1,40 +1,7 @@
-# Load the shell dotfiles, and then some:
-# * ~/.path can be used to extend `$PATH`.
-# * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/.{aliases,bash_prompt,dotfilesconfig.local,dockerfunc,exports,functions,git.completion.bash,path}; do
-	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
-done
-unset file
-
-# Case-insensitive globbing (used in pathname expansion)
-shopt -s nocaseglob
-
-# Append to the Bash history file, rather than overwriting it
-shopt -s histappend
-
-# Autocorrect typos in path names when using `cd`
-shopt -s cdspell
-
-# Enable some Bash 4 features when possible:
-# * `autocd`, e.g. `**/qux` will enter `./foo/bar/baz/qux`
-# * Recursive globbing, e.g. `echo **/*.txt`
-for option in autocd globstar; do
-	shopt -s "$option" 2> /dev/null
-done
-
-# Add tab completion for SSH hostnames based on ~/.ssh/config
-# ignoring wildcards
-[[ -e "$HOME/.ssh/config" ]] && complete -o "default" \
-	-o "nospace" \
-	-W "$(grep "^Host" ~/.ssh/config | \
-	grep -v "[?*]" | cut -d " " -f2 | \
-	tr ' ' '\n')" scp sftp ssh
+# Esse arquivo é executado uma vez sempre que o usuário fizer login na maquina.
+# O arquivo bash_profile faz a mesama coisa quando o login é via terminal, ou
+# ssh
+# O bashrc é executado a cada nova janela de terminal
 
 
-# Add Identify SSH
-ssh-add
-
-# Call Bashrc
-if [ -f ~/.bashrc ]; then
-   source ~/.bashrc
-fi
+[ -r ~/.profile ] && . ~/.profile             # set up environment, once, Bourne-sh syntax only

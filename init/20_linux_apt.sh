@@ -105,7 +105,9 @@ if is_debianOS || is_kali; then
   packages+=(
     php7
     php7.0-xml #precisa pro phpunit funcionar
-    openssh-server
+    ssh-askpass-gnome
+    ssh-askpass
+    aopenssh-server
   )
 elif is_archlinux; then
   packages+=(
@@ -117,6 +119,7 @@ else
   packages+=(
     php
     #php70w-xml #precisa pro phpunit funcionar
+    openssh-askpass
     openssh-server
   )
 fi
