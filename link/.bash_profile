@@ -30,8 +30,11 @@ done
 	grep -v "[?*]" | cut -d " " -f2 | \
 	tr ' ' '\n')" scp sftp ssh
 
-###-tns-completion-start-###
-if [ -f /home/sierra/.tnsrc ]; then
-    source /home/sierra/.tnsrc
+
+# Add Identify SSH
+ssh-add
+
+# Call Bashrc
+if [ -f ~/.bashrc ]; then
+   source ~/.bashrc
 fi
-###-tns-completion-end-###

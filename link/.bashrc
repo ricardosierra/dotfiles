@@ -13,13 +13,6 @@ export DOTFILES=~/.dotfiles
 
 source $HOME/.dotfilesconfig.local
 
-# Welcome Mensage
-if [ "$DOTFILES_LANGUAGE" == "pt-BR" ]; then
-	cowsay "Seja Bem Vindo $USER! Hoje é $(date '+%A, %d de %B de %Y às %T')"
-else
-	cowsay "Welcome $USER! It's now $(date '+%A, %B %d %Y %r')"
-fi
-
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
@@ -117,9 +110,6 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # done
 #END THIS
 
-# if [[ -f $HOME/.bash_profile ]]; then
-# 	source $HOME/.bash_profile
-# fi
 
 # Source all files in "source"
 function src() {
@@ -156,9 +146,8 @@ if [ -f ~/.docker-completion.bash ]; then
  . ~/.docker-completion.bash
 fi
 
-# Add Identify SSH
-ssh-add
+#if [ -f ~/.bash_profile ]; then
+#  source ~/.bash_profile
+#if
 
-if [ -f ~/.bashrc ]; then
-  source ~/.bash_profile
-fi
+
