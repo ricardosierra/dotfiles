@@ -2,15 +2,63 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+#.profile
+
+
+# Case-insensitive globbing (used in pathname expansion)
+shopt -s nocaseglob
+
+# Append to the Bash history file, rather than overwriting it
+shopt -s histappend
+
+# Autocorrect typos in path names when using `cd`
+shopt -s cdspell
+
+# Enable some Bash 4 features when possible:
+# * `autocd`, e.g. `**/qux` will enter `./foo/bar/baz/qux`
+# * Recursive globbing, e.g. `echo **/*.txt`
+for option in autocd globstar; do
+	shopt -s "$option" 2> /dev/null
+done
+
+# Add tab completion for SSH hostnames based on ~/.ssh/config
+# ignoring wildcards
+[[ -e "$HOME/.ssh/config" ]] && complete -o "default" \
+	-o "nospace" \
+	-W "$(grep "^Host" ~/.ssh/config | \
+	grep -v "[?*]" | cut -d " " -f2 | \
+	tr ' ' '\n')" scp sftp ssh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#############################################################################################################3
 # If not running interactively, don't do anything
 case $- in
 	*i*) ;;
 	*) return;;
 esac
 
-# Where the magic happens.
-export DOTFILES=~/.dotfiles
 
+export DOTFILES=~/.dotfiles
 source $HOME/.dotfilesconfig.local
 
 
@@ -146,8 +194,11 @@ if [ -f ~/.docker-completion.bash ]; then
  . ~/.docker-completion.bash
 fi
 
-#if [ -f ~/.bash_profile ]; then
-#  source ~/.bash_profile
-#if
 
+# Load the shell dotfiles, and then some:
+# * ~/.path can be used to extend `$PATH`.
+for file in ~/.{aliases,bash_prompt,dockerfunc,exports,functions,path}; do
+	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
+done
+#unset file
 
