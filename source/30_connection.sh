@@ -25,3 +25,8 @@ sftp() {
   check-ssh-add
   /usr/bin/sftp $@
 }
+
+#git() {
+#  check-ssh-add
+#  /usr/bin/git $@
+#}

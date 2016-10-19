@@ -98,6 +98,7 @@ packages=(
   # Files Converts
   pdftk
   unoconv
+  ufraw
 )
 
 # More APT packages

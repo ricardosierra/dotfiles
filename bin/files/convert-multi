@@ -12,7 +12,7 @@ arquivo=lista.txt
 if [[ "$1" == "--help" ]]; then
 	echo "Converte todos os arquivos da Pasta atual"
 	echo " \n"
-	echo "Accept Convert Extensions: bzlib cairo djvu fftw fontconfig freetype jbig jng jpeg lcms lqr ltdl lzma openexr pangocairo png rsvg tiff wmf x xml zlib"
+	echo "Accept Convert Extensions: bzlib cairo djvu fftw fontconfig freetype cr2 jbig jng jpeg lcms lqr ltdl lzma openexr pangocairo png rsvg tiff wmf x xml zlib"
 	echo "Extra Convertions:"
 	echo "    mp3 -> wav"
 	echo " \n"
@@ -80,7 +80,7 @@ do
 		newNameFile=$(echo ${nome[$j]}"."$nova)
 		echo "Convertendo ${file[$j]} para $newNameFile"
 		# Mp3 for Wav file
-		if [[ "${es[$j]}" == "mp3" && "${es[$j]}" == "wav" ]]; then
+		if [[ "${es[$j]}" == "mp3" && "${nova}" == "wav" ]]; then
 			lame --decode "${es[$j]}" `echo "$1" | sed 's/.mp3$/.wav/'`;
 		else
 			convert "${file[$j]}" "$newNameFile"
