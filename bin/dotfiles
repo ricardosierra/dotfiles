@@ -332,7 +332,12 @@ function copy_do() {
 function link_header() { e_header "Linking files into home directory"; }
 function link_do() {
   if [ -d $2 ]; then
-    if [ -d ~/$1 ]; then
+    if [ -h ~/$1 ]; then
+      e_success "Deleted link: ~/$1"
+      e_success "Linking file: ~/$1"
+      rm ~/$1
+      ln -sf ~/${2#$HOME/} ~/$1
+    elif [ -d ~/$1 ]; then
       do_stuff "link" "$1"
     else
       e_success "Linking directory: ~/$1"

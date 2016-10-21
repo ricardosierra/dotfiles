@@ -134,7 +134,7 @@ if (( ${#packages[@]} > 0 )); then
   e_header "Installing APT packages: ${packages[*]}"
   for package in "${packages[@]}"; do
     if is_debian; then
-      sudo apt-get install "$package" -y
+      sudo apt-get -qq install "$package" -y
     elif is_archlinux; then
       sudo pacman -qq install "$package" -y
     else
