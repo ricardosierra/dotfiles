@@ -210,6 +210,9 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 "let g:airline#extensions#tabline#fnamecollapse = 0
 "let g:airline#extensions#tabline#fnamemod = ':t'
 
+" AG for search in files
+let g:ackprg = 'ag --nogroup --nocolor --column'
+
 " NERDTree
 let NERDTreeShowHidden = 1
 let NERDTreeMouseMode = 2

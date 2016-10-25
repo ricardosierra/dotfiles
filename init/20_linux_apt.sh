@@ -106,20 +106,24 @@ if is_debianOS || is_kali; then
   packages+=(
     php7
     php7.0-xml #precisa pro phpunit funcionar
+    silversearcher-ag
     ssh-askpass-gnome
     ssh-askpass
-    aopenssh-server
+    openssh-server
   )
 elif is_archlinux; then
   packages+=(
     php7
     php7.0-xml #precisa pro phpunit funcionar
+    the_silver_searcher
+    openssh-askpass
     openssh
   )
 else
   packages+=(
     php
     #php70w-xml #precisa pro phpunit funcionar
+    the_silver_searcher
     openssh-askpass
     openssh-server
   )

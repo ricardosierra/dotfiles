@@ -1089,14 +1089,13 @@ thunderbird(){
 		${DOCKER_REPO_PREFIX}thunderbird
 }
 tor(){
-  images_local_build tor
 
 	del_stopped tor
 
 	docker run -d \
 		--net host \
 		--name tor \
-		${DOCKER_REPO_PREFIX}tor
+		jess/tor
 
 	# set up the redirect iptables rules
 	sudo setup-tor-iptables
@@ -1105,7 +1104,6 @@ tor(){
 	browser-exec "https://check.torproject.org/"
 }
 torbrowser(){
-  images_local_build tor-browser
 
 	del_stopped torbrowser
 

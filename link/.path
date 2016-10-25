@@ -1,5 +1,8 @@
-#RESET PATH
+# RESET PATH
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+
+# COMPOSER
+export PATH="$HOME/.config/composer/vendor/bin:$PATH"
 
 # Add binaries into the path
 export PATH="$DOTFILES/bin:$PATH"
