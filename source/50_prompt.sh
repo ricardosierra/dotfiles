@@ -28,7 +28,7 @@ fi;
 # 33  43  yellow    37  47  white
 
 # DEFAULT COLORS
-bold=$(tput bold)
+bold="\[\e[1m\]";
 reset="\[\e[0m\]";
 black="\[\e[1;30m\]";
 blue="\[\e[1;34m\]";
@@ -44,8 +44,8 @@ bracket=$white
 error=$red
 # Highlight the user name when logged in as root.
 if [[ "${USER}" == "root" ]]; then
-	userStyle="${violet}";
-	reset="${violet}";
+	userStyle="${red}";
+	reset="${red}";
 
 else
 	userStyle="${blue}";
@@ -53,7 +53,7 @@ else
 fi;
 # Highlight the hostname when connected via SSH.
 if [[ "${SSH_TTY}" ]]; then
-	hostStyle="${bold}${green}";
+	hostStyle="${bold}${red}";
 else
 	hostStyle="${blue}";
 fi;
