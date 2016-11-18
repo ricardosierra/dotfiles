@@ -34,7 +34,6 @@ black="\[\e[1;30m\]";
 blue="\[\e[1;34m\]";
 cyan="\[\e[1;36m\]";
 green="\[\e[1;32m\]";
-orange="\[\e[1;33m\]";
 purple="\[\e[1;35m\]";
 red="\[\e[1;31m\]";
 violet="\[\e[1;35m\]";
@@ -46,7 +45,6 @@ error=$red
 if [[ "${USER}" == "root" ]]; then
 	userStyle="${red}";
 	reset="${red}";
-
 else
 	userStyle="${blue}";
 	reset="${blue}";
@@ -143,7 +141,7 @@ function prompt_command() {
   PS1="$PS1${bracket}[${yellow}$(date +"%H${bracket}:${yellow}%M${bracket}:${yellow}%S")${bracket}]${reset}"
 
   # [path]
-  PS1="$PS1:${reset}\w${reset}"
+  PS1="$PS1${userStyle}:${cyan}\w${reset}"
 
   # exit code: 127
   PS1="$PS1${error}$(prompt_exitcode "$exit_code")"
