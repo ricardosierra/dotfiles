@@ -1,10 +1,20 @@
 #!/bin/bash
+# Image Convert
+#----------------------------
+# by http://ricardosierra.com.br
+#    ricardo@ricardosierra.com.br
+#============================
 
 export num
 export nova
 export extensao
 export arquivo
 export newNameFile
+export ext
+export file
+export name
+export nome
+export ex
 
 #Definições:
 arquivo=lista.txt

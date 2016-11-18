@@ -278,7 +278,10 @@ function init_files() {
   for i in "${!f[@]}"; do menu_options[i]="$(basename "${f[i]}")"; done
   if [[ -e "$init_file" ]]; then
     # Read cache file if possible
-    IFS=$'\n' read -d '' -r -a menu_selects < "$init_file"
+    OLDIFS=$IFS
+    IFS=$'\n'
+    read -d '' -r -a menu_selects < "$init_file"
+    IFS=$OLDIFS
   else
     # Otherwise default to all scripts not specifically for other OSes
     oses=($(get_os 1))

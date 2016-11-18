@@ -71,6 +71,8 @@ packages=(
   network-manager
   network-manager-openvpn
   network-manager-openvpn-gnome
+  nmap
+  zenmap
   python
   python-pip
   rxvt-unicode
@@ -95,10 +97,11 @@ packages=(
   # IOT
   youtube-dl
 
-  # Files Converts
+  # Files Converts/Minify
   pdftk
   unoconv
   ufraw
+  jpegoptim
 )
 
 # More APT packages

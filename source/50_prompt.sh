@@ -44,8 +44,8 @@ bracket=$white
 error=$red
 # Highlight the user name when logged in as root.
 if [[ "${USER}" == "root" ]]; then
-	userStyle="${purple}";
-	reset="${purple}";
+	userStyle="${violet}";
+	reset="${violet}";
 
 else
 	userStyle="${blue}";

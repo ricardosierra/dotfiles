@@ -4,8 +4,8 @@
 #
 #!/bin/bash
 
-IFS=$?\n?
-#seta o separador de comandos para quebra de linha isto é para resolver caso tenhamos a indesejável utilização de espaços nos nomes dos arquivos
+OLDIFS=$IFS
+IFS=$'\n' #seta o separador de comandos para quebra de linha isto é para resolver caso tenhamos a indesejável utilização de espaços nos nomes dos arquivos
 
 MYTMP=/tmp/procura-recursiva/
 # pasta utilizada pelo programa
@@ -15,19 +15,21 @@ mkdir $MYTMP
 
 for files_pdf in `find -type f | grep ?\.pdf$? | sed ?s/\.//?`
 do
-LOC_FILE=`pwd`$files_pdf
-# diretorio onde se encontra o arquivo seguido do seu nome
-NAME_FILE=`basename $files_pdf`
-# nome dp arquivo pdf analizado
-FIND_FILE=$MYTMP$NAME_FILE.txt
-# Arquivo temporário de pdf em forma de texto para ser utilizado na busca rescursiva
-pdftotext $LOC_FILE $FIND_FILE
-# Converte o arquivo pdf para um arquivo de texto para executar a busca
-grep $1 $FIND_FILE >> /dev/null
-# Procura no arquivo de texto e joga o resultado para o buraco negro
-if [ $? = 0 ]
-then
-#verifica se a busca foi bem sucedida caso sim imprime que foi econtrada a palavra chave no arquivo
-echo ?Expressao encontrada no arquivo $NAME_FILE?;
-fi
+  LOC_FILE=`pwd`$files_pdf
+  # diretorio onde se encontra o arquivo seguido do seu nome
+  NAME_FILE=`basename $files_pdf`
+  # nome dp arquivo pdf analizado
+  FIND_FILE=$MYTMP$NAME_FILE.txt
+  # Arquivo temporário de pdf em forma de texto para ser utilizado na busca rescursiva
+  pdftotext $LOC_FILE $FIND_FILE
+  # Converte o arquivo pdf para um arquivo de texto para executar a busca
+  grep $1 $FIND_FILE >> /dev/null
+  # Procura no arquivo de texto e joga o resultado para o buraco negro
+  if [ $? = 0 ]
+  then
+    #verifica se a busca foi bem sucedida caso sim imprime que foi econtrada a palavra chave no arquivo
+    echo ?Expressao encontrada no arquivo $NAME_FILE?;
+  fi
 done 
+
+IFS=$OLDIFS

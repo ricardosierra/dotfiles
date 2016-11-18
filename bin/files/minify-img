@@ -1,0 +1,92 @@
+#!/bin/bash
+
+# Image Minify
+#----------------------------
+# by http://ricardosierra.com.br
+#    ricardo@ricardosierra.com.br
+#============================
+
+export num
+export extensao
+export modo
+export ext
+export file
+export name
+export nome
+export ex
+
+
+modo="facil"
+
+if [[ "$1" == "--help" ]]; then
+	echo "Diminua imagens da pasta atual"
+	echo " \n"
+	echo "Accept Convert Extensions: jpg, png"
+	echo " \n"
+	echo "Usage: minify-img"
+	exit;
+fi
+
+# Dependencias
+if [[ ! "$(type -P jpegoptim)" ]]; then
+	echo "Comando jpegoptim não encontrado, por favor o instale usando o comando abaixo:"
+	echo "sudo apt install jpegoptim"
+	exit;
+fi
+if [[ ! "$(type -P optipng)" ]]; then
+	echo "Comando optipng não encontrado, por favor o instale usando o comando abaixo:"
+	echo "sudo apt install optipng"
+	exit;
+fi
+
+
+
+num=$(ls -l | awk '{print $9}' | wc -l) #Numero de linhas
+
+
+#-----------------------------------------------------------
+# save and change IFS 
+OLDIFS=$IFS
+IFS=$'\n'
+# read all file name into an array
+fileArray=($(find $DIR -type f))
+# restore it 
+IFS=$OLDIFS
+
+# get length of an array
+tLen=${#fileArray[@]}
+#Lendo arquivos
+for (( i=0; i<${tLen}; i++ ));
+do
+	file[$i]="${fileArray[$i]}"
+	est="${file[$i]}"
+	name=$(echo ${file[$i]} | rev)
+	nome[$i]=$(echo ${name} | cut -c 5- | rev)
+	es[$i]=$(echo ${est##*.})
+done
+#-----------------------------------------------------------
+
+
+#-----------------------------------------------------------
+
+#Convertendo arquivos
+for (( j=1 ; j<=$num ; j++ ));
+do
+    echo "Otimizando ${file[$j]}"
+    # Png file
+    if [[ "${es[$j]}" == "png" ]]; then
+        if [[ $modo == "hard" ]]; then
+            optipng -o7 "${file[$j]}"
+        else
+            optipng -o7 "${file[$j]}"
+        fi
+    elif [[ "${es[$j]}" == "jpg" ]]; then
+        if [[ $modo == "hard" ]]; then
+            jpegoptim --size=250k "${file[$j]}"
+        else
+            jpegoptim "${file[$j]}"
+        fi
+    fi
+
+done
+#-----------------------------------------------------------

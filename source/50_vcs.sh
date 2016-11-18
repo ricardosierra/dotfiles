@@ -101,6 +101,7 @@ function gstat() {
   local file_len graph_len e r c
   range="${1:-HEAD~}"
   echo "Diff name-status & stat for range: $range"
+  OLDIFS=$IFS
   IFS=$'\n'
 
   lines=($(git diff --name-status "$range"))
@@ -140,7 +141,7 @@ function gstat() {
     fi
     echo "$line" | sed "s/\|/$e[0m$mode \|/"
   done
-  unset IFS
+  IFS=$OLDIFS
 }
 
 # OSX-specific Git shortcuts
