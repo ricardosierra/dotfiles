@@ -1,10 +1,3 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
-
-#.profile
-
-
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
 
@@ -21,36 +14,7 @@ for option in autocd globstar; do
 	shopt -s "$option" 2> /dev/null
 done
 
-# Add tab completion for SSH hostnames based on ~/.ssh/config
-# ignoring wildcards
-[[ -e "$HOME/.ssh/config" ]] && complete -o "default" \
-	-o "nospace" \
-	-W "$(grep "^Host" ~/.ssh/config | \
-	grep -v "[?*]" | cut -d " " -f2 | \
-	tr ' ' '\n')" scp sftp ssh
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#############################################################################################################3
 # If not running interactively, don't do anything
 case $- in
 	*i*) ;;
@@ -60,6 +24,23 @@ esac
 
 export DOTFILES=~/.dotfiles
 source $HOME/.dotfilesconfig.local
+
+# Source all files in "source"
+function src() {
+  local file
+  if [[ "$1" ]]; then
+    source "$DOTFILES/source/$1.sh"
+  else
+    for file in $DOTFILES/source/*; do
+      source "$file"
+    done
+  fi
+}
+
+# Run dotfiles script, then source.
+function dotfiles() {
+  $DOTFILES/bin/dotfiles "$@" && src
+}
 
 
 # If set, the pattern "**" used in a pathname expansion context will
@@ -159,46 +140,16 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 #END THIS
 
 
-# Source all files in "source"
-function src() {
-  local file
-  if [[ "$1" ]]; then
-    source "$DOTFILES/source/$1.sh"
-  else
-    for file in $DOTFILES/source/*; do
-      source "$file"
-    done
-  fi
-}
-
-# Run dotfiles script, then source.
-function dotfiles() {
-  $DOTFILES/bin/dotfiles "$@" && src
-}
 
 src
 
-### TNS (Native Script) COMPLETIONS
-if [ -f /home/sierra/.tnsrc ]; then
-    source /home/sierra/.tnsrc
-fi
-###-tns-completion-end-###
-
-### GIT COMPLETIONS
-if [ -f ~/.git-completion.bash ]; then
- . ~/.git-completion.bash
-fi
-
-### DOCKER COMPLETIONS
-if [ -f ~/.docker-completion.bash ]; then
- . ~/.docker-completion.bash
-fi
-
+# Load the shell complete
+for file in ~/.completion/.{tnsrc,git-completion.bash,docker-completion.bash}; do
+	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
+done
 
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
 for file in ~/.{aliases,bash_prompt,dockerfunc,exports,functions,path}; do
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
 done
-#unset file
-
