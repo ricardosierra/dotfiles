@@ -91,6 +91,10 @@ packages=(
   vim
   vim-gnome
   virtualbox
+
+  # Editors
+  gimp
+
   # Support Shell Script
   dialog
 
