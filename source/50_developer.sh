@@ -99,3 +99,9 @@ golistdeps(){
 	go list -e -f '{{join .Deps "\n"}}' ./... | xargs go list -e -f '{{if not .Standard}}{{.ImportPath}}{{end}}'
 	)
 }
+
+
+download-website(){
+	local website=$1
+	wget --limit-rate=200k --mirror --adjust-extension --recursive --page-requisites --html-extension --convert-links -E -e robots=off -U mozilla --random-wait --no-parent $website
+}
