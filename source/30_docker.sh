@@ -154,26 +154,39 @@ dcleanup(){
 	docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
 	docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
 }
-images_local_build(){
-	local name=$1
-	local version=$2
-	#Versão vira uma subpasta do repositorio
-  if [[ "$version" != "" ]]; then
-		directory="${name}/${version}"
-  else
-		directory="${name}"
-	fi
-	#Se a pasta não existe, returna sem buildar nada
-	if [ ! -d "${DOCKERFILES_PATH}/${directory}" ]; then
-		echo "Erro - Dockerfile not found: "$directory
-		return 1
-	fi
 
-  if [[ "$(docker images -q $name 2> /dev/null)" == "" ]]; then
-		echo "Docker Build: ${directory}"
-    docker build -t $name ${DOCKERFILES_PATH}/${directory}
-  fi
+images_remote_build(){
+	local repository=$1
+	local programName=$2
+
+  export DOCKER_CONTENT_TRUST=0
+  echo "Running $programName with Docker"
 }
+
+images_local_build(){
+    local name=$1
+    local version=$2
+
+    export DOCKER_CONTENT_TRUST=0
+
+    #Versão vira uma subpasta do repositorio
+    if [[ "$version" != "" ]]; then
+        directory="${name}/${version}"
+    else
+        directory="${name}"
+    fi
+    #Se a pasta não existe, returna sem buildar nada
+    if [ ! -d "${DOCKERFILES_PATH}/${directory}" ]; then
+        echo "Erro - Dockerfile not found: "$directory
+        return 1
+    fi
+
+    if [[ "$(docker images -q $name 2> /dev/null)" == "" ]]; then
+                  echo "Docker Build: ${directory}"
+      docker build --disable-content-trust -t $name ${DOCKERFILES_PATH}/${directory}
+    fi
+}
+
 del_stopped(){
 	local name=$1
 	local state=$(docker inspect --format "{{.State.Running}}" $name 2>/dev/null)
