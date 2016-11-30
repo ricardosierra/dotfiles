@@ -99,10 +99,6 @@ nbproject/**
 # Icon must end with two \r
 Icon
 
-
-# Thumbnails
-._*
-
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
 .fseventsd
@@ -132,9 +128,6 @@ Temporary Items
 # Linux trash folder which might appear on any partition or disk
 .Trash-*<Paste>
 
-##
-# Vim
-##
 # swap
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]
@@ -222,9 +215,6 @@ tags
 _obj
 _test
 
-# Architecture specific extensions/prefixes
-*.[568vq]
-[568vq].out
 
 *.cgo1.go
 *.cgo2.c
