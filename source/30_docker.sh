@@ -154,6 +154,13 @@ dcleanup(){
 	docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
 	docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
 }
+dclean_container(){
+  docker rm $(docker ps -a -q)
+}
+dcleanall(){
+  docker rm $(docker ps -a -q)
+  docker rmi $(docker images -q)
+}
 
 images_remote_build(){
 	local repository=$1
