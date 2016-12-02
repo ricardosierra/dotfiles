@@ -1,9 +1,9 @@
 # Package management
 if is_debian; then
-  alias update="sudo apt-get -qq update && sudo apt-get upgrade"
-  alias install="sudo apt-get install"
-  alias remove="sudo apt-get remove"
-  alias search="apt-cache search"
+  alias update="sudo apt -qq update && sudo apt upgrade"
+  alias install="sudo apt install"
+  alias remove="sudo apt remove"
+  alias search="apt search"
 elif is_archlinux; then
   alias update="sudo pacman -qq update && sudo pacman upgrade"
   alias install="sudo pacman install"

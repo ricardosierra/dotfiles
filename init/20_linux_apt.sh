@@ -126,12 +126,13 @@ elif is_archlinux; then
     openssh-askpass
     openssh
   )
+#UBuntu
 else
   packages+=(
     php
     #php70w-xml #precisa pro phpunit funcionar
-    the_silver_searcher
-    openssh-askpass
+    silversearcher-ag
+    ssh-askpass
     openssh-server
   )
 fi
@@ -145,7 +146,7 @@ if (( ${#packages[@]} > 0 )); then
   e_header "Installing APT packages: ${packages[*]}"
   for package in "${packages[@]}"; do
     if is_debian; then
-      sudo apt-get -qq install "$package" -y
+      sudo apt -qq install "$package" -y
     elif is_archlinux; then
       sudo pacman -qq install "$package" -y
     else
