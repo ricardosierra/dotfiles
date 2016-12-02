@@ -35,8 +35,8 @@ set laststatus=2 " Always show status line
 set nolist
 
 " Make it obvious where 80 characters is
-set textwidth=80
-set colorcolumn=+1
+set textwidth=121
+let &colorcolumn="81,".join(range(120,999),",")
 
 " Scrolling
 set scrolloff=3 " Start scrolling three lines before horizontal border of window.
@@ -354,8 +354,10 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-eunuch'
 Plug 'scrooloose/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
+if v:version < 705 && !has('patch-7.4.785')
+  Plug 'vim-scripts/PreserveNoEOL'
+endif
 Plug 'editorconfig/editorconfig-vim'
-Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'pangloss/vim-javascript', {'for': 'javascript'}
 Plug 'mhinz/vim-signify'

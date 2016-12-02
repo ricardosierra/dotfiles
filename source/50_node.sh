@@ -28,6 +28,7 @@ function nave_install() {
 
 # Global npm modules to install.
 npm_globals=(
+  babel-cli
   bower
   less
   sass
@@ -37,6 +38,7 @@ npm_globals=(
   grunt-init
   linken
   node-inspector
+  pushstate-server
   phonegap@3.6.0-0.21.19
   cordova@5.0.0
   ripple-emulator@0.9.24
@@ -127,24 +129,12 @@ function npm_latest() {
   fi
 }
 
-# Switch between already-downloaded node versions.
-function node_ver() {
-  (
-    ver="${1#v}"
-    nodes=()
-    if [[ ! -e "/usr/local/src/node-v$ver" ]]; then
-      shopt -s extglob
-      shopt -s nullglob
-      cd "/usr/local/src"
-      eval 'for n in node-v*+([0-9]).+([0-9]).+([0-9]); do nodes=("${nodes[@]}" "${n#node-}"); done'
-      [[ "$1" ]] && echo "Node.js version \"$1\" not found."
-      echo "Valid versions are: ${nodes[*]}"
-      [[ "$(type -P node)" ]] && echo "Current version is: $(node --version)"
-      exit 1
-    fi
-    cd "/usr/local/src/node-v$ver"
-    sudo make install >/dev/null 2>&1 &&
-    echo "Node.js $(node --version) installed." ||
-    echo "Error, $(node --version) installed."
-  )
+# Force npm to rewrite package.json to sort everything in the default order
+function npm-package() {
+  if [[ "$(cat package.json | grep dependencies)" ]]; then
+    npm install foo --save && npm uninstall foo --save
+  fi
+  if [[ "$(cat package.json | grep devDependencies)" ]]; then
+    npm install foo --save-dev && npm uninstall foo --save-dev
+  fi
 }
