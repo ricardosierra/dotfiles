@@ -1,4 +1,5 @@
 # Desable docker notary TRUST because this cause one erro in docker-compose
+# Coloquei essa configuração porque sem ela de vez em quando tenho problemas com o docker notary
 export DOCKER_CONTENT_TRUST=0
 
 
@@ -149,19 +150,25 @@ docker_build_all(){
     done
 }
 
+# Remove todas as camadas intermediárias dos containers
 dcleanup(){
 	docker rm $(docker ps -aq 2>/dev/null) 2>/dev/null
 	docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
 	docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
 }
+
+# Limpa (Removendo) os containers
 dclean_container(){
   docker rm $(docker ps -a -q)
 }
+
+# Limpa Tudo
 dcleanall(){
   docker rm $(docker ps -a -q)
   docker rmi $(docker images -q)
 }
 
+# Comando para Rodar um Programa usando uma imagem da internet
 images_remote_build(){
 	local repository=$1
 	local programName=$2
@@ -170,6 +177,7 @@ images_remote_build(){
   echo "Running $programName with Docker"
 }
 
+# Comando para Rodar um Programa usando uma imagem da internet
 images_local_build(){
     local name=$1
     local version=$2
@@ -179,8 +187,10 @@ images_local_build(){
     #Versão vira uma subpasta do repositorio
     if [[ "$version" != "" ]]; then
         directory="${name}/${version}"
+				contname="${name}:${version}"
     else
         directory="${name}"
+				contname="${name}"
     fi
     #Se a pasta não existe, returna sem buildar nada
     if [ ! -d "${DOCKERFILES_PATH}/${directory}" ]; then
@@ -188,9 +198,9 @@ images_local_build(){
         return 1
     fi
 
-    if [[ "$(docker images -q $name 2> /dev/null)" == "" ]]; then
+    if [[ "$(docker images -q $contname 2> /dev/null)" == "" ]]; then
                   echo "Docker Build: ${directory}"
-      docker build --disable-content-trust -t $name ${DOCKERFILES_PATH}/${directory}
+      docker build --disable-content-trust -t $contname ${DOCKERFILES_PATH}/${directory}
     fi
 }
 
@@ -222,18 +232,18 @@ nginx_config(){
 	cat >${HOME}/.nginx/conf.d/${server}.conf <<-EOF
 	upstream ${server} { server ${route}; }
 	server {
-	server_name ${server};
-	location / {
-	proxy_pass  http://${server};
-	proxy_http_version 1.1;
-	proxy_set_header Upgrade \$http_upgrade;
-	proxy_set_header Connection "upgrade";
-	proxy_set_header Host \$http_host;
-	proxy_set_header X-Forwarded-Proto \$scheme;
-	proxy_set_header X-Forwarded-For \$remote_addr;
-	proxy_set_header X-Forwarded-Port \$server_port;
-	proxy_set_header X-Request-Start \$msec;
-}
+            server_name ${server};
+            location / {
+                proxy_pass  http://${server};
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade \$http_upgrade;
+                proxy_set_header Connection "upgrade";
+                proxy_set_header Host \$http_host;
+                proxy_set_header X-Forwarded-Proto \$scheme;
+                proxy_set_header X-Forwarded-For \$remote_addr;
+                proxy_set_header X-Forwarded-Port \$server_port;
+                proxy_set_header X-Request-Start \$msec;
+            }
 	}
 	EOF
 

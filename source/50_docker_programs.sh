@@ -34,6 +34,7 @@ docker_programs=(
     irssi
     john
     kernel-builder
+		kicad
     kvm
     libreoffice
     lpass
@@ -486,6 +487,13 @@ kernel_builder(){
             --cpu-shares=512 \
             --name kernel-builder \
             ${DOCKER_REPO_PREFIX}kernel-builder
+}
+kicad(){
+	images_local_build kicad 4.0
+  docker run --rm -it \
+		  -e DISPLAY=$DISPLAY \
+			-v /tmp/.X11-unix:/tmp/.X11-unix \
+			${DOCKER_REPO_PREFIX}kicad:4.0
 }
 kvm(){
     images_local_build kvm
@@ -1218,18 +1226,18 @@ virt_viewer(){
 		--net container:kvm \
 		${DOCKER_REPO_PREFIX}virt-viewer "$@"
 }
-visualstudio(){
-  images_local_build visualstudio
-
-	del_stopped visualstudio
-
-	docker run -d \
-		-v /etc/localtime:/etc/localtime:ro \
-		-v /tmp/.X11-unix:/tmp/.X11-unix  \
-		-e DISPLAY=unix$DISPLAY \
-		--name visualstudio \
-		${DOCKER_REPO_PREFIX}visualstudio
-}
+#visualstudio(){
+#  images_local_build visualstudio
+#
+#	del_stopped visualstudio
+#
+#	docker run -d \
+#		-v /etc/localtime:/etc/localtime:ro \
+#		-v /tmp/.X11-unix:/tmp/.X11-unix  \
+#		-e DISPLAY=unix$DISPLAY \
+#		--name visualstudio \
+#		${DOCKER_REPO_PREFIX}visualstudio
+#}
 vlc(){
   images_local_build vlc
 
