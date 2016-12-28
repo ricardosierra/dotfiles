@@ -34,7 +34,7 @@ docker_programs=(
     irssi
     john
     kernel-builder
-		kicad
+    kicad
     kvm
     libreoffice
     lpass
@@ -54,6 +54,7 @@ docker_programs=(
     nmap
     "notify-osd"
     pandoc
+    php
     phonegap
     pivmanpms
     pond
@@ -101,6 +102,10 @@ docker_programs=(
 # Container Aliases
 #
 android-studio(){
+    if [[ "$(type -P android-studio)" ]]; then
+        command android-studio "$@"
+        return 
+    fi
     del_stopped android-studio
 
     sudo docker run -ti --rm \
@@ -120,6 +125,10 @@ apt_file(){
 }
 alias a=atom
 atom(){
+    if [[ "$(type -P atom)" ]]; then
+        command atom "$@"
+        return 
+    fi
     images_local_build atom
 
     docker run -d -ti \
@@ -130,6 +139,10 @@ atom(){
 }
 alias apt-file="apt_file"
 audacity(){
+    if [[ "$(type -P audacity)" ]]; then
+        command audacity "$@"
+        return 
+    fi
     images_local_build audacity
     del_stopped audacity
 
@@ -183,6 +196,10 @@ cadvisor(){
     browser-exec "http://cadvisor:8080"
 }
 cheese(){
+    if [[ "$(type -P cheese)" ]]; then
+        command cheese "$@"
+        return 
+    fi
     images_local_build cheese
     del_stopped cheese
 
@@ -197,7 +214,12 @@ cheese(){
             --name cheese \
             ${DOCKER_REPO_PREFIX}cheese
 }
+alias google-chrome="chrome"
 chrome(){
+    if [[ "$(type -P google-chrome)" ]] && [[ "$1" != "tor" ]]; then
+        command google-chrome "$@"
+        return 
+    fi
     images_local_build chrome stable
     # add flags for proxy if passed
     local proxy=
@@ -243,6 +265,10 @@ chrome(){
     exit 0
 }
 clementine(){
+    if [[ "$(type -P clementine)" ]]; then
+        command clementine "$@"
+        return 
+    fi
     images_local_build clementine
     
     relies_on pulseaudio
@@ -321,6 +347,10 @@ dbvis(){
             ${DOCKER_REPO_PREFIX}dbvis
 }
 dia(){
+    if [[ "$(type -P dia)" ]]; then
+        command dia "$@"
+        return 
+    fi
     images_local_build dia
 
     docker run -d -ti \
@@ -330,6 +360,10 @@ dia(){
             ${DOCKER_REPO_PREFIX}dia
 }
 firefox(){
+    if [[ "$(type -P firefox)" ]]; then
+        command firefox "$@"
+        return 
+    fi
     images_local_build firefox
 
     del_stopped firefox
@@ -397,6 +431,10 @@ gcloud(){
             ${DOCKER_REPO_PREFIX}gcloud "$@"
 }
 gimp(){
+    if [[ "$(type -P gimp)" ]]; then
+        command gimp "$@"
+        return 
+    fi
     images_local_build gimp
 
     del_stopped gimp
@@ -413,6 +451,10 @@ gimp(){
             ${DOCKER_REPO_PREFIX}gimp
 }
 gitk(){
+    if [[ "$(type -P gitk)" ]]; then
+        command gitk "$@"
+        return 
+    fi
     images_remote_build sierratecnologia gitk
 
     docker run -d -ti \
@@ -422,6 +464,10 @@ gitk(){
             sierratecnologia/gitk "$@"
 }
 hollywood(){
+    if [[ "$(type -P hollywood)" ]]; then
+        command hollywood "$@"
+        return 
+    fi
     images_local_build hollywood
 
     docker run --rm -it \
@@ -429,6 +475,10 @@ hollywood(){
             ${DOCKER_REPO_PREFIX}hollywood
 }
 htop(){
+    if [[ "$(type -P htop)" ]]; then
+        command htop "$@"
+        return 
+    fi
     images_local_build htop
 
     docker run --rm -it \
@@ -517,6 +567,10 @@ kvm(){
             ${DOCKER_REPO_PREFIX}kvm
 }
 libreoffice(){
+    if [[ "$(type -P libreoffice)" ]]; then
+        command libreoffice "$@"
+        return 
+    fi
     images_local_build libreoffice
 
     del_stopped libreoffice
@@ -547,6 +601,10 @@ lynx(){
             ${DOCKER_REPO_PREFIX}lynx "$@"
 }
 masscan(){
+    if [[ "$(type -P masscan)" ]]; then
+        command masscan "$@"
+        return 
+    fi
     images_local_build masscan
 
     docker run -it --rm \
@@ -557,6 +615,10 @@ masscan(){
             ${DOCKER_REPO_PREFIX}masscan "$@"
 }
 maltego(){
+    if [[ "$(type -P maltego)" ]]; then
+        command maltego "$@"
+        return 
+    fi
     images_remote_build sierratecnologia maltego
     docker run -d -ti \
             -e DISPLAY=$DISPLAY \
@@ -582,6 +644,10 @@ mpd(){
 		${DOCKER_REPO_PREFIX}mpd
 }
 mysql-workbench(){
+    if [[ "$(type -P mysql-workbench)" ]]; then
+        command mysql-workbench "$@"
+        return 
+    fi
   images_local_build mysql-workbench
 
 	docker run -ti --rm \
@@ -682,6 +748,10 @@ netbeans_php(){
 		sierratecnologia/netbeans-php
 }
 netcat(){
+    if [[ "$(type -P netcat)" ]]; then
+        command netcat "$@"
+        return 
+    fi
   images_local_build netcat
 
 	docker run --rm -it \
@@ -702,13 +772,17 @@ nginx(){
 	sudo hostess add sierra 127.0.0.1
 }
 nmap(){
-	echo "Running Nmap with docker..."
+    if [[ "$(type -P nmap)" ]]; then
+        command nmap "$@"
+        return 
+    fi
+    echo "Running Nmap with docker..."
 
-  	images_local_build nmap
+    images_local_build nmap
 
-	docker run --rm -it \
-		--net host \
-		${DOCKER_REPO_PREFIX}nmap "$@"
+    docker run --rm -it \
+            --net host \
+            ${DOCKER_REPO_PREFIX}nmap "$@"
 }
 notify_osd(){
   images_local_build notify-osd
@@ -734,6 +808,10 @@ notify_send(){
 	docker exec -i notify_osd notify-send "$1" "${args}"
 }
 pandoc(){
+    if [[ "$(type -P pandoc)" ]]; then
+        command pandoc "$@"
+        return 
+    fi
   images_local_build pandoc
 
 	local file=${@: -1}
@@ -746,6 +824,18 @@ pandoc(){
 		-v /tmp:/tmp \
 		--name pandoc \
 		${DOCKER_REPO_PREFIX}pandoc ${args} ${rfile}
+}
+alias php=php_cli
+php_cli(){
+    if [[ "$(type -P php)" ]]; then
+        command php "$@"
+        return 
+    fi
+    images_remote_build sierratecnologia php:7.0
+
+    del_stopped php-cli
+
+    docker run --rm --name=php-cli -v $(pwd):/var/www/html sierratecnologia/php:7.0 php "$@"
 }
 phonegap(){
 	  images_local_build phonegap 3.6.0-0-21-19
@@ -954,6 +1044,10 @@ shorewall(){
 		${DOCKER_REPO_PREFIX}shorewall "$@"
 }
 skype(){
+    if [[ "$(type -P skype)" ]]; then
+        command skype "$@"
+        return 
+    fi
   images_local_build skype
 
 	del_stopped skype
@@ -973,6 +1067,10 @@ skype(){
 		${DOCKER_REPO_PREFIX}skype
 }
 slack(){
+    if [[ "$(type -P slack)" ]]; then
+        command slack "$@"
+        return 
+    fi
   images_local_build slack
 
 	del_stopped slack
@@ -994,22 +1092,26 @@ slack(){
 		${DOCKER_REPO_PREFIX}slack "$@"
 }
 spotify(){
-  images_local_build spotify
+    if [[ "$(type -P spotify)" ]]; then
+        command spotify "$@"
+        return 
+    fi
+    images_local_build spotify
 
-	del_stopped spotify
+    del_stopped spotify
 
-	docker run -d \
-		-v /etc/localtime:/etc/localtime:ro \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-e DISPLAY=unix$DISPLAY \
-		-e QT_DEVICE_PIXEL_RATIO \
-		--security-opt seccomp:unconfined \
-		--device /dev/snd \
-		--device /dev/dri \
-		--group-add audio \
-		--group-add video \
-		--name spotify \
-		${DOCKER_REPO_PREFIX}spotify
+    docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        -e QT_DEVICE_PIXEL_RATIO \
+        --security-opt seccomp:unconfined \
+        --device /dev/snd \
+        --device /dev/dri \
+        --group-add audio \
+        --group-add video \
+        --name spotify \
+        ${DOCKER_REPO_PREFIX}spotify
 }
 
 alias s=sublime-text-3
@@ -1017,17 +1119,20 @@ alias subl=sublime-text-3
 alias subl=sublime-text-3
 alias sublime=sublime-text-3
 sublime-text-3(){
+    if [[ "$(type -P sublime-text-3)" ]]; then
+        command sublime-text-3 "$@"
+        return 
+    fi
+     images_local_build sublime-text-3
 
-  images_local_build sublime-text-3
-
-	docker run -d -ti \
-		-e DISPLAY=$DISPLAY \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-v $HOME/.config/sublime-text-3/:/root/.config/sublime-text-3 \
-		-v $HOME/$DOTFILES_FOLDER_PROJECTS:/root/development \
-		-v `pwd`:/root/www \
-		-v /var/run/dbus:/var/run/dbus \
-		${DOCKER_REPO_PREFIX}sublime-text-3 "$@"
+    docker run -d -ti \
+            -e DISPLAY=$DISPLAY \
+            -v /tmp/.X11-unix:/tmp/.X11-unix \
+            -v $HOME/.config/sublime-text-3/:/root/.config/sublime-text-3 \
+            -v $HOME/$DOTFILES_FOLDER_PROJECTS:/root/development \
+            -v `pwd`:/root/www \
+            -v /var/run/dbus:/var/run/dbus \
+            ${DOCKER_REPO_PREFIX}sublime-text-3 "$@"
 }
 ssh2john(){
   images_local_build john
@@ -1041,47 +1146,55 @@ ssh2john(){
 }
 
 steam(){
-  images_local_build steam
+    if [[ "$(type -P steam)" ]]; then
+        command steam "$@"
+        return 
+    fi
+    images_local_build steam
 
-	del_stopped steam
-	relies_on pulseaudio
+    del_stopped steam
+    relies_on pulseaudio
 
-	docker run -d \
-		-v /etc/localtime:/etc/localtime:ro \
-		-v /etc/machine-id:/etc/machine-id:ro \
-		-v /var/run/dbus:/var/run/dbus \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-v $HOME/.steam:/home/steam \
-		-e DISPLAY=unix$DISPLAY \
-		--link pulseaudio:pulseaudio \
-		-e PULSE_SERVER=pulseaudio \
-		--device /dev/dri \
-		--name steam \
-		${DOCKER_REPO_PREFIX}steam
+    docker run -d \
+            -v /etc/localtime:/etc/localtime:ro \
+            -v /etc/machine-id:/etc/machine-id:ro \
+            -v /var/run/dbus:/var/run/dbus \
+            -v /tmp/.X11-unix:/tmp/.X11-unix \
+            -v $HOME/.steam:/home/steam \
+            -e DISPLAY=unix$DISPLAY \
+            --link pulseaudio:pulseaudio \
+            -e PULSE_SERVER=pulseaudio \
+            --device /dev/dri \
+            --name steam \
+            ${DOCKER_REPO_PREFIX}steam
 }
 t(){
-  images_local_build t
+    images_local_build t
 
-	docker run -t --rm \
-		-v $HOME/.trc:/root/.trc \
-		--log-driver none \
-		${DOCKER_REPO_PREFIX}t "$@"
+    docker run -t --rm \
+            -v $HOME/.trc:/root/.trc \
+            --log-driver none \
+            ${DOCKER_REPO_PREFIX}t "$@"
 }
 tarsnap(){
-  images_local_build tarsnap
+    images_local_build tarsnap
 
-	docker run --rm -it \
-		-v $HOME/.tarsnaprc:/root/.tarsnaprc \
-		-v $HOME/.tarsnap:/root/.tarsnap \
-		-v $HOME:/root/workdir \
-		${DOCKER_REPO_PREFIX}tarsnap "$@"
+    docker run --rm -it \
+            -v $HOME/.tarsnaprc:/root/.tarsnaprc \
+            -v $HOME/.tarsnap:/root/.tarsnap \
+            -v $HOME:/root/workdir \
+            ${DOCKER_REPO_PREFIX}tarsnap "$@"
 }
 telnet(){
-  images_local_build telnet
+    if [[ "$(type -P telnet)" ]]; then
+        command telnet "$@"
+        return 
+    fi
+    images_local_build telnet
 
-	docker run -it --rm \
-		--log-driver none \
-		${DOCKER_REPO_PREFIX}telnet "$@"
+    docker run -it --rm \
+        --log-driver none \
+        ${DOCKER_REPO_PREFIX}telnet "$@"
 }
 termboy(){
   images_local_build termboy
