@@ -17,6 +17,7 @@ docker_programs=(
     cheese
     chrome
     clementine
+		composer
     consul
     cordova
     dcos-cli
@@ -262,7 +263,7 @@ chrome(){
             --host-resolver-rules="$map" $args
 
     # exit current shell
-    exit 0
+    #exit 0
 }
 clementine(){
     if [[ "$(type -P clementine)" ]]; then
@@ -283,6 +284,14 @@ clementine(){
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v $HOME/Musicas:/root/Music \
             ${DOCKER_REPO_PREFIX}clementine "$@"
+}
+composer(){
+	if [[ "$(type -P composer)" ]]; then
+		command composer "$@"
+		return
+	fi
+
+	docker run --rm -v $(pwd):/app -v ~/.ssh:/root/.ssh composer "$@"
 }
 consul(){
     images_local_build consul
