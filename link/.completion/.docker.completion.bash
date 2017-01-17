@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 #font: https://raw.githubusercontent.com/docker/docker/master/contrib/completion/bash/docker in 2016-08-01
 
 

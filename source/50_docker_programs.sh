@@ -4,10 +4,6 @@
 export DOCKER_REPO_PREFIX=
 export DOCKERFILES_PATH=~/.dockerfiles
 
-
-echo "Passou pelo DOcker Programs"
-echo "$(type -P gitk)"
-
 # All Docker Programs
 docker_programs=(
     "android-studio"
@@ -469,7 +465,6 @@ gitk(){
         command gitk "$@"
         return 
     fi
-    echo "Executando"
     images_remote_build sierratecnologia gitk
 
     docker run -d -ti \
