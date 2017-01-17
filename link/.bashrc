@@ -31,7 +31,8 @@ function src() {
   if [[ "$1" ]]; then
     source "$DOTFILES/source/$1.sh"
   else
-    for file in $DOTFILES/source/*; do
+    for file in $DOTFILES/source/*[^~]; do
+      echo "Dando source em $file"
       source "$file"
     done
   fi
@@ -140,16 +141,15 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 #END THIS
 
 
+# Load the shell dotfiles, and then some:
+# * ~/.path can be used to extend `$PATH`.
+for file in ~/.{aliases,bash_prompt,dockerfunc,exports,functions,path}; do
+	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
+done
 
 src
 
 # Load the shell complete
 for file in ~/.completion/.{tnsrc,git-completion.bash,docker-completion.bash}; do
-	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
-done
-
-# Load the shell dotfiles, and then some:
-# * ~/.path can be used to extend `$PATH`.
-for file in ~/.{aliases,bash_prompt,dockerfunc,exports,functions,path}; do
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
 done

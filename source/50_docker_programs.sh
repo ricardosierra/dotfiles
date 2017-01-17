@@ -5,6 +5,9 @@ export DOCKER_REPO_PREFIX=
 export DOCKERFILES_PATH=~/.dockerfiles
 
 
+echo "Passou pelo DOcker Programs"
+echo "$(type -P gitk)"
+
 # All Docker Programs
 docker_programs=(
     "android-studio"
@@ -17,7 +20,7 @@ docker_programs=(
     cheese
     chrome
     clementine
-		composer
+    composer
     consul
     cordova
     dcos-cli
@@ -285,14 +288,16 @@ clementine(){
             -v $HOME/Musicas:/root/Music \
             ${DOCKER_REPO_PREFIX}clementine "$@"
 }
+
 composer(){
 	if [[ "$(type -P composer)" ]]; then
 		command composer "$@"
 		return
 	fi
 
-	docker run --rm -v $(pwd):/app -v ~/.ssh:/root/.ssh composer "$@"
+	docker run --rm -v $(pwd):/app -v ~/.ssh:/root/.ssh -v ~/.composer:/root/.composer composer "$@"
 }
+
 consul(){
     images_local_build consul
     del_stopped consul
@@ -464,6 +469,7 @@ gitk(){
         command gitk "$@"
         return 
     fi
+    echo "Executando"
     images_remote_build sierratecnologia gitk
 
     docker run -d -ti \
@@ -785,7 +791,6 @@ nmap(){
         command nmap "$@"
         return 
     fi
-    echo "Running Nmap with docker..."
 
     images_local_build nmap
 

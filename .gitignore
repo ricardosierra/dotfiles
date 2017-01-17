@@ -6,6 +6,7 @@
 /link/.ssh/id_*
 /link/.ssh/*.pem
 /link/.ssh/known_hosts*
+/link/.ssh/authorized_keys*
 
 # Don't commit Vim plugins, vim-plug will install them.
 /link/.vim/plugged

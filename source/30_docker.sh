@@ -1,7 +1,3 @@
-# Desable docker notary TRUST because this cause one erro in docker-compose
-# Coloquei essa configuração porque sem ela de vez em quando tenho problemas com o docker notary
-export DOCKER_CONTENT_TRUST=0
-
 
 alias drun='docker run -it --rm'
 
@@ -173,7 +169,6 @@ images_remote_build(){
 	local repository=$1
 	local programName=$2
 
-  export DOCKER_CONTENT_TRUST=0
   echo "Running $programName with Docker"
 }
 
@@ -181,8 +176,6 @@ images_remote_build(){
 images_local_build(){
     local name=$1
     local version=$2
-
-    export DOCKER_CONTENT_TRUST=0
 
     #Versão vira uma subpasta do repositorio
     if [[ "$version" != "" ]]; then
