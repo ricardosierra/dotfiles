@@ -22,10 +22,6 @@
 #       Individual readline initialization file
 
 
-# Add Identify SSH
-eval `ssh-agent -s`
-
-
 if [ -n "$PS1" ] ; then                       # are we interactive?
    [ -r ~/.bashrc     ] && . ~/.bashrc        # tty/prompt/function setup for interactive shells
    [ -r ~/.bash_login ] && . ~/.bash_login    # any at-login tasks for login shell only
