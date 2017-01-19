@@ -2,7 +2,7 @@
 # Criando seus próprios aliases.
 Crie o arquivo .aliases na sua raiz e adicione uma linha como a de baixo:
 ```
-alias gm="git commit"
+alias gm="git commit -m"
 ```
 
 # Extendendo os EXPORTS's 

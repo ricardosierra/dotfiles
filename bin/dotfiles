@@ -11,6 +11,24 @@ echo 'Dotfiles - Ricardo R. Sierra - http://ricardosierra.com.br/'
 export DOTFILES=~/.dotfiles
 export DOCKERFILES=~/.dockerfiles
 
+# Check Arguments
+export params_language=''
+export params_initfiles_exist=0
+export params_initfiles=''
+export params_gitauthor=''
+export params_gitemail=''
+# CheckArguments
+for i in "$@" ; do
+    if [[ $i == "--language"* ]] ; then
+      echo FOI
+      params_language="BR"
+      exit;
+    elif [[ $i == "--init" ]] ; then
+        params_initfiles_exist=1
+        params_initfiles=''
+    fi
+done
+
 # Logging stuff.
 function e_header()   { echo -e "\n\033[1m$@\033[0m"; }
 function e_success()  { echo -e " \033[1;32m✔\033[0m  $@"; }
@@ -500,6 +518,9 @@ function install_dotfile_bin() {
   sudo ln -sf $DOTFILES/bin/browser-exec /usr/local/bin/xdg-open;
 }
 
+
+
+
 main(){
   # Enough with the functions, let's do stuff.
 
@@ -548,5 +569,6 @@ if [[ ARGV.include == "-h" || ARGV.include == "--help" || "$1" == "help" || "$1"
     do_stuff helper
     exit;
 fi
+
 # Execute Program
 main
