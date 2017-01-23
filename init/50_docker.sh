@@ -1,3 +1,4 @@
+#!/bin/bash
 
 install_docker() {
     install_docker_linux() {

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Linux-only stuff. Abort if not Linux.
 is_linux || return 1
 
@@ -111,8 +113,6 @@ packages=(
 # More APT packages
 if is_debianOS || is_kali; then
   packages+=(
-    php7
-    php7.0-xml #precisa pro phpunit funcionar
     silversearcher-ag
     ssh-askpass-gnome
     ssh-askpass
@@ -120,8 +120,6 @@ if is_debianOS || is_kali; then
   )
 elif is_archlinux; then
   packages+=(
-    php7
-    php7.0-xml #precisa pro phpunit funcionar
     the_silver_searcher
     openssh-askpass
     openssh
@@ -129,8 +127,6 @@ elif is_archlinux; then
 #UBuntu
 else
   packages+=(
-    php
-    #php70w-xml #precisa pro phpunit funcionar
     silversearcher-ag
     ssh-askpass
     openssh-server
@@ -177,14 +173,6 @@ if [[ ! "$(type -P google-chrome)" ]]; then
     else
       sudo yum -qq update ; sudo yum -qq install google-chrome-stable -y
     fi
-  )
-fi
-
-# Install Fabric
-if [[ ! "$(type -P fab)" ]]; then
-  e_header "Installing Fabric"
-  (
-    sudo pip install fabric
   )
 fi
 

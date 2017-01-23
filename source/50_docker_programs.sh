@@ -291,7 +291,7 @@ composer(){
 		return
 	fi
 
-	docker run --rm -v $(pwd):/app -v ~/.ssh:/root/.ssh -v ~/.composer:/root/.composer composer "$@"
+	docker run --rm -v $(pwd):/app -v ~/.ssh:/root/.ssh -v ~/.composer:/composer composer "$@"
 }
 
 consul(){

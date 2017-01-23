@@ -1,3 +1,4 @@
+#!/bin/bash
 
 export GO_VERSION=1.7.1
 export GO_SRC=/usr/local/go
