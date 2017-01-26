@@ -120,8 +120,9 @@ android-studio(){
 apt_file(){
     images_local_build apt-file
     docker run --rm -it \
-            --name apt-file \
-            ${DOCKER_REPO_PREFIX}apt-file
+        --user $(id -u):$(id -g) \
+        --name apt-file \
+        ${DOCKER_REPO_PREFIX}apt-file
 }
 alias a=atom
 atom(){
@@ -132,10 +133,11 @@ atom(){
     images_local_build atom
 
     docker run -d -ti \
-            -e DISPLAY=$DISPLAY \
-            -v /tmp/.X11-unix:/tmp/.X11-unix \
-            -v `pwd`:/var/www \
-            ${DOCKER_REPO_PREFIX}atom "$@"
+        --user $(id -u):$(id -g) \
+        -e DISPLAY=$DISPLAY \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -v `pwd`:/var/www \
+        ${DOCKER_REPO_PREFIX}atom "$@"
 }
 alias apt-file="apt_file"
 audacity(){
@@ -149,6 +151,7 @@ audacity(){
     relies_on pulseaudio
 
     docker run -d \
+        --user $(id -u):$(id -g) \
             -v /etc/localtime:/etc/localtime:ro \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v `pwd`:/home/root \
@@ -164,6 +167,7 @@ audacity(){
 aws(){
     images_local_build aws
     docker run -it --rm \
+        --user $(id -u):$(id -g) \
             -v $HOME/.aws:/root/.aws \
             --log-driver none \
             --name aws \
@@ -172,6 +176,7 @@ aws(){
 bees(){
     images_local_build bees
     docker run -it --rm \
+        --user $(id -u):$(id -g) \
             -e NOTARY_TOKEN \
             -v $HOME/.bees:/root/.bees \
             -v $HOME/.boto:/root/.boto \
@@ -183,6 +188,7 @@ bees(){
 cadvisor(){
     images_local_build cadvisor
     docker run -d \
+        --user $(id -u):$(id -g) \
             --restart always \
             -v /:/rootfs:ro \
             -v /var/run:/var/run:rw \
@@ -204,6 +210,7 @@ cheese(){
     del_stopped cheese
 
     docker run -d \
+        --user $(id -u):$(id -g) \
             -v /etc/localtime:/etc/localtime:ro \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -e DISPLAY=unix$DISPLAY \
@@ -238,6 +245,7 @@ chrome(){
     # one day remove /etc/hosts bind mount when effing
     # overlay support inotify, such bullshit
     sudo docker run -d \
+        --user $(id -u):$(id -g) \
             --memory 2gb \
             -v /etc/localtime:/etc/localtime:ro \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
@@ -274,6 +282,7 @@ clementine(){
     relies_on pulseaudio
 
     docker run -d \
+        --user $(id -u):$(id -g) \
             -v /etc/localtime:/etc/localtime:ro \
             -e DISPLAY=$DISPLAY \
             --device /dev/snd \
@@ -286,12 +295,30 @@ clementine(){
 }
 
 composer(){
-	if [[ "$(type -P composer)" ]]; then
-		command composer "$@"
-		return
-	fi
+    if [[ "$(type -P composer)" ]]; then
+            command composer "$@"
+            return
+    fi
 
-	docker run --rm -v $(pwd):/app -v ~/.ssh:/root/.ssh -v ~/.composer:/composer composer "$@"
+
+    argument="$@"
+    if [[ "$1" = "install" ]] || [[ "$1" = "update" ]]; then
+      argument="--ignore-platform-reqs --no-scripts $@"
+    fi
+
+    tty=
+    tty -s && tty=--tty
+    docker run \
+        $tty \
+        --interactive \
+        --rm \
+        --user $(id -u):$(id -g) \
+        --volume $(pwd):/app \
+        --volume ~/.ssh:/root/.ssh \
+        --volume ~/.composer:/composer \
+        --volume $SSH_AUTH_SOCK:/ssh-auth.sock \
+        --env SSH_AUTH_SOCK=/ssh-auth.sock \
+        composer $argument
 }
 
 consul(){
@@ -307,6 +334,7 @@ consul(){
     fi
 
     docker run -d \
+        --user $(id -u):$(id -g) \
             --restart always \
             -v $HOME/.consul:/etc/consul.d \
             -v /var/run/docker.sock:/var/run/docker.sock \
@@ -332,6 +360,7 @@ cordova(){
     del_stopped cordova
 
     docker run -it --rm \
+        --user $(id -u):$(id -g) \
 		--privileged \
                 -v /dev/bus/usb:/dev/bus/usb \
                 -v $PWD:/src \
@@ -342,6 +371,7 @@ dcos(){
     images_local_build dcos-cli
 
     docker run -it --rm \
+        --user $(id -u):$(id -g) \
             -v $HOME/.dcos:/root/.dcos \
             -v $(pwd):/root/apps \
             -w /root/apps \
@@ -351,6 +381,7 @@ dbvis(){
     images_local_build dbvis
 
     docker run -d -ti \
+        --user $(id -u):$(id -g) \
             -e DISPLAY=$DISPLAY \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v `pwd`:/root \
@@ -364,6 +395,7 @@ dia(){
     images_local_build dia
 
     docker run -d -ti \
+        --user $(id -u):$(id -g) \
             -e DISPLAY=$DISPLAY \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v `pwd`:/root \
@@ -391,6 +423,7 @@ firefox(){
     fi
 
     sudo docker run -d \
+        --user $(id -u):$(id -g) \
             --memory 2gb \
             --net host \
             --cpuset-cpus 0 \
@@ -424,6 +457,7 @@ gcalcli(){
     images_local_build gcalcli
 
     docker run --rm -it \
+        --user $(id -u):$(id -g) \
             -v /etc/localtime:/etc/localtime:ro \
             -v $HOME/.gcalcli/home:/home/gcalcli/home \
             -v $HOME/.gcalcli/work/oauth:/home/gcalcli/.gcalcli_oauth \
@@ -435,6 +469,7 @@ gcloud(){
     images_local_build gcloud
 
     docker run --rm -it \
+        --user $(id -u):$(id -g) \
             -v $HOME/.gcloud:/root/.config/gcloud \
             -v $HOME/.ssh:/root/.ssh:ro \
             --name gcloud \
@@ -450,6 +485,7 @@ gimp(){
     del_stopped gimp
 
     docker run -d \
+        --user $(id -u):$(id -g) \
             -v /etc/localtime:/etc/localtime:ro \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -e DISPLAY=unix$DISPLAY \
@@ -468,6 +504,7 @@ gitk(){
     images_remote_build sierratecnologia gitk
 
     docker run -d -ti \
+        --user $(id -u):$(id -g) \
             -e DISPLAY=$DISPLAY \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v `pwd`:/var/www \
@@ -481,6 +518,7 @@ hollywood(){
     images_local_build hollywood
 
     docker run --rm -it \
+        --user $(id -u):$(id -g) \
             --name hollywood \
             ${DOCKER_REPO_PREFIX}hollywood
 }
@@ -492,6 +530,7 @@ htop(){
     images_local_build htop
 
     docker run --rm -it \
+        --user $(id -u):$(id -g) \
             --pid host \
             --net none \
             --name htop \
@@ -501,6 +540,7 @@ http(){
     images_local_build httpie
 
     docker run -t --rm \
+        --user $(id -u):$(id -g) \
             -v /var/run/docker.sock:/var/run/docker.sock \
             --log-driver none \
             ${DOCKER_REPO_PREFIX}httpie "$@"
@@ -513,6 +553,7 @@ imagemin(){
     local filename="${image%.*}"
 
     docker run --rm -it \
+        --user $(id -u):$(id -g) \
             -v /etc/localtime:/etc/localtime:ro \
             -v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
             ${DOCKER_REPO_PREFIX}imagemin sh -c "imagemin /root/Pictures/${image} > /root/Pictures/${filename}_min.${extension}"
@@ -524,6 +565,7 @@ irssi() {
     # relies_on notify_osd
 
     docker run --rm -it \
+        --user $(id -u):$(id -g) \
             -v /etc/localtime:/etc/localtime:ro \
             -v $HOME/.irssi:/home/user/.irssi \
             --read-only \
@@ -536,6 +578,7 @@ john(){
     local file=$(realpath $1)
 
     docker run --rm -it \
+        --user $(id -u):$(id -g) \
             -v ${file}:/root/$(basename ${file}) \
             ${DOCKER_REPO_PREFIX}john $@
 }
@@ -543,6 +586,7 @@ kernel_builder(){
     images_local_build kernel-builder
 
     docker run --rm -it \
+        --user $(id -u):$(id -g) \
             -v /usr/src:/usr/src \
             --cpu-shares=512 \
             --name kernel-builder \
@@ -551,6 +595,7 @@ kernel_builder(){
 kicad(){
 	images_local_build kicad 4.0
   docker run --rm -it \
+        --user $(id -u):$(id -g) \
 		  -e DISPLAY=$DISPLAY \
 			-v /tmp/.X11-unix:/tmp/.X11-unix \
 			${DOCKER_REPO_PREFIX}kicad:4.0
@@ -565,6 +610,7 @@ kvm(){
     sudo modprobe kvm
 
     docker run -d \
+        --user $(id -u):$(id -g) \
             -v /etc/localtime:/etc/localtime:ro \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v /run/libvirt:/var/run/libvirt \
@@ -586,6 +632,7 @@ libreoffice(){
     del_stopped libreoffice
 
     docker run -d \
+        --user $(id -u):$(id -g) \
             -v /etc/localtime:/etc/localtime:ro \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -e DISPLAY=unix$DISPLAY \
@@ -599,6 +646,7 @@ lpass(){
     images_local_build lpass
 
     docker run --rm -it \
+        --user $(id -u):$(id -g) \
             -v $HOME/.lpass:/root/.lpass \
             --name lpass \
             ${DOCKER_REPO_PREFIX}lpass "$@"
@@ -607,6 +655,7 @@ lynx(){
     images_local_build lynx
 
     docker run --rm -it \
+        --user $(id -u):$(id -g) \
             --name lynx \
             ${DOCKER_REPO_PREFIX}lynx "$@"
 }
@@ -618,6 +667,7 @@ masscan(){
     images_local_build masscan
 
     docker run -it --rm \
+        --user $(id -u):$(id -g) \
             --log-driver none \
             --net host \
             --cap-add NET_ADMIN \
@@ -631,6 +681,7 @@ maltego(){
     fi
     images_remote_build sierratecnologia maltego
     docker run -d -ti \
+        --user $(id -u):$(id -g) \
             -e DISPLAY=$DISPLAY \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             sierratecnologia/maltego "$@"
@@ -643,6 +694,7 @@ mpd(){
 	# adding cap sys_admin so I can use nfs mount
 	# the container runs as a unpriviledged user mpd
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		--device /dev/snd \
 		--cap-add SYS_ADMIN \
 		-e MPD_HOST=/var/lib/mpd/socket \
@@ -661,6 +713,7 @@ mysql-workbench(){
   images_local_build mysql-workbench
 
 	docker run -ti --rm \
+                --user $(id -u):$(id -g) \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/root \
@@ -685,6 +738,7 @@ mutt(){
 	fi
 
 	docker run -it --rm \
+                --user $(id -u):$(id -g) \
 		-e GMAIL \
 		-e GMAIL_NAME \
 		-e GMAIL_PASS \
@@ -704,6 +758,7 @@ ncmpc(){
 	del_stopped ncmpc
 
 	docker run --rm -it \
+                --user $(id -u):$(id -g) \
 		-v $HOME/.mpd/socket:/var/run/mpd/socket \
 		-e MPD_HOST=/var/run/mpd/socket \
 		--name ncmpc \
@@ -715,6 +770,7 @@ neoman(){
 	del_stopped neoman
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
@@ -730,6 +786,7 @@ nes(){
 	local game=$1
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
 		--device /dev/dri \
@@ -741,6 +798,7 @@ alias nb=netbeans
 netbeans(){
     images_remote_build sierratecnologia netbeans
     docker run -ti --rm \
+        --user $(id -u):$(id -g) \
             -e DISPLAY=$DISPLAY \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v `pwd`:/home/developer \
@@ -751,6 +809,7 @@ alias netbeans-php=netbeans_php
 netbeans_php(){
     images_remote_build sierratecnologia netbeans-php
 	docker run -ti --rm \
+                --user $(id -u):$(id -g) \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/home/developer \
@@ -764,14 +823,16 @@ netcat(){
     fi
   images_local_build netcat
 
-	docker run --rm -it \
-		--net host \
-		${DOCKER_REPO_PREFIX}netcat "$@"
+  docker run --rm -it \
+      --user $(id -u):$(id -g) \
+      --net host \
+      ${DOCKER_REPO_PREFIX}netcat "$@"
 }
 nginx(){
 	del_stopped nginx
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		--restart always \
 		-v $HOME/.nginx:/etc/nginx \
 		--net host \
@@ -790,6 +851,7 @@ nmap(){
     images_local_build nmap
 
     docker run --rm -it \
+            --user $(id -u):$(id -g) \
             --net host \
             ${DOCKER_REPO_PREFIX}nmap "$@"
 }
@@ -799,6 +861,7 @@ notify_osd(){
 	del_stopped notify_osd
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		--net none \
@@ -814,7 +877,7 @@ notify_send(){
 	relies_on notify_osd
 	local args=${@:2}
 
-	docker exec -i notify_osd notify-send "$1" "${args}"
+	docker exec --user $(id -u):$(id -g) -i notify_osd notify-send "$1" "${args}"
 }
 pandoc(){
     if [[ "$(type -P pandoc)" ]]; then
@@ -829,6 +892,7 @@ pandoc(){
 	local args=${@:1:${#@}-1}
 
 	docker run --rm \
+                --user $(id -u):$(id -g) \
 		-v ${lfile}:${rfile} \
 		-v /tmp:/tmp \
 		--name pandoc \
@@ -844,19 +908,20 @@ php_cli(){
 
     del_stopped php-cli
 
-    docker run --rm --name=php-cli -v $(pwd):/var/www/html sierratecnologia/php:7.0 php "$@"
+    docker run --rm --user $(id -u):$(id -g) --name=php-cli -v $(pwd):/var/www/html sierratecnologia/php:7.0 php "$@"
 }
 phonegap(){
-	  images_local_build phonegap 3.6.0-0-21-19
+  images_local_build phonegap 3.6.0-0-21-19
 
-		del_stopped phonegap
+  del_stopped phonegap
 
-		docker run -it --rm \
-			--privileged \
-	    -v /dev/bus/usb:/dev/bus/usb \
-	    -v $PWD:/data \
-			-w /data \
-			phonegap "$@"
+  docker run -it --rm \
+    --user $(id -u):$(id -g) \
+    --privileged \
+    -v /dev/bus/usb:/dev/bus/usb \
+    -v $PWD:/data \
+    -w /data \
+    phonegap "$@"
 }
 pivman(){
   images_local_build pivman
@@ -864,6 +929,7 @@ pivman(){
 	del_stopped pivman
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
@@ -878,6 +944,7 @@ pms(){
 	del_stopped pms
 
 	docker run --rm -it \
+                --user $(id -u):$(id -g) \
 		-v $HOME/.mpd/socket:/var/run/mpd/socket \
 		-e MPD_HOST=/var/run/mpd/socket \
 		--name pms \
@@ -890,6 +957,7 @@ pond(){
 	relies_on torproxy
 
 	docker run --rm -it \
+                --user $(id -u):$(id -g) \
 		--net container:torproxy \
 		--name pond \
 		${DOCKER_REPO_PREFIX}pond
@@ -901,6 +969,7 @@ privoxy(){
 	relies_on torproxy
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		--restart always \
 		--link torproxy:torproxy \
 		-v /etc/localtime:/etc/localtime:ro \
@@ -916,6 +985,7 @@ pulseaudio(){
 	del_stopped pulseaudio
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		--device /dev/snd \
 		-p 4713:4713 \
@@ -928,6 +998,7 @@ rainbowstream(){
   images_local_build rainbowstream
 
 	docker run -it --rm \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v $HOME/.rainbow_oauth:/root/.rainbow_oauth \
 		-v $HOME/.rainbow_config.json:/root/.rainbow_config.json \
@@ -938,6 +1009,7 @@ registrator(){
 	del_stopped registrator
 
 	docker run -d --restart always \
+                --user $(id -u):$(id -g) \
 		-v /var/run/docker.sock:/tmp/docker.sock \
 		--net host \
 		--name registrator \
@@ -949,6 +1021,7 @@ remmina(){
 	del_stopped remmina
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
@@ -965,6 +1038,7 @@ ricochet(){
 	del_stopped ricochet
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
@@ -981,6 +1055,7 @@ rstudio(){
 	del_stopped rstudio
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v $HOME/fastly-logs:/root/fastly-logs \
@@ -997,6 +1072,7 @@ s3cmdocker(){
 	del_stopped s3cmd
 
 	docker run --rm -it \
+                --user $(id -u):$(id -g) \
 		-e AWS_ACCESS_KEY="${DOCKER_AWS_ACCESS_KEY}" \
 		-e AWS_SECRET_KEY="${DOCKER_AWS_ACCESS_SECRET}" \
 		-v $(pwd):/root/s3cmd-workspace \
@@ -1006,6 +1082,7 @@ s3cmdocker(){
 scilab(){
     images_remote_build sierratecnologia scilab
     docker run -d -ti \
+            --user $(id -u):$(id -g) \
             -e DISPLAY=$DISPLAY \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             sierratecnologia/scilab "$@"
@@ -1016,6 +1093,7 @@ scudcloud(){
 	del_stopped scudcloud
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
@@ -1046,6 +1124,7 @@ shorewall(){
 	del_stopped shorewall
 
 	docker run --rm -it \
+                --user $(id -u):$(id -g) \
 		--net host \
 		--cap-add NET_ADMIN \
 		--privileged \
@@ -1063,6 +1142,7 @@ skype(){
 	relies_on pulseaudio
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
@@ -1086,6 +1166,7 @@ slack(){
 	relies_on pulseaudio
 
 	sudo docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
@@ -1110,6 +1191,7 @@ spotify(){
     del_stopped spotify
 
     docker run -d \
+        --user $(id -u):$(id -g) \
         -v /etc/localtime:/etc/localtime:ro \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
         -e DISPLAY=unix$DISPLAY \
@@ -1135,6 +1217,7 @@ sublime-text-3(){
      images_local_build sublime-text-3
 
     docker run -d -ti \
+            --user $(id -u):$(id -g) \
             -e DISPLAY=$DISPLAY \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v $HOME/.config/sublime-text-3/:/root/.config/sublime-text-3 \
@@ -1149,6 +1232,7 @@ ssh2john(){
 	local file=$(realpath $1)
 
 	docker run --rm -it \
+                --user $(id -u):$(id -g) \
 		-v ${file}:/root/$(basename ${file}) \
 		--entrypoint ssh2john \
 		${DOCKER_REPO_PREFIX}john $@
@@ -1165,6 +1249,7 @@ steam(){
     relies_on pulseaudio
 
     docker run -d \
+            --user $(id -u):$(id -g) \
             -v /etc/localtime:/etc/localtime:ro \
             -v /etc/machine-id:/etc/machine-id:ro \
             -v /var/run/dbus:/var/run/dbus \
@@ -1181,6 +1266,7 @@ t(){
     images_local_build t
 
     docker run -t --rm \
+            --user $(id -u):$(id -g) \
             -v $HOME/.trc:/root/.trc \
             --log-driver none \
             ${DOCKER_REPO_PREFIX}t "$@"
@@ -1189,6 +1275,7 @@ tarsnap(){
     images_local_build tarsnap
 
     docker run --rm -it \
+            --user $(id -u):$(id -g) \
             -v $HOME/.tarsnaprc:/root/.tarsnaprc \
             -v $HOME/.tarsnap:/root/.tarsnap \
             -v $HOME:/root/workdir \
@@ -1202,6 +1289,7 @@ telnet(){
     images_local_build telnet
 
     docker run -it --rm \
+        --user $(id -u):$(id -g) \
         --log-driver none \
         ${DOCKER_REPO_PREFIX}telnet "$@"
 }
@@ -1212,6 +1300,7 @@ termboy(){
 	local game=$1
 
 	docker run --rm -it \
+                --user $(id -u):$(id -g) \
 		--device /dev/snd \
 		--name termboy \
 		${DOCKER_REPO_PREFIX}nes /games/${game}.rom
@@ -1221,6 +1310,7 @@ thunderbird(){
   images_local_build thunderbird
 
 	docker run -ti --rm \
+                --user $(id -u):$(id -g) \
 		-e DISPLAY=$DISPLAY \
 		--net host \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
@@ -1234,6 +1324,7 @@ tor(){
 	del_stopped tor
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		--net host \
 		--name tor \
 		jess/tor
@@ -1249,6 +1340,7 @@ torbrowser(){
 	del_stopped torbrowser
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
@@ -1267,6 +1359,7 @@ tormessenger(){
 	del_stopped tormessenger
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
@@ -1285,6 +1378,7 @@ torproxy(){
 	del_stopped torproxy
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		--restart always \
 		-v /etc/localtime:/etc/localtime:ro \
 		-p 9050:9050 \
@@ -1297,6 +1391,7 @@ traceroute(){
   images_local_build traceroute
 
 	docker run --rm -it \
+                --user $(id -u):$(id -g) \
 		--net host \
 		${DOCKER_REPO_PREFIX}traceroute "$@"
 }
@@ -1306,6 +1401,7 @@ transmission(){
 	del_stopped transmission
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v $HOME/Torrents:/transmission/download \
 		-v $HOME/.transmission:/transmission/config \
@@ -1325,6 +1421,7 @@ virsh(){
 	relies_on kvm
 
 	docker run -it --rm \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /run/libvirt:/var/run/libvirt \
 		--log-driver none \
@@ -1338,6 +1435,7 @@ virt_viewer(){
 	relies_on kvm
 
 	docker run -it --rm \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix  \
 		-e DISPLAY=unix$DISPLAY \
@@ -1348,18 +1446,19 @@ virt_viewer(){
 		--net container:kvm \
 		${DOCKER_REPO_PREFIX}virt-viewer "$@"
 }
-#visualstudio(){
-#  images_local_build visualstudio
-#
-#	del_stopped visualstudio
-#
-#	docker run -d \
-#		-v /etc/localtime:/etc/localtime:ro \
-#		-v /tmp/.X11-unix:/tmp/.X11-unix  \
-#		-e DISPLAY=unix$DISPLAY \
-#		--name visualstudio \
-#		${DOCKER_REPO_PREFIX}visualstudio
-#}
+visualstudio(){
+  images_local_build visualstudio
+
+	del_stopped visualstudio
+
+	docker run -d \
+                --user $(id -u):$(id -g) \
+		-v /etc/localtime:/etc/localtime:ro \
+		-v /tmp/.X11-unix:/tmp/.X11-unix  \
+		-e DISPLAY=unix$DISPLAY \
+		--name visualstudio \
+		${DOCKER_REPO_PREFIX}visualstudio
+}
 vlc(){
   images_local_build vlc
 
@@ -1367,6 +1466,7 @@ vlc(){
 	relies_on pulseaudio
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
@@ -1386,6 +1486,7 @@ warzone2100(){
   images_local_build warzone2100
 
 	docker run -ti --rm \
+                --user $(id -u):$(id -g) \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/home/.warzone2100-3.1 \
@@ -1397,6 +1498,7 @@ watchman(){
 	del_stopped watchman
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v $HOME/Downloads:/root/Downloads \
 		--name watchman \
@@ -1408,6 +1510,7 @@ wireshark(){
 	del_stopped wireshark
 
 	docker run -d \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-e DISPLAY=unix$DISPLAY \
@@ -1419,6 +1522,7 @@ wrk(){
   images_local_build wrk
 
 	docker run -it --rm \
+                --user $(id -u):$(id -g) \
 		--log-driver none \
 		--name wrk \
 		${DOCKER_REPO_PREFIX}wrk "$@"
@@ -1429,6 +1533,7 @@ ykpersonalize(){
 	del_stopped ykpersonalize
 
 	docker run --rm -it \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		--device /dev/usb \
 		--device /dev/bus/usb \
@@ -1442,6 +1547,7 @@ yubico_piv_tool(){
 	del_stopped yubico-piv-tool
 
 	docker run --rm -it \
+                --user $(id -u):$(id -g) \
 		-v /etc/localtime:/etc/localtime:ro \
 		--device /dev/usb \
 		--device /dev/bus/usb \

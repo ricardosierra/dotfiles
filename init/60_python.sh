@@ -7,3 +7,10 @@ if [[ ! "$(type -P fab)" ]]; then
     sudo pip install fabric
   )
 fi
+
+if [[ ! "$(type -P pylint)" ]]; then
+  e_header "Installing Pylint"
+  (
+    sudo pip install pylint
+  )
+fi
