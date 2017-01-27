@@ -24,14 +24,14 @@ esac
 export DOTFILES=~/.dotfiles
 
 # Verify Dotfiles Config
-if ! [ -f $DOTFILES/copy/.dotfilesconfig.local ] then;
-	if [ -f $HOME/.dotfilesconfig.local ] then;
+if ! [ -f $DOTFILES/copy/.dotfilesconfig.local ]; then
+	if [ -f $HOME/.dotfilesconfig.local ]; then
 		cp $HOME/.dotfilesconfig.local $DOTFILES/copy/.dotfilesconfig.local
-	elif
+	else
 		generate_custom_config_for_dotfiles
 		cp $DOTFILES/copy/.dotfilesconfig.local $HOME/.dotfilesconfig.local
-	fi;
-fi;
+	fi
+fi
 # Load Dotfiles Config
 source $HOME/.dotfilesconfig.local
 
