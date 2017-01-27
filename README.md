@@ -10,6 +10,16 @@ It is advisable to run this script on a newly installed operating system, becaus
 
 ![My awesome bash prompt](./docs/)
 
+## Documentation
+[About](docs/en/About.md)
+[Folders](docs/en/FoldersAndFunctions.md)
+[Install](docs/en/Install.md)
+
+## Documentação em Português (Brasil)
+[Introdução](docs/ptbr/Introducao.md)
+[Personalizando](docs/ptbr/Personalizando.md)
+[Funcionamento](docs/ptbr/Funcionamento.md)
+
 ## Inspiration
 <https://github.com/cowboy/dotfiles>
 <https://github.com/jfrazelle/dotfiles>  
