@@ -548,5 +548,18 @@ if [[ ARGV.include == "-h" || ARGV.include == "--help" || "$1" == "help" || "$1"
     do_stuff helper
     exit;
 fi
+
+if [[ "$1" == "install"]]; then
+  main
+  exit;
+fi
+
+if [[ "$1" == "update"]]; then
+  do_stuff "copy"
+  do_stuff "link"
+  exit;
+fi
+
+
 # Execute Program
 main

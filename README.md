@@ -8,7 +8,7 @@ And more inspiration by jfrazelle
 
 It is advisable to run this script on a newly installed operating system, because it changes the terminal and other features that you may have changed in the system.
 
-![My awesome bash prompt](http://farm8.staticflickr.com/7142/6754488927_563dd73553_b.jpg)
+![My awesome bash prompt](./docs/)
 
 ## Inspiration
 <https://github.com/cowboy/dotfiles>

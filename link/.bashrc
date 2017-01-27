@@ -14,15 +14,25 @@ for option in autocd globstar; do
 	shopt -s "$option" 2> /dev/null
 done
 
-
 # If not running interactively, don't do anything
 case $- in
 	*i*) ;;
 	*) return;;
 esac
 
-
+# Init Variables
 export DOTFILES=~/.dotfiles
+
+# Verify Dotfiles Config
+if ! [ -f $DOTFILES/copy/.dotfilesconfig.local ] then;
+	if [ -f $HOME/.dotfilesconfig.local ] then;
+		cp $HOME/.dotfilesconfig.local $DOTFILES/copy/.dotfilesconfig.local
+	elif
+		generate_custom_config_for_dotfiles
+		cp $DOTFILES/copy/.dotfilesconfig.local $HOME/.dotfilesconfig.local
+	fi;
+fi;
+# Load Dotfiles Config
 source $HOME/.dotfilesconfig.local
 
 # Source all files in "source"
