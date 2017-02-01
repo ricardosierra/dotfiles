@@ -14,3 +14,10 @@ if [[ ! "$(type -P pylint)" ]]; then
     sudo pip install pylint
   )
 fi
+
+if [[ ! "$(type -P grip)" ]]; then
+  e_header "Installing grip"
+  (
+    sudo pip install grip
+  )
+fi

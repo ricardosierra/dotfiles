@@ -308,12 +308,28 @@ composer(){
 
 
     argument="$@"
-    if [[ "$1" = "install" ]] || [[ "$1" = "update" ]]; then
+    if [[ "$1" = "install" ]] || [[ "$1" = "update" ]] || [[ "$2" = "require" ]]; then
       argument="--ignore-platform-reqs --no-scripts $@"
+    fi
+    if [[ "$1" = "global" ]] || [[ "$1" = "GLOBAL" ]]; then
+        if [[ "$2" = "install" ]] || [[ "$2" = "update" ]] || [[ "$2" = "require" ]]; then
+          argument="--ignore-platform-reqs --no-scripts $@"
+        fi
     fi
 
     tty=
     tty -s && tty=--tty
+echo "docker run \
+        $tty \
+        --interactive \
+        --rm \
+        --user $(id -u):$(id -g) \
+        --volume $(pwd):/app \
+        --volume ~/.ssh:/root/.ssh \
+        --volume ~/.composer:/composer \
+        --volume $SSH_AUTH_SOCK:/ssh-auth.sock \
+        --env SSH_AUTH_SOCK=/ssh-auth.sock \
+        composer $argument"
     docker run \
         $tty \
         --interactive \

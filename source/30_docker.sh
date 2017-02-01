@@ -131,7 +131,7 @@ alias conns="sudo lsof -a -p $(pidof docker) | wc -l"
 alias conns2="lsof -a -p $(ps -e | grep docker | awk '{print $1}' | head -n1) | wc  -l"
 
 #docker-compose
-alias up='docker-compose up'
+alias up='docker-compose up -d'
 alias down='docker-compose down'
 
 alias images='docker images'
