@@ -51,63 +51,69 @@ fi
 
 # Install APT packages.
 packages=(
-  apparmor
-  apt-transport-https
-  ansible
-  autoconf # for c compile
-  build-essential # for c compile
-  ca-certificates
-  chromium-browser
-  cowsay
-  gedit
-  gedit-developer-plugins
-  gedit-plugins
-  git-core
-  gocr
-  id3tool
-  imagemagick
-  #libxml2-dev # todo not identify by dpkg
-  #libssl-dev # todo not identify by dpkg
-  meld
-  mercurial
-  network-manager
-  network-manager-openvpn
-  network-manager-openvpn-gnome
-  nmap
-  zenmap
-  python
-  python-pip
-  rxvt-unicode
-  silversearcher-ag
-  sl
-  ssh
-  sudo
-  telnet
-  thunderbird
-  texlive-binaries
-  translate-shell
-  tree
-  xclip
-  #xcompmgr #compiz, nao funciona no ubuntu
-  secure-delete # command srm (replaces a file before removing thus to avoid any type of file recovery)
-  vim
-  vim-gnome
-  virtualbox
+    # Impressora
+    cups
+    smbclient
+    foomatic-db 
 
-  # Editors
-  gimp
+    # Libs e Pacotes
+    apparmor
+    apt-transport-https
+    ansible
+    autoconf # for c compile
+    build-essential # for c compile
+    ca-certificates
+    chromium-browser
+    cowsay
+    gedit
+    gedit-developer-plugins
+    gedit-plugins
+    git-core
+    gocr
+    id3tool
+    imagemagick
+    #libxml2-dev # todo not identify by dpkg
+    #libssl-dev # todo not identify by dpkg
+    meld
+    mercurial
+    network-manager
+    network-manager-openvpn
+    network-manager-openvpn-gnome
+    nmap
+    zenmap
+    python
+    python-pip
+    rxvt-unicode
+    silversearcher-ag
+    sl
+    ssh
+    sudo
+    telnet
+    thunderbird
+    texlive-binaries
+    translate-shell
+    tree
+    xclip
+    #xcompmgr #compiz, nao funciona no ubuntu
+    secure-delete # command srm (replaces a file before removing thus to avoid any type of file recovery)
+    vim
+    vim-gnome
+    virtualbox
 
-  # Support Shell Script
-  dialog
+    # Editors
+    gimp
 
-  # IOT
-  youtube-dl
+    # Support Shell Script
+    dialog
 
-  # Files Converts/Minify
-  pdftk
-  unoconv
-  ufraw
-  jpegoptim
+    # IOT
+    youtube-dl
+
+    # Files Converts/Minify
+    pdftk
+    unoconv
+    ufraw
+    jpegoptim
 )
 
 # More APT packages

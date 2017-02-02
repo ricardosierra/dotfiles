@@ -230,7 +230,7 @@ cheese(){
 alias google-chrome="chrome"
 chrome(){
     if [[ "$(type -P google-chrome)" ]] && [[ "$1" != "tor" ]]; then
-        command google-chrome "$@"
+        command google-chrome "$@" &> /dev/null
         return 
     fi
     images_local_build chrome stable
@@ -239,11 +239,11 @@ chrome(){
     local map=
     local args=$@
     if [[ "$1" == "tor" ]]; then
-            relies_on torproxy
+        relies_on torproxy
 
-            map="MAP * ~NOTFOUND , EXCLUDE torproxy"
-            proxy="socks5://torproxy:9050"
-            args="https://check.torproject.org/api/ip ${@:2}"
+        map="MAP * ~NOTFOUND , EXCLUDE torproxy"
+        proxy="socks5://torproxy:9050"
+        args="https://check.torproject.org/api/ip ${@:2}"
     fi
 
     del_stopped chrome
@@ -252,31 +252,28 @@ chrome(){
     # overlay support inotify, such bullshit
     sudo docker run -d \
         --user $(id -u):$(id -g) \
-            --memory 2gb \
-            -v /etc/localtime:/etc/localtime:ro \
-            -v /tmp/.X11-unix:/tmp/.X11-unix \
-            -e DISPLAY=unix$DISPLAY \
-            -v $HOME/Downloads:/root/Downloads \
-            -v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
-            -v $HOME/Torrents:/root/Torrents \
-            -v $HOME/.chrome:/data \
-            -v /dev/shm:/dev/shm \
-            -v /etc/hosts:/etc/hosts \
-            --security-opt seccomp:/etc/docker/seccomp/chrome.json \
-            --device /dev/snd \
-            --device /dev/dri \
-            --device /dev/video0 \
-            --device /dev/usb \
-            --device /dev/bus/usb \
-            --group-add audio \
-            --group-add video \
-            --name chrome \
-            ${DOCKER_REPO_PREFIX}chrome --user-data-dir=/data \
-            --proxy-server="$proxy" \
-            --host-resolver-rules="$map" $args
-
-    # exit current shell
-    #exit 0
+        --memory 2gb \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        -v $HOME/Downloads:/root/Downloads \
+        -v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
+        -v $HOME/Torrents:/root/Torrents \
+        -v $HOME/.chrome:/data \
+        -v /dev/shm:/dev/shm \
+        -v /etc/hosts:/etc/hosts \
+        --security-opt seccomp:/etc/docker/seccomp/chrome.json \
+        --device /dev/snd \
+        --device /dev/dri \
+        --device /dev/video0 \
+        --device /dev/usb \
+        --device /dev/bus/usb \
+        --group-add audio \
+        --group-add video \
+        --name chrome \
+        ${DOCKER_REPO_PREFIX}chrome --user-data-dir=/data \
+        --proxy-server="$proxy" \
+        --host-resolver-rules="$map" $args &> /dev/null
 }
 clementine(){
     if [[ "$(type -P clementine)" ]]; then
@@ -425,7 +422,7 @@ dia(){
 }
 firefox(){
     if [[ "$(type -P firefox)" ]]; then
-        command firefox "$@"
+        command firefox "$@" &> /dev/null
         return 
     fi
     images_local_build firefox
@@ -437,43 +434,40 @@ firefox(){
     local map=
     local args=$@
     if [[ "$1" == "tor" ]]; then
-            relies_on torproxy
+        relies_on torproxy
 
-            map="MAP * ~NOTFOUND , EXCLUDE torproxy"
-            proxy="socks5://torproxy:9050"
-            args="https://check.torproject.org/api/ip ${@:2}"
+        map="MAP * ~NOTFOUND , EXCLUDE torproxy"
+        proxy="socks5://torproxy:9050"
+        args="https://check.torproject.org/api/ip ${@:2}"
     fi
 
     sudo docker run -d \
         --user $(id -u):$(id -g) \
-            --memory 2gb \
-            --net host \
-            --cpuset-cpus 0 \
-            -v /etc/localtime:/etc/localtime:ro \
-            -v /tmp/.X11-unix:/tmp/.X11-unix \
-            -e DISPLAY=unix$DISPLAY \
-            -e GDK_SCALE \
-            -e GDK_DPI_SCALE \
-            -v $HOME/.firefox/cache:/root/.cache/mozilla \
-            -v $HOME/.firefox/mozilla:/root/.mozilla \
-            -v $HOME/Downloads:/root/Downloads \
-            -v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
-            -v $HOME/Torrents:/root/Torrents \
-            -v /dev/shm:/dev/shm \
-            -v /etc/hosts:/etc/hosts \
-            --device /dev/snd \
-            --device /dev/dri \
-            --device /dev/video0 \
-            --device /dev/usb \
-            --device /dev/bus/usb \
-            --group-add audio \
-            --group-add video \
-            --name firefox \
-            ${DOCKER_REPO_PREFIX}firefox "$@" \
-            --proxy-server="$proxy" \
-
-    # exit current shell
-    exit 0
+        --memory 2gb \
+        --net host \
+        --cpuset-cpus 0 \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        -e GDK_SCALE \
+        -e GDK_DPI_SCALE \
+        -v $HOME/.firefox/cache:/root/.cache/mozilla \
+        -v $HOME/.firefox/mozilla:/root/.mozilla \
+        -v $HOME/Downloads:/root/Downloads \
+        -v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
+        -v $HOME/Torrents:/root/Torrents \
+        -v /dev/shm:/dev/shm \
+        -v /etc/hosts:/etc/hosts \
+        --device /dev/snd \
+        --device /dev/dri \
+        --device /dev/video0 \
+        --device /dev/usb \
+        --device /dev/bus/usb \
+        --group-add audio \
+        --group-add video \
+        --name firefox \
+        --proxy-server="$proxy" \
+        ${DOCKER_REPO_PREFIX}firefox "$@" &> /dev/null
 }
 gcalcli(){
     images_local_build gcalcli
