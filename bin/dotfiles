@@ -549,12 +549,12 @@ if [[ ARGV.include == "-h" || ARGV.include == "--help" || "$1" == "help" || "$1"
     exit;
 fi
 
-if [[ "$1" == "install"]]; then
+if [[ "$1" == "install" ]]; then
   main
   exit;
 fi
 
-if [[ "$1" == "update"]]; then
+if [[ "$1" == "update" ]]; then
   do_stuff "copy"
   do_stuff "link"
   exit;
