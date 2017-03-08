@@ -316,17 +316,6 @@ composer(){
 
     tty=
     tty -s && tty=--tty
-echo "docker run \
-        $tty \
-        --interactive \
-        --rm \
-        --user $(id -u):$(id -g) \
-        --volume $(pwd):/app \
-        --volume ~/.ssh:/root/.ssh \
-        --volume ~/.composer:/composer \
-        --volume $SSH_AUTH_SOCK:/ssh-auth.sock \
-        --env SSH_AUTH_SOCK=/ssh-auth.sock \
-        composer $argument"
     docker run \
         $tty \
         --interactive \
