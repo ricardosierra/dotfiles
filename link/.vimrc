@@ -419,10 +419,6 @@ vnoremap <leader>gb :Gblame<CR>
 " Mapping to minibuffer
 nmap <C-t> :bn<CR>
 
-" =================== Vim-cfmt ===================
-let g:cfmt_style = '-linux'
-autocmd BufWritePre *.c,*.h Cfmt
-
 " ==================== Vim-go ====================
 let g:go_fmt_fail_silently = 0
 let g:go_fmt_command = "goimports"
@@ -653,16 +649,20 @@ function! Multiple_cursors_after()
   endif
 endfunction
 
-" ========= vim-better-whitespace ==================
+" =================== Vim-cfmt ===================
+let g:cfmt_style = '-linux'
+autocmd BufWritePre *.c,*.h Cfmt
 
+" ========= vim-better-whitespace ==================
 " auto strip whitespace except for file with extention blacklisted
-let blacklist = ['markdown', 'md']
-autocmd BufWritePre * StripWhitespace
+" let blacklist = ['markdown', 'md']
+" autocmd BufWritePre * StripWhitespace
 
 " ================= clang-format ==================
-
 map <C-K> :pyf /usr/share/vim/addons/syntax/clang-format-3.8.py<cr>
 imap <C-K> <c-o>:pyf /usr/share/vim/addons/syntax/clang-format-3.8.py<cr>
 autocmd BufWritePre *.cpp,*.hpp pyf /usr/share/vim/addons/syntax/clang-format-3.8.py
 
 " vim:ts=2:sw=2:et
+
+" ===================== NÂO USADO MAIS ==================

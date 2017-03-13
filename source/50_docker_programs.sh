@@ -911,9 +911,7 @@ php_cli(){
     fi
     images_remote_build sierratecnologia php:7.0
 
-    del_stopped php-cli
-
-    docker run --rm --user $(id -u):$(id -g) --name=php-cli -v $(pwd):/var/www/html sierratecnologia/php:7.0 php "$@"
+    docker run --user $(id -u):$(id -g) --name=php-cli -v $(pwd):/var/www/html  -d sierratecnologia/php:7.0 php "$@"
 }
 phonegap(){
   images_local_build phonegap 3.6.0-0-21-19
