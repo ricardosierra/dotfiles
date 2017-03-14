@@ -23,7 +23,7 @@ ssh() {
   do
     QUOTE_ARGS="${QUOTE_ARGS} '${ARG}'"
   done
-  eval e/usr/bin/ssh ${QUOTE_ARGS}
+  eval /usr/bin/ssh ${QUOTE_ARGS}
 }
 
 scp() {

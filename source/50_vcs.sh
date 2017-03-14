@@ -14,8 +14,12 @@ alias gs='git status'
 alias gst='gs'
 alias gd='git diff'
 alias gdc='gd --cached'
-alias gm='git commit -m'
-alias gma='git commit -am'
+function gm() {
+    eval git commit -m "\"$@\""
+}
+function gma() {
+    eval git commit -am "\"$@\""
+}
 alias gb='git branch'
 alias gba='git branch -a'
 function gc() { git checkout "${@:-master}"; } # Checkout master by default
