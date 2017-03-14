@@ -911,7 +911,20 @@ php_cli(){
     fi
     images_remote_build sierratecnologia php:7.0
 
-    docker run --user $(id -u):$(id -g) --name=php-cli -v $(pwd):/var/www/html  -d sierratecnologia/php:7.0 php "$@"
+    del_stopped php-cli  
+
+    # Caso Seja interativo
+    EXTRA_ARGS=''
+    for ARG in "$@"
+    do
+        if [[ "$ARG" == "-a" ]]; then
+            EXTRA_ARGS=' -it'
+        fi
+    done
+
+    echo "${EXTRA_ARGS}"
+    echo "docker run --rm ${EXTRA_ARGS}--user $(id -u):$(id -g) --name=php-cli -v $(pwd):/var/www/html sierratecnologia/php:7.0 php "$@""
+    docker run --rm${EXTRA_ARGS} --user $(id -u):$(id -g) --name=php-cli -v $(pwd):/var/www/html sierratecnologia/php:7.0 php "$@"
 }
 phonegap(){
   images_local_build phonegap 3.6.0-0-21-19

@@ -7,23 +7,23 @@ fi
 }
 
 slogin() {
- check-ssh-add
- QUOTE_ARGS=''
- for ARG in "$@"
- do
-   QUOTE_ARGS="${QUOTE_ARGS} '${ARG}'"
- done
- eval /usr/bin/slogin ${QUOTE_ARGS}
+  check-ssh-add
+  QUOTE_ARGS=''
+  for ARG in "$@"
+  do
+    QUOTE_ARGS="${QUOTE_ARGS} '${ARG}'"
+  done
+  eval /usr/bin/slogin ${QUOTE_ARGS}
 }
 
 ssh() {
- check-ssh-add
- QUOTE_ARGS=''
- for ARG in "$@"
- do
-   QUOTE_ARGS="${QUOTE_ARGS} '${ARG}'"
- done
- eval e/usr/bin/ssh ${QUOTE_ARGS}
+  check-ssh-add
+  QUOTE_ARGS=''
+  for ARG in "$@"
+  do
+    QUOTE_ARGS="${QUOTE_ARGS} '${ARG}'"
+  done
+  eval e/usr/bin/ssh ${QUOTE_ARGS}
 }
 
 scp() {
