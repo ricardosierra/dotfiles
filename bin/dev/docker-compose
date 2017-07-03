@@ -17,7 +17,8 @@ export DOCKER_CONTENT_TRUST=0
 
 set -e
 
-VERSION="1.7.1"
+VERSION=`git ls-remote https://github.com/docker/compose | grep refs/tags | grep -oP "[0-9]+\.[0-9][0-9]+\.[0-9]+$" | tail -n 1`
+
 IMAGE="docker/compose:$VERSION"
 
 
