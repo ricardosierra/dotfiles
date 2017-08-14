@@ -9,4 +9,3 @@
 if [ -z "$SSH_AUTH_SOCK" ] ; then
   eval `ssh-agent -s`
   ssh-add
-fisource /home/sierra/.rvm/scripts/rvm
