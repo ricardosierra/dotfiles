@@ -150,6 +150,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 #END THIS
 
 
+src
+
 # Load the shell dotfiles, and then some:
 # * ~/.aliases can be created aliases.
 # * ~/.exports can be used to create exports.
@@ -157,8 +159,6 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 for file in ~/.{aliases,exports,path}; do
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
 done
-
-src
 
 # Load the shell complete
 for file in ~/.completion/.*[^~]; do

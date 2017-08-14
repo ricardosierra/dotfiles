@@ -1,3 +1,7 @@
+.idea/**
+.idea
+www.properties
+www.xml
 # Lots of junk goes in here.
 /caches/
 /backups/

@@ -24,3 +24,15 @@ O objetivo do seu dotfiles é instala-lo sempre que passar a usar um novo comput
 - Programa VI será personalizado com imclemento de diversos plugins.
 
 # Estrutura do Programa
+
+
+# Configuração e Personalização
+
+## Arquivo .path
+COnfiguração adicional do path
+
+
+## arquivo .gitconfig
+
+
+## Arquivo .dotfilesconfig

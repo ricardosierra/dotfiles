@@ -16,3 +16,6 @@ if [[ "$(type -P rbenv)" ]]; then
     done
   fi
 fi
+
+# Install Bundler
+gem install bundler

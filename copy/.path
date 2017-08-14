@@ -1,0 +1,2 @@
+export PATH="/home/$USER/Programas/RubyMine-2017.2.1/bin:$PATH"
+export PATH="/home/$USER/Programas/android-studio/bin:$PATH"

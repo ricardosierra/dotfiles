@@ -19,9 +19,15 @@ export DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/user/$(id -u)/bus;
 export TODOTXT_DEFAULT_ACTION=ls
 
 # hidpi for gtk apps
-export GDK_SCALE=2
-export GDK_DPI_SCALE=0.5
-export QT_DEVICE_PIXEL_RATIO=2
+if [[ "$OSTYPE" =~ ^darwin ]]; then
+	export GDK_SCALE=2
+	export GDK_DPI_SCALE=0.5
+	export QT_DEVICE_PIXEL_RATIO=2
+else
+	export GDK_SCALE=1
+	export GDK_DPI_SCALE=1
+	export QT_DEVICE_PIXEL_RATIO=1
+fi
 
 # turn on go vendoring experiment
 export GO15VENDOREXPERIMENT=1
