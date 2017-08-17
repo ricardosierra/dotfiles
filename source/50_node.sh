@@ -1,3 +1,5 @@
+[[ "$1" != init && ! -e ~/.nave ]] && return 1
+
 export PATH="~/.nave/installed/default/bin:$PATH"
 #PATH=~/.nave/installed/default/bin:"$(path_remove ~/.nave/installed/*/bin)"
 
@@ -26,6 +28,9 @@ function nave_install() {
   [[ "$1" == "stable" ]] && nave_default stable && npm_install
 }
 
+# Use the version of node in the local .nvmrc file
+alias nvmrc='exec nave use $(<.nvmrc)'
+
 # Global npm modules to install.
 npm_globals=(
   babel-cli
@@ -34,9 +39,8 @@ npm_globals=(
   sass
   gulp-cli
   ember-cli
+  eslint
   grunt-cli
-  grunt-init
-  linken
   node-inspector
   pushstate-server
   phonegap@3.6.0-0.21.19
@@ -44,7 +48,20 @@ npm_globals=(
   ripple-emulator@0.9.24
   tns-android
   yo
+  webpack
 )
+
+# Because "rm -rf node_modules && npm install" takes WAY too long. Not sure
+# if this really works as well, though. We'll see.
+alias npm_up='npm prune && npm install && npm update'
+
+# Run arbitrary command with npm "bin" directory in PATH.
+function npm_run() {
+  git rev-parse 2>/dev/null && (
+    PATH="$(git rev-parse --show-toplevel)/node_modules/.bin:$PATH"
+    "$@"
+  )
+}
 
 # Update npm and install global modules.
 function npm_install() {

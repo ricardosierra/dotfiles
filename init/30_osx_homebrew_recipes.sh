@@ -8,25 +8,29 @@ is_osx || return 1
 
 # Homebrew recipes
 recipes=(
-  android-platform-tools
   ansible
+  awscli
   bash
   cmatrix
+  coreutils
   cowsay
   git
   git-extras
   htop-osx
   hub
   id3tool
+  jq
   lesspipe
   man2html
   mercurial
   nmap
-  postgres
+  postgresql
+  reattach-to-user-namespace
   sl
   ssh-copy-id
   terminal-notifier
   the_silver_searcher
+  tmux
   tree
   wget
 )

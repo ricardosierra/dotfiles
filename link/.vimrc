@@ -1,5 +1,6 @@
 " Change mapleader
 let mapleader=","
+let maplocalleader="\\"
 
 " Local dirs
 if !has('win32')
@@ -153,11 +154,26 @@ nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
 
+" Ctrl-arrows select split
+nnoremap [1;5B <C-W>j
+nnoremap [1;5A <C-W>k
+nnoremap [1;5C <C-W>l
+nnoremap [1;5D <C-W>h
+
 " Buffer navigation
 nnoremap <leader>b :CtrlPBuffer<CR> " List other buffers
 map <leader><leader> :b#<CR> " Switch between the last two files
 map gb :bnext<CR> " Next buffer
 map gB :bprev<CR> " Prev buffer
+
+" Switch buffers with Alt-Left/Right
+nmap [1;3C :bprev<CR>
+nmap [1;3D :bnext<CR>
+vmap [1;3C <Esc>:bprev<CR>
+vmap [1;3D <Esc>:bnext<CR>
+
+" Ctrl-J, the opposite of Shift-J
+nnoremap <C-J> a<CR><Esc>k$
 
 " Jump to buffer number 1-9 with ,<N> or 1-99 with <N>gb
 let c = 1
@@ -209,6 +225,14 @@ if !exists("*SourceConfigs")
   endfunction
 endif
 
+" FILE TYPES
+
+autocmd vimrc BufRead .vimrc,*.vim set keywordprg=:help
+autocmd vimrc BufRead,BufNewFile *.md set filetype=markdown
+autocmd vimrc BufRead,BufNewFile *.tmpl set filetype=html
+autocmd vimrc FileType sql :let b:vimpipe_command="psql mydatabase"
+autocmd vimrc FileType sql :let b:vimpipe_filetype="postgresql"
+
 " PLUGINS
 
 " Airline
@@ -243,10 +267,17 @@ autocmd vimrc VimEnter *
 let g:signify_vcs_list = ['git', 'hg', 'svn']
 
 " CtrlP.vim
-map <leader>p <C-P>
-map <leader>r :CtrlPMRUFiles<CR>
+" map <leader>p <C-P>
+" map <leader>r :CtrlPMRUFiles<CR>
 "let g:ctrlp_match_window_bottom = 0 " Show at top of window
 
+" Vim-pipe
+let g:vimpipe_invoke_map = '<Leader>r'
+let g:vimpipe_close_map = '<Leader>p'
+
+" DBExt
+let g:dbext_default_profile_PG_skillsbot = 'type=pgsql:host=rds.bocoup.com:dbname=skillsbot-dev:user=skillsbot-dev'
+let g:dbext_default_profile = 'PG_skillsbot'
 
 " Indent Guides
 let g:indent_guides_start_level = 2
@@ -339,6 +370,11 @@ set wildignore+=*.orig                           " Merge resolution files
 
 " ----------------------------------------------------- "
 " Plugins       			    		"
+" Ack/ag
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
 " https://github.com/junegunn/vim-plug                  "
 " Reload .vimrc and :PlugInstall to install plugins.    "
 " ----------------------------------------------------- "
@@ -368,6 +404,11 @@ Plug 'wavded/vim-stylus'
 Plug 'klen/python-mode', {'for': 'python'}
 Plug 'terryma/vim-multiple-cursors'
 Plug 'wting/rust.vim', {'for': 'rust'}
+Plug 'vim-scripts/dbext.vim'
+Plug 'krisajenkins/vim-pipe'
+Plug 'krisajenkins/vim-postgresql-syntax'
+Plug 'mileszs/ack.vim'
+Plug 'tmux-plugins/vim-tmux'
 call plug#end()
 
 
