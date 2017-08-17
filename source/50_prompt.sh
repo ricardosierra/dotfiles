@@ -26,19 +26,42 @@
 # 33  43  yellow    37  47  white
 
 if [[ ! "${__prompt_colors[@]}" ]]; then
-  __prompt_colors=(
-    "36" # information color
-    "37" # bracket color
-    "31" # error color
-  )
+    # DEFAULT COLORS
+    bold="\[\e[1m\]";
+    reset="\[\e[0m\]";
+    black="\[\e[1;30m\]";
+    blue="\[\e[1;34m\]";
+    cyan="\[\e[1;36m\]";
+    green="\[\e[1;32m\]";
+    purple="\[\e[1;35m\]";
+    red="\[\e[1;31m\]";
+    violet="\[\e[1;35m\]";
+    white="\[\e[1;37m\]";
+    yellow="\[\e[1;33m\]";
+    bracket=$white
+    error=$red
 
-  if [[ "$SSH_TTY" ]]; then
-    # connected via ssh
-    __prompt_colors[0]="32"
-  elif [[ "$USER" == "root" ]]; then
-    # logged in as root
-    __prompt_colors[0]="35"
-  fi
+    __prompt_colors=(
+        "36" # information color
+        "37" # bracket color
+        "31" # error color
+    )
+
+
+    # Highlight the user name when logged in as root.
+    if [[ "${USER}" == "root" ]]; then
+        userStyle="${red}";
+        reset="${red}";
+    else
+        userStyle="${blue}";
+        reset="${blue}";
+    fi;
+    # Highlight the hostname when connected via SSH.
+    if [[ "${SSH_TTY}" ]]; then
+        hostStyle="${bold}${red}";
+    else
+        hostStyle="${blue}";
+    fi;
 fi
 
 # Inside a prompt function, run this alias to setup local $c0-$c9 color vars.
@@ -117,6 +140,12 @@ function __prompt_command() {
   __prompt_get_colors
   # http://twitter.com/cowboy/status/150254030654939137
   PS1="\n"
+
+  # date: [HH:MM:SS]
+  PS1="$PS1${bracket}[${yellow}$(date +"%H${bracket}:${yellow}%M${bracket}:${yellow}%S")${bracket}]${reset}"
+
+  # VCS
+  PS1="$PS1${green}"
   __prompt_vcs_info=()
   # git: [branch:flags]
   __prompt_git || \
@@ -129,25 +158,31 @@ function __prompt_command() {
   # can't execute arbitrary commands. For more info, see this PR:
   # https://github.com/cowboy/dotfiles/pull/68
   if [[ "${#__prompt_vcs_info[@]}" != 0 ]]; then
-    PS1="$PS1$c1[$c0"
+    PS1="$PS1${bracket}[${green}"
     for i in "${!__prompt_vcs_info[@]}"; do
       if [[ "${__prompt_vcs_info[i]}" ]]; then
-        [[ $i != 0 ]] && PS1="$PS1$c1:$c0"
+        [[ $i != 0 ]] && PS1="$PS1${bracket}:${green}"
         PS1="$PS1\${__prompt_vcs_info[$i]}"
       fi
     done
-    PS1="$PS1$c1]$c9"
+    PS1="$PS1${bracket}]$c9"
   fi
+
   # misc: [cmd#:hist#]
   # PS1="$PS1$c1[$c0#\#$c1:$c0!\!$c1]$c9"
+
   # path: [user@host:path]
-  PS1="$PS1$c1[$c0\u$c1@$c0\h$c1:$c0\w$c1]$c9"
-  PS1="$PS1\n"
-  # date: [HH:MM:SS]
-  PS1="$PS1$c1[$c0$(date +"%H$c1:$c0%M$c1:$c0%S")$c1]$c9"
+  PS1="$PS1${bracket}[${userStyle}\u${bracket}@${hostStyle}\h${bracket}]"
+
+  # [path]
+  PS1="$PS1${userStyle}:${cyan}\w${reset}"
+
   # exit code: 127
   PS1="$PS1$(__prompt_exit_code "$exit_code")"
-  PS1="$PS1 \$ "
+  PS1="$PS1 ${bracket}\$ "
+
+  PS2="${yellow}→ ${reset}";
+  export PS2;
 }
 
 PROMPT_COMMAND="__prompt_command"
