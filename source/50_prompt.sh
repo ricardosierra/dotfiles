@@ -77,7 +77,7 @@ function __prompt_exit_code() {
 function __prompt_git() {
   __prompt_get_colors
   local status branch flags
-  status="$(git status 2>/dev/null)"
+  status="$(git status uno 2>/dev/null)"
   [[ $? != 0 ]] && return 1;
   branch="$(echo "$status" | awk '/# Initial commit/ {print "(init)"}')"
   [[ "$branch" ]] || branch="$(echo "$status" | awk '/# On branch/ {print $4}')"
@@ -183,6 +183,10 @@ function __prompt_command() {
 
   PS2="${yellow}→ ${reset}";
   export PS2;
+
+	# PROMPTY TO DEBUG
+	# SHWO FILE AND LINE WHEN USE bash +x
+	export PS4='$0.$LINENO+ '
 }
 
 PROMPT_COMMAND="__prompt_command"
