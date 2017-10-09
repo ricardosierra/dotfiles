@@ -46,3 +46,5 @@ function qq() {
 }
 alias q2='qq 2'
 alias q3='qq 3'
+
+alias tls='tmux ls'

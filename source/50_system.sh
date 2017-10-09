@@ -28,3 +28,5 @@ ipif() {
     fi
     echo
 }
+
+alias e="exit"

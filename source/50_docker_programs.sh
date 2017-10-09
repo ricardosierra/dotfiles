@@ -61,6 +61,7 @@ docker_programs=(
     "notify-osd"
     pandoc
     php
+    phpmyadmin
     phonegap
     pivmanpms
     pond
@@ -925,6 +926,11 @@ php_cli(){
     echo "${EXTRA_ARGS}"
     echo "docker run --rm ${EXTRA_ARGS}--user $(id -u):$(id -g) --name=php-cli -v $(pwd):/var/www/html sierratecnologia/php:7.0 php "$@""
     docker run --rm${EXTRA_ARGS} --user $(id -u):$(id -g) --name=php-cli -v $(pwd):/var/www/html sierratecnologia/php:7.0 php "$@"
+}
+phpmyadmin(){
+  del_stopped phpmyadmin
+
+  dfazer
 }
 phonegap(){
   images_local_build phonegap 3.6.0-0-21-19
