@@ -72,7 +72,11 @@ function npm_install() {
   modules=($(setdiff "${npm_globals[*]}" "${installed[*]}"))
   if (( ${#modules[@]} > 0 )); then
     e_header "Installing Npm modules: ${modules[*]}"
-    sudo npm install -g "${modules[@]}"
+    if is_windows; then
+      npm install -g "${modules[@]}"
+    else
+      sudo npm install -g "${modules[@]}"
+    fi
   fi
 }
 

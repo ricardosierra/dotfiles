@@ -22,6 +22,11 @@ VERSION=1.14.0
 
 IMAGE="docker/compose:$VERSION"
 
+if is_windows; then
+	"/c/Program Files/Docker Toolbox/docker-compose.exe" "$@"
+	return ;
+fi
+
 
 # Setup options for connecting to docker host
 if [ -z "$DOCKER_HOST" ]; then

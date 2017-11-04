@@ -1,7 +1,6 @@
+#!/bin/bash
 
-
-
-
+is_linux || return 1
 
 sudo apt-get install build-essential automake cmake libreadline6 autotools-dev libcurl4-openssl-dev autoconf libplist3 libplist-utils libplist-dev libplist++-dev libzip-dev git curl libgnutls-dev libreadline-dev libusb-dev libtool libusb-1.0-0-dev libusbmuxd-dev libglib2.0-dev libimobiledevice-dev
 

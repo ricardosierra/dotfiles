@@ -76,8 +76,15 @@ function get_os() {
 }
 # WINDOWS
 function is_windows() {
-     [[ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]] || return 1
+    if [[ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]]; then
+      return 0
+    elif [[ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]]; then
+      return 0
+    else
+      return 1
+    fi
 }
+
 # MAC
 function is_osx() {
   [[ "$OSTYPE" =~ ^darwin ]] || return 1
@@ -489,7 +496,7 @@ function helper_do() {
 # Link config files.
 function config_header() { e_header "Linking files into ~/.config directory"; }
 function config_dest() {
-  echo "$HOME/.config/$base"
+  echo "$HOME/.config/$1"
 }
 function config_test() {
   [[ "$1" -ef "$2" ]] && echo "same file"
@@ -521,40 +528,46 @@ function do_stuff() {
   fi
   # Iterate over files.
   for file in "${files[@]}"; do
-    if [[ ! "$file" == *example ]]
-    thenbase="${subfolder}$(basename $file)"
-    # Get dest path.
-    if [[ $(declare -f "$1_dest") ]]; then
-      dest="$("$1_dest" "$base")"
-    else
-			dest="$HOME/$base"
-		fi
-    # Run _test function only if declared.
-    if [[ $(declare -f "$1_test") ]]; then
-      # If _test function returns a string, skip file and print that message.
-      skip="$("$1_test" "$file" "$dest")"
-      if [[ "$skip" ]]; then
-        e_error "Skipping ~/$base, $skip."
-        continue
-      fi
-      # Destination file/folder already exists in ~/.
-      if [[ -e "$dest" ]]; then
-          # Create backup dir if it doesn't already exist.
-          [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
-          # Create backup subfolder dir if it doesn't already exist.
-          [[ -e "${backup_dir}${subfolder}" ]] || mkdir -p "${backup_dir}${subfolder}"
-          # Destination is file? Back it up !
-          if [ ! -d $dest ]; then
-						  # Set backup flag, so a nice message can be shown at the end.
-             backup=1
-             e_arrow "Backing file ~/$base."
-             # Backup file / link / whatever.
-             mv "$dest" "${backup_dir}${subfolder}"
-          fi
-      fi
+    base="$(basename "$file")"
+    # Caso seja uma subpasta acrescenta a base
+    if [ "$subfolder" != "" ]; then
+      base="$subfolder/$base"
     fi
-    # Do stuff.
-    "$1_do" "$base" "$file"
+
+    if [[ ! "$file" == *example ]]; then
+      # Get dest path.
+      if [[ $(declare -f "$1_dest") ]]; then
+        dest="$("$1_dest" "$base")"
+      else
+          dest="$HOME/$base"
+      fi
+      # Run _test function only if declared.
+      if [[ $(declare -f "$1_test") ]]; then
+        # If _test function returns a string, skip file and print that message.
+        skip="$("$1_test" "$file" "$base")"
+        if [[ "$skip" ]]; then
+          e_error "Skipping ${dest}, $skip."
+          continue
+        fi
+        # Destination file/folder already exists in ~/.
+        if [[ -e "$dest" ]]; then
+            # Create backup dir if it doesn't already exist.
+            [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
+            # Create backup subfolder dir if it doesn't already exist.
+            [[ -e "${backup_dir}${subfolder}" ]] || mkdir -p "${backup_dir}${subfolder}"
+            # Destination is file? Back it up !
+            if [ ! -d $dest ]; then
+  						  # Set backup flag, so a nice message can be shown at the end.
+               backup=1
+               e_arrow "Backing file ${dest}."
+               # Backup file / link / whatever.
+               mv "$dest" "${backup_dir}${subfolder}"
+            fi
+        fi
+      fi
+      # Do stuff.
+      "$1_do" "$base" "$file"
+    fi
   done
 }
 
@@ -736,7 +749,11 @@ function install_dotfile_bin() {
   [[ -d $DOTFILES/bin ]] && PATH=$DOTFILES/bin:$PATH
   export PATH
   # browser-exec with default browser
-  sudo ln -sf $DOTFILES/bin/browser-exec /usr/local/bin/xdg-open;
+  if is_windows; then
+    ln -sf $DOTFILES/bin/browser-exec /usr/local/bin/xdg-open;
+  else
+    sudo ln -sf $DOTFILES/bin/browser-exec /usr/local/bin/xdg-open;
+  fi
 }
 
 main(){

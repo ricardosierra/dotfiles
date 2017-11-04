@@ -10,6 +10,10 @@
 export DOCKER_REPO_PREFIX=
 export DOCKERFILES_PATH=~/.dockerfiles
 
+if is_windows; then
+    return ;
+fi
+
 # All Docker Programs
 docker_programs=(
     "android-studio"

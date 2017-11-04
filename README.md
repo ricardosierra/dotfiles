@@ -1,7 +1,7 @@
 # Dotfiles
 
 OSX / Ubuntu / Fedora / KaliLinux / Debian dotfiles.
-Is a fork from "Cowboy" Ben Alman.
+Is a fork from "cowbow" Ben Alman.
 And more inspiration by jfrazelle
 
 ## Be careful
@@ -55,12 +55,15 @@ Scripts in the `/init` subdirectory will be executed. A whole bunch of things wi
 * Homebrew via the [init/20_osx_homebrew.sh](init/20_osx_homebrew.sh) script
 * Homebrew recipes via the [init/30_osx_homebrew_recipes.sh](init/30_osx_homebrew_recipes.sh) script
 * Homebrew casks via the [init/30_osx_homebrew_casks.sh](init/30_osx_homebrew_casks.sh) script
-* [Fonts](/cowboy/dotfiles/tree/master/conf/osx/fonts) via the [init/50_osx_fonts.sh](init/50_osx_fonts.sh) script
+* [Fonts](/ricardorsierra/dotfiles/tree/master/conf/osx/fonts) via the [init/50_osx_fonts.sh](init/50_osx_fonts.sh) script
 
-#### Ubuntu
+#### Linux (Tested in Ubuntu)
 * APT packages and git-extras via the [init/20_ubuntu_apt.sh](init/20_ubuntu_apt.sh) script
 
-#### Both
+#### Windows
+* The code was not meant to be run on windows. However with git bash installed you will be able to run without problems.
+
+#### Linux / OS X
 * Node.js, npm and nave via the [init/50_node.sh](init/50_node.sh) script
 * Ruby, gems and rbenv via the [init/50_ruby.sh](init/50_ruby.sh) script
 * Vim plugins via the [init/50_vim.sh](init/50_vim.sh) script
@@ -69,7 +72,7 @@ Scripts in the `/init` subdirectory will be executed. A whole bunch of things wi
 
 Because the [dotfiles][dotfiles] script is completely self-contained, you should be able to delete everything else from your dotfiles repo fork, and it will still work. The only thing it really cares about are the `/copy`, `/link` and `/init` subdirectories, which will be ignored if they are empty or don't exist.
 
-If you modify things and notice a bug or an improvement, [file an issue](https://github.com/cowboy/dotfiles/issues) or [a pull request](https://github.com/cowboy/dotfiles/pulls) and let me know.
+If you modify things and notice a bug or an improvement, [file an issue](https://github.com/ricardorsierra/dotfiles/issues) or [a pull request](https://github.com/ricardorsierra/dotfiles/pulls) and let me know.
 
 Also, before installing, be sure to [read my gently-worded note](#heed-this-critically-important-warning-before-you-install).
 
@@ -85,11 +88,13 @@ _Tested in OSX 10.10_
 
 ### Ubuntu Notes
 
-You might want to set up your ubuntu server [like I do it](https://github.com/cowboy/dotfiles/wiki/ubuntu-setup), but then again, you might not.
+You might want to set up your ubuntu server [like I do it](https://github.com/ricardorsierra/dotfiles/wiki/ubuntu-setup), but then again, you might not.
 
 Either way, you should at least update/upgrade APT with `sudo apt-get -qq update && sudo apt-get -qq dist-upgrade` first.
 
 _Tested in Ubuntu 14.04 LTS_
+_Tested in Ubuntu 16 LTS_
+_Tested in Ubuntu 17_
 
 ### Heed this critically important warning before you install
 
@@ -101,22 +106,22 @@ Why? Because I often completely break this repo while updating. Which means that
 
 1. [Read my gently-worded note](#heed-this-critically-important-warning-before-you-install)
 1. Fork this repo
-1. Open a terminal/shell and do this (change `cowboy` and `master` as appropriate):
+1. Open a terminal/shell and do this (change `ricardorsierra` and `master` as appropriate):
 
-#### Ubuntu
+#### Linux
 
 ```sh
-export DOTFILES_GH_USER=cowboy
+export DOTFILES_GH_USER=ricardorsierra
 export DOTFILES_GH_BRANCH=master
-bash -c "$(wget -qO- https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles)" && source ~/.bashrc
+bash -c "$(wget -qO- https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
 ```
 
-#### macOS
+#### macOS / windows
 
 ```sh
-export DOTFILES_GH_USER=cowboy
+export DOTFILES_GH_USER=ricardorsierra
 export DOTFILES_GH_BRANCH=master
-bash -c "$(curl -fsSL https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles)" && source ~/.bashrc
+bash -c "$(curl -fsSL https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
 ```
 
 Since you'll be using the [dotfiles][dotfiles] command on subsequent runs, you'll only have to set the `DOTFILES_GH_USER` variable for the initial install, but if you have a custom branch, you _will_ need to export `DOTFILES_GH_BRANCH` for subsequent runs.
@@ -125,16 +130,16 @@ There's a lot of stuff that requires admin access via `sudo`, so be warned that 
 
 ### Actual installation (for me)
 
-#### Ubuntu
+#### Linux
 
 ```sh
-bash -c "$(wget -qO- https://bit.ly/cowboy-dotfiles)" && source ~/.bashrc
+bash -c "$(wget -qO- https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
 ```
 
 #### macOS
 
 ```sh
-bash -c "$(curl -fsSL https://bit.ly/cowboy-dotfiles)" && source ~/.bashrc
+bash -c "$(curl -fsSL https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
 ```
 
 ## Aliases and Functions
@@ -170,7 +175,7 @@ Check it out:
 [Funcionamento](docs/ptbr/Funcionamento.md)
 
 ## Inspiration
-<https://github.com/cowboy/dotfiles>
+<https://github.com/cowbow/dotfiles>
 <https://github.com/jfrazelle/dotfiles>  
 <https://github.com/gf3/dotfiles>  
 <https://github.com/mathiasbynens/dotfiles>  

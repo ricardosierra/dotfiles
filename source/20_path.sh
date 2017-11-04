@@ -1,5 +1,10 @@
 # RESET PATH
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+
+if is_windows; then
+	export PATH="/c/Ruby23/bin:$PATH"
+else
+	export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+fi
 
 # COMPOSER
 export PATH="$HOME/.config/composer/vendor/bin:$PATH"
@@ -27,3 +32,8 @@ export PATH=/usr/local/go/bin:$PATH:$GOPATH/bin:/usr/share/bcc/tools
 
 #OTHERS PROGRAMS
 export PATH="$HOME/.composer/vendor/bin:$PATH"
+
+
+if is_windows; then
+	export PATH="/c/Ruby23/bin:$PATH"
+fi

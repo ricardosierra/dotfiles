@@ -1,5 +1,7 @@
 #!/bin/bash
 
+is_linux || is_osx || return 1
+
 # Install Fabric
 if [[ ! "$(type -P fab)" ]]; then
   e_header "Installing Fabric"
