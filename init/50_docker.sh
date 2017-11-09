@@ -34,6 +34,10 @@ install_docker() {
             package="deb https://apt.dockerproject.org/repo ubuntu-wily main"
         elif [ $version == '16.04' ]; then
             package="deb https://apt.dockerproject.org/repo ubuntu-xenial main"
+        elif [ $version == '17.10' ]; then
+
+        else
+            return
         fi
         sudo bash -c "echo $package > /etc/apt/sources.list.d/docker.list"
     }
@@ -47,6 +51,8 @@ install_docker() {
             package="deb https://apt.dockerproject.org/repo debian-jessie main"
         elif [ $version == '9.0' ]; then
             package="deb https://apt.dockerproject.org/repo debian-stretch main"
+        else
+            return
         fi
         sudo bash -c "echo $package > /etc/apt/sources.list.d/docker.list"
     }

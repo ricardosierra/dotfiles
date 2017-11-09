@@ -678,51 +678,29 @@ function git_update_dotfiles() {
     new_dotfiles_install=1
     prompt_delay=15
     e_header "Downloading dotfiles"
-    git clone --recursive git://github.com/ricardorsierra/dotfiles.git $DOTFILES
+    git clone --branch ${DOTFILES_GH_BRANCH:-master} --recursive \
+    git://github.com/${DOTFILES_GH_USER:-ricardorsierra}/dotfiles.git $DOTFILES
     cd $DOTFILES
   elif [[ "$1" != "restart" ]]; then
     # Make sure we have the latest files.
     e_header "Updating dotfiles"
     cd $DOTFILES
     prev_head="$(git rev-parse HEAD)"
-    git pull origin master
+    git pull
     git submodule update --init --recursive --quiet
     if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
-      e_header "Changes detected, restarting script"
-      exec "$0" "restart"
+      if is_dotfiles_bin; then
+        e_header "Changes detected, restarting script"
+        exec "$0" restart
+      else
+        e_header "Changes detected, please re-run script"
+        exit
+      fi
     fi
   fi
-}
-# If Git isn't installed by now, something exploded. We gots to quit!
-if [[ ! "$(type -P git)" ]]; then
-  e_error "Git should be installed. It isn't. Aborting."
-  exit 1
-fi
 
-# Initialize.
-if [[ ! -d $DOTFILES ]]; then
-  # Dotfiles directory doesn't exist? Clone it!
-  e_header "Downloading dotfiles"
-  git clone --branch ${DOTFILES_GH_BRANCH:-master} --recursive \
-    git://github.com/${DOTFILES_GH_USER:-cowboy}/dotfiles.git $DOTFILES
-  cd $DOTFILES
-elif [[ "$1" != "restart" ]]; then
-  # Make sure we have the latest files.
-  e_header "Updating dotfiles"
-  cd $DOTFILES
-  prev_head="$(git rev-parse HEAD)"
-  git pull
-  git submodule update --init --recursive --quiet
-  if [[ "$(git rev-parse HEAD)" != "$prev_head" ]]; then
-    if is_dotfiles_bin; then
-      e_header "Changes detected, restarting script"
-      exec "$0" restart
-    else
-      e_header "Changes detected, please re-run script"
-      exit
-    fi
-  fi
-fi
+
+}
 
 function install_git() {
   # If Git is not installed, install it (Ubuntu only, since Git comes standard
@@ -773,8 +751,6 @@ main(){
   git_update_dockerfiles
   git_update_dotfiles
   install_dotfile_bin
-# Add binaries into the path
-[[ -d $DOTFILES/bin ]] && export PATH=$DOTFILES/bin:$PATH
 
   # Tweak file globbing.
   shopt -s dotglob
@@ -791,7 +767,7 @@ main(){
   do_stuff copy
   do_stuff link
   do_stuff config
-do_stuff init
+  do_stuff init
 
   # Alert if backups were made.
   if [[ "$backup" ]]; then

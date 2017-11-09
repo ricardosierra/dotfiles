@@ -1,3 +1,5 @@
+return 1;
+
 if [[ "$(which powerline-daemon)" ]]; then
   # Powerline stuff.
   export POWERLINE_PREFIX="$(python -c "import powerline; print powerline.__path__[0]")"

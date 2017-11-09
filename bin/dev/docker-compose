@@ -22,6 +22,16 @@ VERSION=1.14.0
 
 IMAGE="docker/compose:$VERSION"
 
+# WINDOWS
+function is_windows() {
+    if [[ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]]; then
+      return 0
+    elif [[ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]]; then
+      return 0
+    else
+      return 1
+    fi
+}
 if is_windows; then
 	"/c/Program Files/Docker Toolbox/docker-compose.exe" "$@"
 	return ;

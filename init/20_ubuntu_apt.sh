@@ -47,13 +47,21 @@ apt_packages+=(
   tree
 )
 
+
 apt_packages+=(vim)
 is_ubuntu_desktop && apt_packages+=(vim-gnome)
 
+
+# Conversor de Videos. Multimidia
 # https://launchpad.net/~stebbins/+archive/ubuntu/handbrake-releases
-add_ppa ppa:stebbins/handbrake-releases
+# add_ppa ppa:stebbins/handbrake-releases
+#apt_packages+=(handbrake-cli)
+#is_ubuntu_desktop && apt_packages+=(handbrake-gtk)
+
+# Oficial Repo
 apt_packages+=(handbrake-cli)
-is_ubuntu_desktop && apt_packages+=(handbrake-gtk)
+is_ubuntu_desktop && apt_packages+=(handbrake)
+
 
 # https://github.com/rbenv/ruby-build/wiki
 apt_packages+=(
@@ -61,9 +69,11 @@ apt_packages+=(
   libncurses5-dev libffi-dev libgdbm3 libgdbm-dev zlib1g-dev
 )
 
+
 # https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-16-04
 add_ppa ppa:ansible/ansible
 apt_packages+=(ansible)
+
 
 if is_ubuntu_desktop; then
   # http://www.omgubuntu.co.uk/2016/06/install-latest-arc-gtk-theme-ubuntu-16-04
