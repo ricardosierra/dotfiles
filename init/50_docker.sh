@@ -4,19 +4,19 @@ install_docker() {
     install_docker_linux() {
         sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D $SAIDA
 
+        user=$(whoami)
         if (is_ubuntu); then
             install_docker_linux_ubuntu_package
         elif (is_debianOS); then
             install_docker_linux_debian_package
+            sudo apt-get update $SAIDA
+            apt-cache policy docker-engine $SAIDA
+            sudo apt-get install -y docker-engine $SAIDA
+            sudo service docker start $SAIDA
         else
             continue;
         fi
 
-        user=$(whoami)
-        sudo apt-get update $SAIDA
-        apt-cache policy docker-engine $SAIDA
-        sudo apt-get install -y docker-engine $SAIDA
-        sudo service docker start $SAIDA
         sudo sudo groupadd docker $SAIDA
         sudo usermod -aG docker $user $SAIDA
         sudo systemctl enable docker
@@ -24,22 +24,23 @@ install_docker() {
     }
 
     install_docker_linux_ubuntu_package() {
-        release=$(lsb_release -r)
-        version=$(cut -d ':' -f 2 <<< $release | xargs)
-        if [ $version == '12.04' ]; then
-            package="deb https://apt.dockerproject.org/repo ubuntu-precise main"
-        elif [ $version == '14.04' ]; then
-            package="deb https://apt.dockerproject.org/repo ubuntu-trusty main"
-        elif [ $version == '15.10' ]; then
-            package="deb https://apt.dockerproject.org/repo ubuntu-wily main"
-        elif [ $version == '16.04' ]; then
-            package="deb https://apt.dockerproject.org/repo ubuntu-xenial main"
-        elif [ $version == '17.10' ]; then
-
-        else
-            return
-        fi
-        sudo bash -c "echo $package > /etc/apt/sources.list.d/docker.list"
+        sudo apt-get update
+        sudo apt-get install \
+            linux-image-extra-$(uname -r) \
+            linux-image-extra-virtual
+        sudo apt-get update
+        sudo apt-get install \
+            apt-transport-https \
+            ca-certificates \
+            curl \
+            software-properties-common
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository \
+           "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+           $(lsb_release -cs) \
+           stable"
+       sudo apt-get update
+       sudo apt-get install docker-ce
     }
 
     install_docker_linux_debian_package() {

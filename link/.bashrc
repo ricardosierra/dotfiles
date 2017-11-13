@@ -1,5 +1,5 @@
 
-echo 'Loading bashrc...'
+#echo 'Loading bashrc...'
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
@@ -168,3 +168,9 @@ for file in ~/.completion/.*[^~]; do
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
 done
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+
+if [[ ! "$TMUX" ]]; then
+	tmux
+fi
+
+clear

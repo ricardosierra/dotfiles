@@ -4,7 +4,7 @@
 # ssh
 # O bashrc é executado a cada nova janela de terminal
 
-echo 'Loading bash_profile ...'
+#echo 'Loading bash_profile ...'
 
 [ -r ~/.profile ] && . ~/.profile             # set up environment, once, Bourne-sh syntax only
 

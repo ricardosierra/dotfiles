@@ -11,4 +11,7 @@ install_php_dependences() {
   composer global require 'phploc/phploc=*'  
 }
 
-install_php_dependences
+
+if [[ "$(type -P composer)" ]]; then
+	install_php_dependences
+fi

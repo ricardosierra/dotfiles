@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ ! "$(type -P rbenv)" ]]; then
+  sudo apt install rbenv
+fi
 
 # Initialize rbenv.
 source $DOTFILES/source/50_ruby.sh

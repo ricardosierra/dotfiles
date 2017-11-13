@@ -1,2 +1,3 @@
-export PATH="/home/$USER/Programas/RubyMine-2017.2.1/bin:$PATH"
-export PATH="/home/$USER/Programas/android-studio/bin:$PATH"
+export PATH="/opt/PhpStorm-172.4155.41/bin:$PATH"
+export PATH="/opt/RubyMine-2017.2.1/bin:$PATH"
+export PATH="/opt/android-studio/bin:$PATH"
