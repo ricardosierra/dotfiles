@@ -63,7 +63,6 @@ packages=(
     autoconf # for c compile
     build-essential # for c compile
     ca-certificates
-    chromium-browser
     cowsay
     gedit
     gedit-developer-plugins
@@ -79,7 +78,6 @@ packages=(
     network-manager
     network-manager-openvpn
     network-manager-openvpn-gnome
-    nmap
     zenmap
     python
     python-pip
@@ -100,6 +98,11 @@ packages=(
     vim-gnome
     virtualbox
 
+    # Network
+    hostess
+    nmap
+
+
     # Editors
     gimp
 
@@ -115,6 +118,426 @@ packages=(
     ufraw
     jpegoptim
 )
+
+
+
+echo ""
+echo [+] "Deseja instalar os componentes essenciais do sitema e utilitários (recomendado)? y/n" ;
+echo '.: build-essential, linux-headers, sysvconfig, bum, tofrodos, xinetd, unrar, p7zip-full, fcrackzip, ipcalc, sharutils, xclip, ldap-utils, cabextract, g++, ssh :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    build-essential
+    linux-headers-`uname -r`
+    sysvconfig
+    bum
+    tofrodos
+    xinetd
+    unrar
+    p7zip-full
+    fcrackzip
+    ipcalc
+    sharutils
+    xclip
+    ldap-utils
+    cabextract
+    g++
+    ssh
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar os servicos de rede? y/n" ;
+echo '.: samba, nis, nfs, smbfs :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    samba
+    nis
+    nfs
+    smbfs
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar os servicos de monitoracao? y/n" ;
+echo '.: ntop, sysstat, procinfo :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    ntop
+    sysstat
+    procinfo
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar os gerenciadores de pacotes? y/n" ;
+echo '.: apt-file, apt-utils, apt-listchanges, dconf :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    #apt-build
+    #apt-dpkg-ref
+    #apt-listbugs
+    apt-file
+    #apt-howto
+    apt-utils
+    apt-listchanges
+    dconf
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar os emuladores de terminal? y/n" ;
+echo '.: tn5250, screen :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    tn5250
+    screen
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar as ferramentas de sistemas de arquivos? y/n" ;
+echo '.: sshfs, ntfs-3g, ntfs-config, ntfsprogs, mkisofs :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    sshfs
+    ntfs-3g
+    ntfs-config
+    ntfsprogs
+    mkisofs
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar algumas configuracoes do Gnome? y/n" ;
+echo '.: gconf, gnomebaker, nautilus-open-terminal :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    gconf
+    gnomebaker
+    nautilus-open-terminal
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar o ISAKPMD e VPNc? y/n" ;
+echo '.: vpnc :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    isakmpd
+    vpnc
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar os pacotes de Multimidia? y/n" ;
+echo '.: amarok, xmms, xmms-skins, xmms-mp4, mpg123, totem-xine, ksnapshot, istanbul, recordmydesktop, gtk-recordmydesktop, xvidcap :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    amarok
+    xmms
+    xmms-skins
+    xmms-mp4
+    mpg123
+    totem-xine
+    ksnapshot
+    istanbul
+    recordmydesktop
+    gtk-recordmydesktop
+    xvidcap
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar o Netcat e ferramentas de Tunnelling? y/n" ;
+echo '.: netcat, sbd, cryptcat, socat, vtun, stunnel :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    netcat
+    sbd
+    cryptcat
+    socat
+    vtun
+    stunnel
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar Scanners? y/n" ;
+echo '.: nmap, fping, hping2, hping3, scapy, snmp, traceroute, ike-scan, nbtscan, sslscan :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    nmap
+    fping
+    hping2
+    hping3
+    scapy
+    snmp
+    traceroute
+    tcptraceroute
+    ike-scan
+    nbtscan
+    sslscan
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar Scanners Passivos? y/n" ;
+echo '.: p0f, pads :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    p0f
+    pads
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar ferramentas de sniffing? y/n" ;
+echo '.: wireshark, ettercap, ettercap-gtk, tcpdump, tcpflow, ssldump, nemesis, dsniff, etherape :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    wireshark
+    ettercap
+    ettercap-gtk
+    tcpdump
+    tcpflow
+    ssldump
+    nemesis
+    dsniff
+    etherape
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar as bibliotecas (recomendado)? y/n" ;
+echo '.: libssl, libssl-dev, libssh-2, python-pycurl, libnet-dns-perl, libsnmp-perl, libcrypt-ssleay-perl, libnet-ssleay-perl, ncurses-dev, libpcap-dev :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    libssl
+    libssl-dev
+    libssh-2
+    python-pycurl
+    libnet-dns-perl
+    libsnmp-perl
+    libcrypt-ssleay-perl
+    libnet-ssleay-perl
+    ncurses-dev
+    libpcap-dev
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar ferramentas de cracking? y/n" ;
+echo '.: john, medusa, hydra :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    john
+    medusa
+    hydra
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar ferramentas para Wireless? y/n" ;
+echo '.: aircrack, aircrack-ng :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    aircrack
+    aircrack-ng
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar ferramentas de linha de comando para aplicacoes Web? y/n" ;
+echo '.: wget, curl, nikto :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    wget
+    curl
+    nikto
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar linguagens de script? y/n" ;
+echo '.: ruby, python, perl, perl-doc, gawk, vim-ruby, vim-python :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    ruby
+    python
+    perl
+    perl-doc
+    gawk
+    vim-ruby
+    vim-python
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar o Ruby Gems? y/n" ;
+echo '.: gems, rubygems :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    gems
+    rubygems
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar as dependencias do Metasploit? y/n" ;
+echo '.: libopenssl-ruby, ruby-libglade2, libgtk2-ruby :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    libopenssl-ruby
+    ruby-libglade2
+    libgtk2-ruby
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar as dependencias do Scapy? y/n" ;
+echo '.: graphviz, imagemagick, python-gnuplot, python-crypto, python-visual, python-pyx, acroread, gv, sox :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    graphviz
+    imagemagick
+    python-gnuplot
+    python-crypto
+    python-visual
+    python-pyx
+    acroread
+    gv
+    sox
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar ferramentas para Documentacao? y/n" ;
+echo '.: notecase, vim, liferea :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    notecase
+    vim
+    liferea
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar Utilitários para Browsers/Web? y/n" ;
+echo '.: azerus, opera, filezilla, pidgin, pidgin-otr, thunderbird, lightning-extension, enigmail, irssi, silc, tor :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    azureus
+    opera
+    filezilla
+    pidgin
+    pidgin-otr
+    thunderbird
+    lightning-extension
+    enigmail
+    irssi
+    silc
+    tor
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar ferramentas para Windows? y/n" ;
+echo '.: wine, quicksynergy :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    wine
+    quicksynergy
+  )
+fi
+
+
+echo ""
+echo [+] "Deseja instalar ferramentas de criptografia? y/n" ;
+echo '.: dmsetup, password-gorilla, gpa, seahorse :.'
+read digx
+if [ $digx = "y" ]
+then
+  packages+=(
+    dmsetup
+    password-gorilla
+    gpa
+    seahorse
+  )
+fi
+
+
+
 
 # More APT packages
 if is_debianOS || is_kali; then
@@ -159,43 +582,97 @@ fi
 
 # Install Git Extras
 if [[ ! "$(type -P git-extras)" ]]; then
-  e_header "Installing Git Extras"
-  (
-    cd $DOTFILES/vendor/git-extras &&
-    sudo make install
-  )
+  echo ""
+  echo [+] "Deseja instalar o Git Extras ? y/n" ;
+  read digx
+  if [ $digx = "y" ]; then
+    e_header "Installing Git Extras"
+    (
+      cd $DOTFILES/vendor/git-extras &&
+      sudo make install
+    )
+  fi
 fi
 
 # Install Google-Chrome
 if [[ ! "$(type -P google-chrome)" ]]; then
-  e_header "Installing Google-Chrome"
-  (
-    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-    sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-    if is_debian; then
-      sudo apt-get -qq update ; sudo apt-get -qq install google-chrome-stable -y
-    elif is_archlinux; then
-      sudo pacman -qq update ; sudo pacman -qq install google-chrome-stable -y
-    else
-      sudo yum -qq update ; sudo yum -qq install google-chrome-stable -y
-    fi
-  )
+  echo ""
+  echo [+] "Deseja instalar o Google Chrome? y/n" ;
+  read digx
+  if [ $digx = "y" ]; then
+    e_header "Installing Google-Chrome"
+    (
+      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+      sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+      if is_debian; then
+        sudo apt-get -qq update ; sudo apt-get -qq install google-chrome-stable -y
+      elif is_archlinux; then
+        sudo pacman -qq update ; sudo pacman -qq install google-chrome-stable -y
+      else
+        sudo yum -qq update ; sudo yum -qq install google-chrome-stable -y
+      fi
+    )
+  fi
 fi
 
 # Install Google Hangout
 if [[ ! "$(dpkg -l |grep google-talkplugin)" ]]; then
-  e_header "Installing Google Hangout"
-  (
+  echo ""
+  echo [+] "Deseja instalar o Google Hangout? y/n" ;
+  read digx
+  if [ $digx = "y" ]; then
+    e_header "Installing Google Hangout"
+    (
+      if is_debian; then
+        wget https://dl.google.com/linux/direct/google-talkplugin_current_amd64.deb -O ~/Downloads/google-talkplugin.deb
+        sudo dpkg -i ~/Downloads/google-talkplugin.deb
+        rm ~/Downloads/google-talkplugin.deb
+      else
+        wget https://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm -O ~/Downloads/google-talkplugin.rpm
+        sudo dpkg -i ~/Downloads/google-talkplugin.rpm
+        rm ~/Downloads/google-talkplugin.rpm
+      fi
+    )
+  fi
+fi
+
+echo ""
+echo [+] "Deseja instalar o Java? y/n" ;
+echo '.: openjdk-7-jre, openjdk-7-jdk :.'
+read digx
+if [ $digx = "y" ]
+then
     if is_debian; then
-      wget https://dl.google.com/linux/direct/google-talkplugin_current_amd64.deb -O ~/Downloads/google-talkplugin.deb
-      sudo dpkg -i ~/Downloads/google-talkplugin.deb
-      rm ~/Downloads/google-talkplugin.deb
+      sudo apt -qq install openjdk-7-jre -y
+      sudo apt -qq install openjdk-7-jdk -y
+    elif is_archlinux; then
+      sudo pacman -qq install openjdk-7-jre -y
+      sudo pacman -qq install openjdk-7-jdk -y
     else
-      wget https://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm -O ~/Downloads/google-talkplugin.rpm
-      sudo dpkg -i ~/Downloads/google-talkplugin.rpm
-      rm ~/Downloads/google-talkplugin.rpm
+      sudo yum -qq install openjdk-7-jre -y
+      sudo yum -qq install openjdk-7-jdk -y
     fi
-  )
+    java -version
+fi
+
+
+echo ""
+echo [+] "Deseja remover serviços desnecessarios do boot? y/n" ;
+echo '.: exim4, tor, ntop, p0f, pads, isakmpd, nessusd, cups, samba, nis, nfs-common :.'
+read digx
+if [ $digx = "y" ]
+then
+    update-rc.d -f exim4 remove
+    update-rc.d -f tor remove
+    update-rc.d -f ntop remove
+    update-rc.d -f p0f remove
+    update-rc.d -f pads remove
+    update-rc.d -f isakmpd remove
+    update-rc.d -f nessusd remove
+    update-rc.d -f cups remove
+    update-rc.d -f samba remove
+    update-rc.d -f nis remove
+    update-rc.d -f nfs-common remove
 fi
 
 # ssh

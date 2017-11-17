@@ -1,7 +1,6 @@
 #!/bin/bash
 is_linux || return 1
 
-clear
 echo "======================================"
 echo "          BeEF Installer              "
 echo "======================================"

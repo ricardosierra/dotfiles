@@ -7,7 +7,7 @@
 #alias npm="docker run -ti --rm -u $UID -v `pwd`:/data dragonmantank/nodejs-grunt-bower npm"
 #alias bower="docker run -ti --rm -u $UID -v `pwd`:/data dragonmantank/nodejs-grunt-bower bower"
 
-export DOCKER_REPO_PREFIX=
+export DOCKER_REPO_PREFIX=jess/
 export DOCKERFILES_PATH=~/.dockerfiles
 
 if is_windows; then
@@ -117,16 +117,20 @@ android-studio(){
         command android-studio "$@"
         return 
     fi
-    del_stopped android-studio
-
-    sudo docker run -ti --rm \
-            -e DISPLAY=$DISPLAY \
-            --privileged \
-            -v `pwd`:/home/developer/www \
-            -v DOTFILES_FOLDER_PROJECTS:/home/developer/Android \
-            -v /dev/bus/usb:/dev/bus/usb \
-            -v /tmp/.X11-unix:/tmp/.X11-unix \
-            kelvinlawson/android-studio
+    docker run -rm -ti \
+	  --privileged \
+	  -v $HOME/AndroidStudioProjects:/home/ubuntu/AndroidStudioProjects \
+	  -v $HOME/.android:/home/ubuntu/.android \
+	  -v $HOME/.AndroidStudio3.0:/home/ubuntu/.AndroidStudio3.0 \
+	  -v /dev/bus/usb:/dev/bus/usb \
+	  -v /dev/kvm:/dev/kvm \
+	  -v $ANDROID_HOME:/opt/android-sdk \
+	  -e DISPLAY=$DISPLAY \
+	  -v /tmp/.X11-unix:/tmp/.X11-unix \
+	  -v $XAUTHORITY:/home/ubuntu/.Xauthority \
+	  -v `pwd`:/data \
+	  --net host \
+	  sierratecnologia/android-studio:3.0 "$@"
 }
 apt_file(){
     images_local_build apt-file
