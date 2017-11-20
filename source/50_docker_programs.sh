@@ -1244,7 +1244,13 @@ sublime-text-3(){
         command sublime-text-3 "$@"
         return 
     fi
-     images_local_build sublime-text-3
+
+		if [[ "$(type -P subl)" ]]; then
+			  command subl "$@"
+				return
+		fi
+
+    images_local_build sublime-text-3
 
     docker run -d -ti \
             --user $(id -u):$(id -g) \

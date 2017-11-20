@@ -198,11 +198,12 @@ fi
 
 echo ""
 echo [+] "Deseja instalar os emuladores de terminal? y/n" ;
-echo '.: tn5250, screen :.'
+echo '.: tmux tn5250, screen :.'
 read digx
 if [ $digx = "y" ]
 then
   packages+=(
+	  tmux
     tn5250
     screen
   )
