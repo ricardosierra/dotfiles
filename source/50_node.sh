@@ -40,8 +40,10 @@ npm_globals=(
   gulp-cli
   ember-cli
   eslint
+  json-lint
+  json2yaml
   grunt-cli
-  node-inspector
+  gulp-cli
   pushstate-server
   phonegap@3.6.0-0.21.19
   cordova@5.0.0
@@ -49,6 +51,8 @@ npm_globals=(
   tns-android
   yo
   webpack
+  yaml2json
+  yarn
 )
 
 # Because "rm -rf node_modules && npm install" takes WAY too long. Not sure

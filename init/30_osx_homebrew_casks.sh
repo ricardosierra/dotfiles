@@ -21,7 +21,9 @@ brew cask info this-is-somewhat-annoying 2>/dev/null
 casks=(
   # Applications
   a-better-finder-rename
+  alfred
   android-platform-tools
+  bartender
   battle-net
   bettertouchtool
   charles
@@ -37,7 +39,6 @@ casks=(
   hex-fiend
   iterm2
   karabiner-elements
-  launchbar
   macvim
   menumeters
   meld
@@ -68,7 +69,6 @@ casks=(
   virtualbox
   vlc
   ynab
-  yujitach-menumeters
   # Quick Look plugins
   betterzipql
   qlcolorcode
