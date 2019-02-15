@@ -14,4 +14,6 @@ else
   fi
 fi
 
-source /home/sierra/.rvm/scripts/rvm
+if [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
+  source /home/sierra/.rvm/scripts/rvm
+fi

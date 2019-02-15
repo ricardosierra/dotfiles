@@ -536,7 +536,6 @@ else
 endif
 call plug#end()
 
-<<<<<<< HEAD
 
 " ----------------------------------------- "
 " Plugin configs 			    			"

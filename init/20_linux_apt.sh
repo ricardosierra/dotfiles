@@ -124,7 +124,7 @@ packages=(
 echo ""
 echo [+] "Deseja instalar os componentes essenciais do sitema e utilitários (recomendado)? y/n" ;
 echo '.: build-essential, linux-headers, sysvconfig, bum, tofrodos, xinetd, unrar, p7zip-full, fcrackzip, ipcalc, sharutils, xclip, ldap-utils, cabextract, g++, ssh :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -151,7 +151,7 @@ fi
 echo ""
 echo [+] "Deseja instalar os servicos de rede? y/n" ;
 echo '.: samba, nis, nfs, smbfs :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -166,7 +166,7 @@ fi
 echo ""
 echo [+] "Deseja instalar os servicos de monitoracao? y/n" ;
 echo '.: ntop, sysstat, procinfo :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -180,7 +180,7 @@ fi
 echo ""
 echo [+] "Deseja instalar os gerenciadores de pacotes? y/n" ;
 echo '.: apt-file, apt-utils, apt-listchanges, dconf :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -199,7 +199,7 @@ fi
 echo ""
 echo [+] "Deseja instalar os emuladores de terminal? y/n" ;
 echo '.: tmux tn5250, screen :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -213,7 +213,7 @@ fi
 echo ""
 echo [+] "Deseja instalar as ferramentas de sistemas de arquivos? y/n" ;
 echo '.: sshfs, ntfs-3g, ntfs-config, ntfsprogs, mkisofs :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -229,7 +229,7 @@ fi
 echo ""
 echo [+] "Deseja instalar algumas configuracoes do Gnome? y/n" ;
 echo '.: gconf, gnomebaker, nautilus-open-terminal :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -243,7 +243,7 @@ fi
 echo ""
 echo [+] "Deseja instalar o ISAKPMD e VPNc? y/n" ;
 echo '.: vpnc :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -256,7 +256,7 @@ fi
 echo ""
 echo [+] "Deseja instalar os pacotes de Multimidia? y/n" ;
 echo '.: amarok, xmms, xmms-skins, xmms-mp4, mpg123, totem-xine, ksnapshot, istanbul, recordmydesktop, gtk-recordmydesktop, xvidcap :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -278,7 +278,7 @@ fi
 echo ""
 echo [+] "Deseja instalar o Netcat e ferramentas de Tunnelling? y/n" ;
 echo '.: netcat, sbd, cryptcat, socat, vtun, stunnel :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -295,7 +295,7 @@ fi
 echo ""
 echo [+] "Deseja instalar Scanners? y/n" ;
 echo '.: nmap, fping, hping2, hping3, scapy, snmp, traceroute, ike-scan, nbtscan, sslscan :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -317,7 +317,7 @@ fi
 echo ""
 echo [+] "Deseja instalar Scanners Passivos? y/n" ;
 echo '.: p0f, pads :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -330,7 +330,7 @@ fi
 echo ""
 echo [+] "Deseja instalar ferramentas de sniffing? y/n" ;
 echo '.: wireshark, ettercap, ettercap-gtk, tcpdump, tcpflow, ssldump, nemesis, dsniff, etherape :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -350,7 +350,7 @@ fi
 echo ""
 echo [+] "Deseja instalar as bibliotecas (recomendado)? y/n" ;
 echo '.: libssl, libssl-dev, libssh-2, python-pycurl, libnet-dns-perl, libsnmp-perl, libcrypt-ssleay-perl, libnet-ssleay-perl, ncurses-dev, libpcap-dev :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -371,7 +371,7 @@ fi
 echo ""
 echo [+] "Deseja instalar ferramentas de cracking? y/n" ;
 echo '.: john, medusa, hydra :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -385,7 +385,7 @@ fi
 echo ""
 echo [+] "Deseja instalar ferramentas para Wireless? y/n" ;
 echo '.: aircrack, aircrack-ng :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -398,7 +398,7 @@ fi
 echo ""
 echo [+] "Deseja instalar ferramentas de linha de comando para aplicacoes Web? y/n" ;
 echo '.: wget, curl, nikto :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -412,7 +412,7 @@ fi
 echo ""
 echo [+] "Deseja instalar linguagens de script? y/n" ;
 echo '.: ruby, python, perl, perl-doc, gawk, vim-ruby, vim-python :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -430,7 +430,7 @@ fi
 echo ""
 echo [+] "Deseja instalar o Ruby Gems? y/n" ;
 echo '.: gems, rubygems :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -443,7 +443,7 @@ fi
 echo ""
 echo [+] "Deseja instalar as dependencias do Metasploit? y/n" ;
 echo '.: libopenssl-ruby, ruby-libglade2, libgtk2-ruby :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -457,7 +457,7 @@ fi
 echo ""
 echo [+] "Deseja instalar as dependencias do Scapy? y/n" ;
 echo '.: graphviz, imagemagick, python-gnuplot, python-crypto, python-visual, python-pyx, acroread, gv, sox :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -477,7 +477,7 @@ fi
 echo ""
 echo [+] "Deseja instalar ferramentas para Documentacao? y/n" ;
 echo '.: notecase, vim, liferea :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -491,7 +491,7 @@ fi
 echo ""
 echo [+] "Deseja instalar Utilitários para Browsers/Web? y/n" ;
 echo '.: azerus, opera, filezilla, pidgin, pidgin-otr, thunderbird, lightning-extension, enigmail, irssi, silc, tor :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -513,7 +513,7 @@ fi
 echo ""
 echo [+] "Deseja instalar ferramentas para Windows? y/n" ;
 echo '.: wine, quicksynergy :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -526,7 +526,7 @@ fi
 echo ""
 echo [+] "Deseja instalar ferramentas de criptografia? y/n" ;
 echo '.: dmsetup, password-gorilla, gpa, seahorse :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
@@ -585,7 +585,7 @@ fi
 if [[ ! "$(type -P git-extras)" ]]; then
   echo ""
   echo [+] "Deseja instalar o Git Extras ? y/n" ;
-  read digx
+  read -n 1 digx
   if [ $digx = "y" ]; then
     e_header "Installing Git Extras"
     (
@@ -599,7 +599,7 @@ fi
 if [[ ! "$(type -P google-chrome)" ]]; then
   echo ""
   echo [+] "Deseja instalar o Google Chrome? y/n" ;
-  read digx
+  read -n 1 digx
   if [ $digx = "y" ]; then
     e_header "Installing Google-Chrome"
     (
@@ -620,7 +620,7 @@ fi
 if [[ ! "$(dpkg -l |grep google-talkplugin)" ]]; then
   echo ""
   echo [+] "Deseja instalar o Google Hangout? y/n" ;
-  read digx
+  read -n 1 digx
   if [ $digx = "y" ]; then
     e_header "Installing Google Hangout"
     (
@@ -640,7 +640,7 @@ fi
 echo ""
 echo [+] "Deseja instalar o Java? y/n" ;
 echo '.: openjdk-7-jre, openjdk-7-jdk :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
     if is_debian; then
@@ -660,7 +660,7 @@ fi
 echo ""
 echo [+] "Deseja remover serviços desnecessarios do boot? y/n" ;
 echo '.: exim4, tor, ntop, p0f, pads, isakmpd, nessusd, cups, samba, nis, nfs-common :.'
-read digx
+read -n 1 digx
 if [ $digx = "y" ]
 then
     update-rc.d -f exim4 remove
