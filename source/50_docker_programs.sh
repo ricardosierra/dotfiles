@@ -332,7 +332,7 @@ composer(){
         --user $(id -u):$(id -g) \
         --volume $(pwd):/app \
         --volume ~/.ssh:/root/.ssh \
-        --volume ~/.composer:/composer \
+        --volume ~/.config/composer:/composer \
         --volume $SSH_AUTH_SOCK:/ssh-auth.sock \
         --env SSH_AUTH_SOCK=/ssh-auth.sock \
         composer $argument

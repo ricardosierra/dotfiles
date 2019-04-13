@@ -1,1 +1,3 @@
 export PATH="~/Programas/PhpStorm/bin:$PATH"
+alias docker-restart='docker-compose down && docker-compose rm && docker-compose up --build'
+alias docker-clean='docker-compose down && docker-compose rm'

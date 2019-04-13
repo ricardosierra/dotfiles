@@ -8,7 +8,8 @@ install_php_dependences() {
   composer global require "codeception/codeception:*"
   composer global require "phpdocumentor/phpdocumentor:2.*"
   # Statistics for PhpProjects
-  composer global require 'phploc/phploc=*'  
+  composer global require 'phploc/phploc=*'
+  composer global require "phpstan/phpstan:*"
 }
 
 
