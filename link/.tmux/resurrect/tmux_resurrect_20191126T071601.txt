@@ -1,0 +1,16 @@
+pane	default	1	:..themes/arqbem	1	:*Z	0	:/var/www/html/arqbem/wp-content/themes/arqbem	1	vim	:vim .
+pane	default	1	:..themes/arqbem	1	:*Z	1	:/var/www/html/arqbem/wp-content/themes/arqbem	0	zsh	:
+pane	default	2	:vim	0	:#-	0	:/home/sierra/Development/partners-react	0	vim	:vim .
+pane	default	2	:vim	0	:#-	1	:/home/sierra/Development/partners-react	1	zsh	:
+pane	default	3	:vim	0	:#Z	0	:/home/sierra/Development/caseme-backend	0	zsh	:
+pane	default	3	:vim	0	:#Z	1	:/home/sierra/Development/caseme-backend	0	vim	:vim .
+pane	default	3	:vim	0	:#Z	2	:/home/sierra/Development/caseme-backend	0	zsh	:
+pane	default	3	:vim	0	:#Z	3	:/home/sierra/Development/caseme-backend	1	zsh	:
+pane	default	3	:vim	0	:#Z	4	:/home/sierra/Development/caseme-template	0	zsh	:
+pane	default	4	:..opment/Cheffe	0	:#	0	:/home/sierra/Development/Cheffe	0	zsh	:
+pane	default	4	:..opment/Cheffe	0	:#	1	:/home/sierra/Development/Cheffe	1	zsh	:
+window	default	1	1	:*Z	c24e,213x48,0,0[213x18,0,0,1,213x29,0,19,2]
+window	default	2	0	:#-	119f,80x23,0,0[80x11,0,0,3,80x11,0,12,4]
+window	default	3	0	:#Z	042c,80x23,0,0[80x10,0,0{39x10,0,0,5,40x10,40,0,6},80x12,0,11{60x12,0,11,7,9x12,61,11,8,9x12,71,11,9}]
+window	default	4	0	:#	93c7,80x23,0,0[80x11,0,0,10,80x11,0,12,11]
+state	default	

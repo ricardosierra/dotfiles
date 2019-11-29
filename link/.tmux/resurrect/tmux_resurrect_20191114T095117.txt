@@ -1,0 +1,6 @@
+pane	default	1	:Arqbem	0	:-Z	0	:/var/www/html/arqbem/wp-content/themes/arqbem	1	vim	:vim .
+pane	default	1	:Arqbem	0	:-Z	1	:/var/www/html/arqbem	0	zsh	:
+pane	default	2	:~/Development	1	:*	0	:/home/sierra/Development	1	zsh	:
+window	default	1	0	:-Z	894b,213x48,0,0[213x23,0,0,0,213x24,0,24,1]
+window	default	2	1	:*	cc5f,213x48,0,0,2
+state	default	

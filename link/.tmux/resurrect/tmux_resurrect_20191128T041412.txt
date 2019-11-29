@@ -1,0 +1,16 @@
+pane	default	1	:vim	0	:#-	0	:/home/sierra	0	vim	:vim .
+pane	default	1	:vim	0	:#-	1	:/home/sierra	1	zsh	:
+pane	default	2	:vim	0	:#	0	:/home/sierra	0	vim	:vim .
+pane	default	2	:vim	0	:#	1	:/home/sierra	1	zsh	:
+pane	default	3	:~/.dropbox-dist/dropboxd	1	:*	0	:/home/sierra	0	zsh	:
+pane	default	3	:~/.dropbox-dist/dropboxd	1	:*	1	:/home/sierra	0	vim	:vim .
+pane	default	3	:~/.dropbox-dist/dropboxd	1	:*	2	:/home/sierra	0	vi	:vi .zshrc
+pane	default	3	:~/.dropbox-dist/dropboxd	1	:*	3	:/home/sierra	1	dropbox	:/home/sierra/.dropbox-dist/dropbox-lnx.x86_64-85.4.155/dropbox
+pane	default	3	:~/.dropbox-dist/dropboxd	1	:*	4	:/home/sierra	0	zsh	:
+pane	default	4	:~	0	:#	0	:/home/sierra	0	zsh	:
+pane	default	4	:~	0	:#	1	:/home/sierra	1	zsh	:
+window	default	1	0	:#-	38fe,80x23,0,0[80x5,0,0,1,80x17,0,6,2]
+window	default	2	0	:#	119f,80x23,0,0[80x11,0,0,3,80x11,0,12,4]
+window	default	3	1	:*	9d3d,213x45,0,0[213x21,0,0{106x21,0,0,5,106x21,107,0,6},213x23,0,22{104x23,0,22,7,53x23,105,22,8,54x23,159,22,9}]
+window	default	4	0	:#	93c7,80x23,0,0[80x11,0,0,10,80x11,0,12,11]
+state	default	

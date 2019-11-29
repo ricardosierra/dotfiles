@@ -1,0 +1,4 @@
+pane	default	1	:vim	1	:*	0	:/var/www/html/arqbem/wp-content/themes/arqbem	1	vim	:vim .
+pane	default	1	:vim	1	:*	1	:/var/www/html/arqbem/wp-content/themes/arqbem	0	zsh	:
+window	default	1	1	:*	b04b,213x48,0,0[213x24,0,0,0,213x23,0,25,1]
+state	default	

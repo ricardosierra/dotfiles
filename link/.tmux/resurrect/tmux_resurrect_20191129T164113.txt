@@ -1,0 +1,7 @@
+pane	default	1	:StopClub	0	:-	0	:/home/sierra/Desenvolvimento/Business/StopClub/api-nodejs	1	zsh	:
+pane	default	2	:~/.dotfiles	1	:*	0	:/home/sierra/.dotfiles	1	zsh	:
+pane	default	5	:Dropbox	0	:	0	:/media/sierra/8cc27082-2326-4668-85e4-bd8470128538	1	mv	:mv /home/sierra/Dropbox ./Dropbox
+window	default	1	0	:-	be9e,204x54,0,0,1
+window	default	2	1	:*	5f81,204x54,0,0,12
+window	default	5	0	:	5f80,204x54,0,0,11
+state	default	

@@ -1,0 +1,7 @@
+pane	default	1	:..themes/arqbem	1	:*Z	0	:/var/www/html/arqbem/wp-content/themes/arqbem	1	vim	:vim .
+pane	default	1	:..themes/arqbem	1	:*Z	1	:/var/www/html/arqbem/wp-content/themes/arqbem	0	zsh	:
+pane	default	2	:vim	0	:#-	0	:/home/sierra/Development/partners-react	1	vim	:vim .
+pane	default	2	:vim	0	:#-	1	:/home/sierra/Development/partners-react	0	zsh	:
+window	default	1	1	:*Z	094e,213x48,0,0[213x23,0,0,1,213x24,0,24,2]
+window	default	2	0	:#-	3053,213x48,0,0[213x24,0,0,3,213x23,0,25,4]
+state	default	

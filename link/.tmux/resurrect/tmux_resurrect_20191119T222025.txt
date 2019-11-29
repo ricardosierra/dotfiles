@@ -1,0 +1,16 @@
+pane	default	1	:vim	0	:#Z	0	:/var/www/html/arqbem/wp-content/themes/arqbem	1	vim	:vim .
+pane	default	1	:vim	0	:#Z	1	:/var/www/html/arqbem/wp-content/themes/arqbem	0	zsh	:
+pane	default	2	:vim	0	:	0	:/home/sierra/Development/partners-react	0	vim	:vim .
+pane	default	2	:vim	0	:	1	:/home/sierra/Development/partners-react	1	zsh	:
+pane	default	3	:yarn	1	:*	0	:/home/sierra/Development/caseme-backend	0	make	:make run
+pane	default	3	:yarn	1	:*	1	:/home/sierra/Development/caseme-backend	0	vim	:vim .
+pane	default	3	:yarn	1	:*	2	:/home/sierra/Development/caseme-backend	0	make	:make docker_restart
+pane	default	3	:yarn	1	:*	3	:/home/sierra/Development/caseme-backend	0	zsh	:
+pane	default	3	:yarn	1	:*	4	:/home/sierra/Development/caseme-template	1	node	:/home/sierra/.asdf/installs/nodejs/12.9.1/bin/node /usr/share/yarn/bin/yarn.js dev
+pane	default	4	:..opment/Cheffe	0	:-	0	:/home/sierra/Development/Cheffe	0	zsh	:
+pane	default	4	:..opment/Cheffe	0	:-	1	:/home/sierra/Development/Cheffe	1	zsh	:
+window	default	1	0	:#Z	b94d,213x48,0,0[213x19,0,0,1,213x28,0,20,2]
+window	default	2	0	:	3053,213x48,0,0[213x24,0,0,3,213x23,0,25,4]
+window	default	3	1	:*	69ec,213x48,0,0[213x24,0,0{106x24,0,0,5,106x24,107,0,6},213x23,0,25{106x23,0,25,7,53x23,107,25,8,52x23,161,25,12}]
+window	default	4	0	:-	d875,213x48,0,0[213x24,0,0,9,213x23,0,25,11]
+state	default	

@@ -1,0 +1,18 @@
+pane	default	1	:~/.dropbox-dist/dropboxd	0	:	0	:/home/sierra	0	vim	:vim .
+pane	default	1	:~/.dropbox-dist/dropboxd	0	:	1	:/home/sierra	1	dropbox	:/home/sierra/.dropbox-dist/dropbox-lnx.x86_64-85.4.155/dropbox
+pane	default	2	:vim	0	:#	0	:/home/sierra	0	vim	:vim .
+pane	default	2	:vim	0	:#	1	:/home/sierra	1	zsh	:
+pane	default	3	:vim	0	:Z	0	:/home/sierra	0	zsh	:
+pane	default	3	:vim	0	:Z	1	:/home/sierra	0	vim	:vim .
+pane	default	3	:vim	0	:Z	2	:/home/sierra	0	zsh	:
+pane	default	3	:vim	0	:Z	3	:/home/sierra	1	zsh	:
+pane	default	3	:vim	0	:Z	4	:/home/sierra	0	zsh	:
+pane	default	4	:..nessDoc/Sitec	1	:*	0	:/home/sierra/Desenvolvimento/BusinessDoc/Sitec	1	zsh	:
+pane	default	4	:..nessDoc/Sitec	1	:*	1	:/home/sierra/Desenvolvimento/Libs	0	zsh	:
+pane	default	5	:StopCLub	0	:-	0	:/home/sierra/Desenvolvimento/Business/StopClub/admin-react	1	zsh	:
+window	default	1	0	:	714b,213x45,0,0[213x16,0,0,1,213x28,0,17,2]
+window	default	2	0	:#	119f,80x23,0,0[80x11,0,0,3,80x11,0,12,4]
+window	default	3	0	:Z	9d3d,213x45,0,0[213x21,0,0{106x21,0,0,5,106x21,107,0,6},213x23,0,22{104x23,0,22,7,53x23,105,22,8,54x23,159,22,9}]
+window	default	4	1	:*	d398,213x45,0,0[213x22,0,0,10,213x22,0,23,11]
+window	default	5	0	:-	6061,213x45,0,0,12
+state	default	
