@@ -91,6 +91,21 @@ fi
 # Load Bash RC Common Source
 source $HOME/.commonrc
 
+src
+
+# Load the shell dotfiles, and then some:
+# * ~/.aliases can be created aliases.
+# * ~/.exports can be used to create exports.
+# * ~/.path can be used to extend `$PATH`.
+for file in ~/.{aliases,exports,path}; do
+	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
+done
+
+# Load the shell complete
+for file in ~/.completion/.*[^~]; do
+	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
+done
+
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
   env TERM=screen-256color tmux attach -t default || env TERM=screen-256color tmux new -s default
 fi
