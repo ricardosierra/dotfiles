@@ -23,38 +23,8 @@ case $- in
 	*) return;;
 esac
 
-# Init Variables
-export DOTFILES=~/.dotfiles
-
-# Verify Dotfiles Config
-if ! [ -f $DOTFILES/copy/.dotfilesconfig.local ]; then
-	if [ -f $HOME/.dotfilesconfig.local ]; then
-		cp $HOME/.dotfilesconfig.local $DOTFILES/copy/.dotfilesconfig.local
-	else
-		generate_custom_config_for_dotfiles
-		cp $DOTFILES/copy/.dotfilesconfig.local $HOME/.dotfilesconfig.local
-	fi
-fi
-# Load Dotfiles Config
-source $HOME/.dotfilesconfig.local
-
-# Source all files in "source"
-function src() {
-  local file
-  if [[ "$1" ]]; then
-    source "$DOTFILES/source/$1.sh"
-  else
-    for file in $DOTFILES/source/*[^~]; do
-      source "$file"
-    done
-  fi
-}
-
-# Run dotfiles script, then source.
-function dotfiles() {
-  $DOTFILES/bin/dotfiles "$@" && src
-}
-
+# Load Bash RC Common Source
+source $HOME/.commonrc
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
