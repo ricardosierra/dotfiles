@@ -88,10 +88,22 @@ else
 fi
 
 
-# Load Bash RC Common Source
-source $HOME/.commonrc
 
-src
+######################################################
+######################################################
+################ INICIO DOTFILES #####################
+######################################################
+######################################################
+
+# Simulando o shopt no zsh
+alias shopt='/home/sierra/.dotfiles/dependency/shopt'
+# Load Bash RC Common Source
+#source $HOME/.commonrc
+
+# FixBugs
+local ZSH_DEBUG_CMD
+
+#src
 
 # Load the shell dotfiles, and then some:
 # * ~/.aliases can be created aliases.
@@ -101,10 +113,18 @@ for file in ~/.{aliases,exports,path}; do
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
 done
 
+# Deu problema pra rodar isso aqui
+# @todo _zsh_highlight:33: scalar parameter ZSH_DEBUG_CMD created globally in function _zsh_highlight
 # Load the shell complete
-for file in ~/.completion/.*[^~]; do
-	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
-done
+#for file in ~/.completion/.*[^~]; do
+#	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
+#done
+
+######################################################
+######################################################
+################ FINAL DOTFILES ######################
+######################################################
+######################################################
 
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
   env TERM=screen-256color tmux attach -t default || env TERM=screen-256color tmux new -s default
