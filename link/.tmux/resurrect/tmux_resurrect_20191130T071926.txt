@@ -1,0 +1,10 @@
+pane	default	1	:~/.dotfiles	1	:*	0	:/home/sierra/.dotfiles	1	zsh	:
+pane	default	2	:~	0	:	0	:/home/sierra	1	zsh	:
+pane	default	3	:exit	0	:	0	:/home/sierra/Desenvolvimento/Libs/Finder	1	zsh	:
+pane	default	5	:..os/backoffice	0	:-	0	:/home/sierra/Desenvolvimento/ProjProdutos/backoffice	0	docker-compose	:docker-compose up
+pane	default	5	:..os/backoffice	0	:-	1	:/home/sierra/Desenvolvimento/ProjProdutos/backoffice	1	zsh	:
+window	default	1	1	:*	d15e,238x58,0,0,1
+window	default	2	0	:	d15f,238x58,0,0,2
+window	default	3	0	:	d160,238x58,0,0,3
+window	default	5	0	:-	4a55,238x58,0,0[238x29,0,0,4,238x28,0,30,19]
+state	default	

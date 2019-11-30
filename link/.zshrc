@@ -98,12 +98,18 @@ fi
 # Simulando o shopt no zsh
 alias shopt='/home/sierra/.dotfiles/dependency/shopt'
 # Load Bash RC Common Source
-#source $HOME/.commonrc
+source $HOME/.commonrc
 
 # FixBugs
 local ZSH_DEBUG_CMD
 
 #src
+src 20_path
+src 20_system
+src 30_docker
+src 50_file
+src 50_developer
+src 50_vcs
 
 # Load the shell dotfiles, and then some:
 # * ~/.aliases can be created aliases.
