@@ -22,6 +22,7 @@ www.xml
 
 # Don't commit tmux plugins, tpm will install them.
 /link/.tmux/plugins
+/link/.tmux/resurrect/**.txt
 
 # Ignore any file with LOCAL in the name (good for per-machine vars/functions)
 *LOCAL*

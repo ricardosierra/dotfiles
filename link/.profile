@@ -22,7 +22,34 @@
 #       Individual readline initialization file
 
 
+
 if [ -n "$PS1" ] ; then                       # are we interactive?
-   [ -r ~/.bashrc     ] && . ~/.bashrc        # tty/prompt/function setup for interactive shells
+
+
+    # if running bash
+    if [ -n "$ZSH_VERSION" ]; then
+        # include .zshrc if it exists
+        if [ -f "$HOME/.zshrc" ]; then
+        . "$HOME/.zshrc"
+        fi
+    elif [ -n "$BASH_VERSION" ]; then
+        # include .bashrc if it exists
+        if [ -f "$HOME/.bashrc" ]; then
+        . "$HOME/.bashrc"
+        fi
+    fi
+
+    #    [ -r ~/.bashrc     ] && . ~/.bashrc        # tty/prompt/function setup for interactive shells
    [ -r ~/.bash_login ] && . ~/.bash_login    # any at-login tasks for login shell only
 fi  
+
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi

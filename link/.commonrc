@@ -62,7 +62,7 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Flutter
-export PATH="$PATH:/opt/flutter/bin"
+export PATH="$PATH:/snap/bin:/opt/flutter/bin"
 export ANDROID_SDK_ROOT=/home/sierra/Android/Sdk
 export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
 export PATH=$PATH:$ANDROID_SDK_ROOT/tools

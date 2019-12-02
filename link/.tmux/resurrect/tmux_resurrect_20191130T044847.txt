@@ -1,9 +1,0 @@
-pane	default	1	:..ub/api-nodejs	0	:#	0	:/home/sierra/Desenvolvimento/Business/StopClub/api-nodejs	1	zsh	:
-pane	default	2	:~	0	:#-	0	:/home/sierra	1	zsh	:
-pane	default	3	:~/.dotfiles	1	:*	0	:/home/sierra/.dotfiles	1	zsh	:
-pane	default	5	:~	0	:#	0	:/home/sierra	1	zsh	:
-window	default	1	0	:#	ae5e,80x23,0,0,1
-window	default	2	0	:#-	ae5f,80x23,0,0,2
-window	default	3	1	:*	d160,238x58,0,0,3
-window	default	5	0	:#	ae61,80x23,0,0,4
-state	default	

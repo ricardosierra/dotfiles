@@ -104,10 +104,11 @@ source $HOME/.commonrc
 local ZSH_DEBUG_CMD
 
 #src
+src 00_dotfiles
 src 20_path
 src 20_system
 src 30_docker
-src 50_file
+#src 50_file
 src 50_developer
 src 50_vcs
 
