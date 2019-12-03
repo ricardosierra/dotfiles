@@ -101,7 +101,7 @@ alias shopt='/home/sierra/.dotfiles/dependency/shopt'
 source $HOME/.commonrc
 
 # FixBugs
-local ZSH_DEBUG_CMD
+# local ZSH_DEBUG_CMD
 
 #src
 src 00_dotfiles
