@@ -1,6 +1,5 @@
 
 # Git shortcuts
-
 alias g='git'
 function ga() { git add "${@:-.}"; } # Add all files by default
 alias gp='git push'
@@ -16,10 +15,11 @@ alias gs='git status'
 alias gst='gs'
 alias gd='git diff'
 alias gdc='gd --cached'
-function gm() {
+# Rename gm to cmt (commit) because conflits with zsh git plugin
+function cmt() {
     eval git commit -m "\"$@\""
 }
-function gma() {
+function cmta() {
     eval git commit -am "\"$@\""
 }
 alias gb='git branch'

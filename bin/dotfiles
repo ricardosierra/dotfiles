@@ -490,7 +490,9 @@ Description:
 HELP
 }
 function helper_do() {
-  source "$2"
+  if [ -d "$2" ]; then
+    source "$2"
+  fi
 }
 
 # Link config files.

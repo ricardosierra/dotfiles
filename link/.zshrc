@@ -114,7 +114,7 @@ src 10_editor
 # src 10_powerline
 # src 10_tmux
 src 20_system
-src 30_connection
+# src 30_connection
 src 30_docker
 # src 50_aws
 src 50_clipboard
