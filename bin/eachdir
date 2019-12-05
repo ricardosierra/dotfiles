@@ -3,7 +3,6 @@
 function _eachdir() {
 
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then cat <<HELP
-eachdir
 http://benalman.com/
 
 Usage: eachdir [dirs --] commands
