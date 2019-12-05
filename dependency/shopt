@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Arquivo pra sinular o shopt no zsh
+# alias shopt='/home/sierra/.dotfiles/dependency/shopt'
+
+args='';
+for item in $@
+  do
+    args="$args $item";
+  done
+shopt $args;

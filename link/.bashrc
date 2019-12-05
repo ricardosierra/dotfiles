@@ -1,5 +1,5 @@
 
-#echo 'Loading bashrc...'
+echo 'Loading bashrc...'
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
@@ -23,50 +23,8 @@ case $- in
 	*) return;;
 esac
 
-# Init Variables
-export DOTFILES=~/.dotfiles
-
-# Verify Dotfiles Config
-if ! [ -f $DOTFILES/copy/.dotfilesconfig.local ]; then
-	if [ -f $HOME/.dotfilesconfig.local ]; then
-		cp $HOME/.dotfilesconfig.local $DOTFILES/copy/.dotfilesconfig.local
-	else
-		generate_custom_config_for_dotfiles
-		cp $DOTFILES/copy/.dotfilesconfig.local $HOME/.dotfilesconfig.local
-	fi
-fi
-# Load Dotfiles Config
-source $HOME/.dotfilesconfig.local
-
-# Source all files in "source"
-function src() {
-  local file
-  if [[ "$1" ]]; then
-    source "$DOTFILES/source/$1.sh"
-  else
-    for file in $DOTFILES/source/*[^~]; do
-      source "$file"
-    done
-  fi
-}
-
-# Run dotfiles script, then source.
-function dotfiles() {
-  $DOTFILES/bin/dotfiles "$@" && src
-}
-
-
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
-
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-	debian_chroot=$(cat /etc/debian_chroot)
-fi
+# Load Bash RC Common Source
+source $HOME/.commonrc
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
@@ -155,14 +113,6 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 src
 
-# Load the shell dotfiles, and then some:
-# * ~/.aliases can be created aliases.
-# * ~/.exports can be used to create exports.
-# * ~/.path can be used to extend `$PATH`.
-for file in ~/.{aliases,exports,path}; do
-	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
-done
-
 # Load the shell complete
 for file in ~/.completion/.*[^~]; do
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
@@ -173,7 +123,3 @@ if [[ ! "$TMUX" ]]; then
 fi
 
 clear
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

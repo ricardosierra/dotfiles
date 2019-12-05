@@ -1,1 +1,0 @@
-# sudo apt-get –y install gobjc gnustep gnustep-devel;

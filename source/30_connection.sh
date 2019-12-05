@@ -1,9 +1,9 @@
 check-ssh-add() {
-if [ "$DESKTOP_SESSION" == "" ]; then
- if [[ `ssh-add -l` != *id_?sa* ]]; then 
-   ssh-add -t 5h  ## 5 hour ssh-agent expiration
- fi
-fi
+  # if [ "$DESKTOP_SESSION" == "" ] then # @todo comentei pq tava dando erro de parser no zsh
+    if [[ `ssh-add -l` != *id_?sa* ]] then 
+      ssh-add -t 5h  ## 5 hour ssh-agent expiration
+    fi
+  # fi
 }
 
 slogin() {
