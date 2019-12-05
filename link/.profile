@@ -21,6 +21,7 @@
 #~/.inputrc
 #       Individual readline initialization file
 
+echo 'Loading profile...'
 
 
 if [ -n "$PS1" ] ; then                       # are we interactive?
@@ -42,14 +43,3 @@ if [ -n "$PS1" ] ; then                       # are we interactive?
     #    [ -r ~/.bashrc     ] && . ~/.bashrc        # tty/prompt/function setup for interactive shells
    [ -r ~/.bash_login ] && . ~/.bash_login    # any at-login tasks for login shell only
 fi  
-
-
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
-fi

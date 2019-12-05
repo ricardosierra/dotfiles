@@ -1,5 +1,5 @@
 
-#echo 'Loading bashrc...'
+echo 'Loading bashrc...'
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
@@ -113,14 +113,6 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 src
 
-# Load the shell dotfiles, and then some:
-# * ~/.aliases can be created aliases.
-# * ~/.exports can be used to create exports.
-# * ~/.path can be used to extend `$PATH`.
-for file in ~/.{aliases,exports,path}; do
-	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
-done
-
 # Load the shell complete
 for file in ~/.completion/.*[^~]; do
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
@@ -131,7 +123,3 @@ if [[ ! "$TMUX" ]]; then
 fi
 
 clear
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

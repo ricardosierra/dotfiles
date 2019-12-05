@@ -1,6 +1,8 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+echo 'Loading zshrc...'
+
 # Path to your oh-my-zsh installation.
 export ZSH="/home/sierra/.oh-my-zsh"
 
@@ -66,7 +68,15 @@ DISABLE_AUTO_UPDATE="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+  asdf
+  composer
+  docker
+  docker-compose
   git 
+  git-extras
+  git-flow
+  vscode
+  web-search
   zsh-syntax-highlighting
   zsh-autosuggestions
 )
@@ -79,15 +89,6 @@ source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='mvim'
-fi
-
-
 
 ######################################################
 ######################################################
@@ -105,20 +106,38 @@ source $HOME/.commonrc
 
 #src
 src 00_dotfiles
-src 20_path
+src 01_console
+src 01_exports
+src 01_path
+# src 01_prompt
+src 10_editor
+# src 10_powerline
+# src 10_tmux
 src 20_system
+src 30_connection
 src 30_docker
+# src 50_aws
+src 50_clipboard
+src 50_developer
+src 50_docker_programs
 #src 50_file
+src 50_history
+# src 50_misc
+src 50_net
+src 50_node
+# src 50_osx
+# src 50_pebble
+# src 50_prompt
+# src 50_ruby
+src 50_search
+src 50_security
+src 50_system
+src 50_ubuntu_desktop
+src 50_ubuntu
 src 50_developer
 src 50_vcs
-
-# Load the shell dotfiles, and then some:
-# * ~/.aliases can be created aliases.
-# * ~/.exports can be used to create exports.
-# * ~/.path can be used to extend `$PATH`.
-for file in ~/.{aliases,exports,path}; do
-	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
-done
+src 50_web
+# src 60_windows
 
 # Deu problema pra rodar isso aqui
 # @todo _zsh_highlight:33: scalar parameter ZSH_DEBUG_CMD created globally in function _zsh_highlight

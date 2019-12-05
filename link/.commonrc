@@ -1,6 +1,8 @@
 # Init Variables
 export DOTFILES=~/.dotfiles
 
+echo 'Loading commounrc...'
+
 # Verify Dotfiles Config
 if ! [ -f $DOTFILES/copy/.dotfilesconfig.local ]; then
 	if [ -f $HOME/.dotfilesconfig.local ]; then
@@ -46,6 +48,14 @@ fi
 
 
 
+# Load the shell dotfiles, and then some:
+# * ~/.aliases can be created aliases.
+# * ~/.exports can be used to create exports.
+# * ~/.path can be used to extend `$PATH`.
+for file in ~/.{aliases,exports,path}; do
+  [[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
+done
+
 #############################################
 # Era exclusivo do zshrc
 
@@ -61,15 +71,14 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Flutter
-export PATH="$PATH:/snap/bin:/opt/flutter/bin"
-export ANDROID_SDK_ROOT=/home/sierra/Android/Sdk
-export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
-export PATH=$PATH:$ANDROID_SDK_ROOT/tools
-
 # Add colors to Terminal
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
+
+
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
