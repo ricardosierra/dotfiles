@@ -147,12 +147,12 @@ function get_os() {
 # Remove an entry from $PATH
 # Based on http://stackoverflow.com/a/2108540/142339
 function path_remove() {
-  local arg path
-  path=":$PATH:"
-  for arg in "$@"; do path="${path//:$arg:/:}"; done
-  path="${path%:}"
-  path="${path#:}"
-  echo "$path"
+  local arg tmppath
+  tmppath=":$PATH:"
+  for arg in "$@"; do tmppath="${tmppath//:$arg:/:}"; done
+  tmppath="${tmppath%:}"
+  tmppath="${tmppath#:}"
+  echo "$tmppath"
 }
 
 # Display a fancy multi-select menu.
