@@ -34,3 +34,12 @@ export GO15VENDOREXPERIMENT=1
 
 # Desable docker notary TRUST because this cause one erro in docker-compose
 export DOCKER_CONTENT_TRUST=0
+
+
+
+# Importante para os paths
+# PROGRAMS VARIABLES
+export ANDROID_HOME="/home/$USER/$DOTFILES_FOLDER_PROGRAMS/android-sdk-linux"
+export ANDROID_PLATFORM_TOOLS="/home/$USER/$DOTFILES_FOLDER_PROGRAMS/android-sdk-linux/platform-tools/"
+# go path
+export GOPATH=$HOME/.go

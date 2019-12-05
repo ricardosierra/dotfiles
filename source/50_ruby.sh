@@ -1,4 +1,6 @@
 export PATH
+
+# @todo Commando type nao funciona com -P no zsh, nem o whitch
  
 if [[ "$(type -P rbenv)" && ! "$(type -t _rbenv)" ]]; then
   eval "$(rbenv init -)"
