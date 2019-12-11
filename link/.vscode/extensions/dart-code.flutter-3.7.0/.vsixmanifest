@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Language="en-US" Id="flutter" Version="3.6.0" Publisher="Dart-Code"/>
+    <Identity Language="en-US" Id="flutter" Version="3.7.0" Publisher="Dart-Code"/>
     <DisplayName>Flutter</DisplayName>
     <Description xml:space="preserve">Flutter support and debugger for Visual Studio Code.</Description>
     <Tags>flutter,dart,mobile,android,ios</Tags>

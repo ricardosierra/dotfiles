@@ -37,3 +37,6 @@
 [submodule "rbenv-update"]
   path = link/.rbenv/plugins/rbenv-update
   url = https://github.com/rkh/rbenv-update.git
+[submodule "rbenv-update"]
+  path = link/.oh-my-zsh
+  url = https://github.com/robbyrussell/oh-my-zsh.git
