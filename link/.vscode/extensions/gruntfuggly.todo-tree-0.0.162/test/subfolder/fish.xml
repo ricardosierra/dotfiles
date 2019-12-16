@@ -1,0 +1,17 @@
+int main() { // TODO: herllo! 
+    int x = 0;
+    Log_( "Start: x = %i", x );
+    return 1; // ???
+}
+// [x] this needs to be done           <--- done: shown in green
+// [ ] this needs to be done           <--- not done: shown in blue
+// [ ] this needs to be done
+
+Hello // TO\DO YEs!
+
+this shouled // TODO be highlighted
+
+
+
+
+this should not // FIXME be highlighted

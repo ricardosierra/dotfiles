@@ -1,0 +1,23 @@
+int main() { // TODO herllo! 
+    int x = 0;
+    Log_( "Start: x = %i", x );
+    return 1;
+}
+// [x] this needs to be done           <--- done: shown in green
+// [ ] this needs to be done           <--- not done: shown in red
+// [ ] this needs to be done
+
+
+
+this shouled // TODO be highlighted
+
+
+// TODO Some comment
+// TO\DO Some comment
+// FIXME Some comment
+// !TODO Some comment
+// ? Should I reformat this?
+// ^ Some comment
+//+ Some comment
+
+this should not // FIXME be highlighted

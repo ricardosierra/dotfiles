@@ -16,6 +16,7 @@ paths=(
   # Add local binaries
   $HOME/bin
   $HOME/opt/local/bin
+  # Esse nao ta reconhecendo @todo
   $HOME/.local/bin
   # Add binaries into the path
   $DOTFILES/bin

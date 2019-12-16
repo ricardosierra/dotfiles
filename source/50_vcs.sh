@@ -15,7 +15,26 @@ alias gs='git status'
 alias gst='gs'
 alias gd='git diff'
 alias gdc='gd --cached'
-# Rename gm to cmt (commit) because conflits with zsh git plugin
+
+# @description Multiline description goes here and
+# there
+#
+# @example
+#   some:other:func a b c
+#   echo 123
+#
+# @arg $1 string Some arg.
+# @arg $@ any Rest of arguments.
+#
+# @noargs
+#
+# @exitcode 0  If successfull.
+# @exitcode >0 On failure
+# @exitcode 5  On some error.
+#
+# @stdout Path to something.
+#
+# @see some:other:func()
 function cmt() {
     eval git commit -m "\"$@\""
 }

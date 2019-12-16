@@ -1,0 +1,22 @@
+{
+  "todo-tree": {
+    "test": {
+      "subfolder": {
+        "fish.xml": {
+          "line 0": "TODO herllo!",
+          "line 11": "TODO be highlighted",
+          "line 16": "FIXME be highlighted"
+        }
+      },
+      "chips.xml": {
+        "line 0": "TODO herllo!",
+        "line 11": "TODO be highlighted",
+        "line 16": "FIXME be highlighted"
+      }
+    },
+    "README.md": {
+      "line 184": "TODO multiline example",
+      "line 195": "TODO multiline example"
+    }
+  }
+}
