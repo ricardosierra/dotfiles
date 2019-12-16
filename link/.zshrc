@@ -70,13 +70,13 @@ DISABLE_AUTO_UPDATE="true"
 plugins=(
   asdf
   composer
-  docker
-  docker-compose
+  # docker
+  # docker-compose
   git 
-  git-extras
-  git-flow
+  # git-extras
+  # git-flow
   vscode
-  web-search
+  # web-search
   zsh-syntax-highlighting
   zsh-autosuggestions
 )
