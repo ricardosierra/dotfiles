@@ -15,7 +15,7 @@
 #
 #  clipcopy <file>         - copies a file's contents to clipboard
 #
-function clipcopy() {
+function copiar() {
   local file=$1
   if [[ $OSTYPE == darwin* ]]; then
     if [[ -z $file ]]; then
@@ -66,7 +66,7 @@ function clipcopy() {
 #
 #   # Paste to a file
 #   clippaste > file.txt
-function clippaste() {
+function colar() {
   if [[ $OSTYPE == darwin* ]]; then
     pbpaste
   elif [[ $OSTYPE == cygwin* ]]; then
