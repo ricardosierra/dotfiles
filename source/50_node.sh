@@ -1,4 +1,4 @@
-[[ "$1" != init && ! -e ~/.nave ]] && return 1
+[[ "$1" != init && ! -e ~/.volta ]] && return 1
 
 export PATH="~/.nave/installed/default/bin:$PATH"
 #PATH=~/.nave/installed/default/bin:"$(path_remove ~/.nave/installed/*/bin)"
@@ -120,46 +120,30 @@ function npm_owner_add() {
     eachdir "__npm_owner_add_each $users"
   fi
 }
+export VOLTA_HOME=~/.volta
+grep --silent "$VOLTA_HOME/bin" <<< $PATH || export PATH="$VOLTA_HOME/bin:$PATH"
 
-function __npm_owner_add_each() {
-  local owners
-  owners="$(npm owner ls 2>/dev/null)"
-  [[ $? != 0 ]] && return
-  for user in $*; do
-    echo $owners | grep -v $user >/dev/null && npm owner add $user
-  done
+# Use npx instead of installing global npm modules
+function make_npx_alias () {
+  alias $1="npx $@"
 }
 
-# Look at a project's package.json and figure out what dependencies can be
-# updated. While the "npm outdated" command only lists versions that are valid
-# per the version string in package.json, this looks at the @latest tag in npm.
-function npm_latest() {
-  if [[ -e 'node_modules' ]]; then
-    echo 'Backing up node_modules directory.'
-    mv "node_modules" "node_modules-$(date "+%Y_%m_%d-%H_%M_%S")"
-  fi
-  local deps='JSON.parse(require("fs").readFileSync("package.json")).dependencies'
-  # Install the latest version of all dependencies listed in package.json.
-  echo 'Installing @latest version of all dependencies...'
-  npm install $(node -pe "Object.keys($deps).map(function(m){return m+'@latest'}).join(' ')");
-  # List all dependencies that are now invalid, along with their (new) version.
-  local npm_ls="$(npm ls 2>/dev/null)"
-  if echo "$npm_ls" | grep invalid >/dev/null; then
-    echo -e '\nTHESE DEPENDENCIES CAN POSSIBLY BE UPDATED\n'
-    echo 'Module name:                   @latest:             package.json:'
-    echo "$npm_ls" | perl -ne "m/.{10}(.+)@(.+?) invalid\$/ && printf \"%-30s %-20s %s\", \$1, \$2, \`node -pe '$deps[\"\$1\"]'\`"
-    return 99
-  else
-    echo -e '\nAll dependencies are @latest version.'
-  fi
+make_npx_alias json2yaml
+make_npx_alias pushstate-server
+make_npx_alias yaml2json
+
+function get_last_modified_js_file_recursive() {
+  find . -type d \( -name node_modules -o -name .git -o -name .build \) -prune -o -type f \( -name '*.js' -o -name '*.jsx' \) -print0 \
+    | xargs -0 stat -f '%m %N' \
+    | sort -rn \
+    | head -1 \
+    | cut -d' ' -f2-
 }
 
-# Force npm to rewrite package.json to sort everything in the default order
-function npm-package() {
-  if [[ "$(cat package.json | grep dependencies)" ]]; then
-    npm install foo --save && npm uninstall foo --save
-  fi
-  if [[ "$(cat package.json | grep devDependencies)" ]]; then
-    npm install foo --save-dev && npm uninstall foo --save-dev
-  fi
+function watchfile() {
+  yarn watch --testPathPattern "$(get_last_modified_js_file_recursive | sed -E 's#.*/([^/]+)/([^.]+).*#\1/\2.#')"
+}
+
+function watchdir() {
+  yarn watch --testPathPattern "$(dirname "$(get_last_modified_js_file_recursive)")"
 }

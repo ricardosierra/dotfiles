@@ -8,9 +8,9 @@ is_osx || return 1
 
 # Ensure the cask kegs are installed.
 kegs=(
-  caskroom/cask
-  caskroom/drivers
-  caskroom/fonts
+  homebrew/cask-drivers
+  homebrew/cask-fonts
+  homebrew/cask-versions
 )
 brew_tap_kegs
 
@@ -26,30 +26,40 @@ casks=(
   bartender
   battle-net
   bettertouchtool
+  betterzip
+  caprine
   charles
   chromium
   chronosync
   controllermate
+  datagrip
   docker
   dropbox
   fastscripts
   google-chrome
   firefox
+  gimp
   gyazo
   hex-fiend
   iterm2
   karabiner-elements
+  licecap
   macvim
+<<<<<<< HEAD
   menumeters
   meld
   messenger-for-desktop
+=======
+  microsoft-remote-desktop-beta
+>>>>>>> 09aa03cab27cdd2496df4a550b32a33af0f9f832
   midi-monitor
   moom
+  ngrok
+  numi
   omnidisksweeper
-  race-for-the-galaxy
+  postman
   reaper
   robo-3t
-  screenhero
   scroll-reverser
   seil
   sharemouse
@@ -63,14 +73,14 @@ casks=(
   spotify
   steam
   the-unarchiver
-  totalfinder
   tower
   vagrant
   virtualbox
+  visual-studio-code
   vlc
-  ynab
+  xscreensaver
+  zeplin
   # Quick Look plugins
-  betterzipql
   qlcolorcode
   qlmarkdown
   qlprettypatch
@@ -80,12 +90,9 @@ casks=(
   quicknfo
   suspicious-package
   webpquicklook
-  # Color pickers
-  colorpicker-developer
-  colorpicker-skalacolor
   # Drivers
   sonos
-  xbox360-controller-driver
+  xbox360-controller-driver-unofficial
   # Fonts
   font-m-plus
   font-mplus-nerd-font
@@ -99,7 +106,6 @@ if (( ${#casks[@]} > 0 )); then
   for cask in "${casks[@]}"; do
     brew cask install $cask
   done
-  brew cask cleanup
 fi
 
 # Work around colorPicker symlink issue.

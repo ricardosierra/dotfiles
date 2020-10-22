@@ -73,6 +73,7 @@ nohup.out
 .*.swp
 .*.swo
 
+<<<<<<< HEAD
 # PHPSTORM
 .idea
 
@@ -225,3 +226,7 @@ _testmain.go
 
 *.test
 *.prof
+=======
+# VS Code
+.vscode
+>>>>>>> 09aa03cab27cdd2496df4a550b32a33af0f9f832

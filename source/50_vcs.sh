@@ -43,6 +43,7 @@ function cmta() {
 }
 alias gb='git branch'
 alias gba='git branch -a'
+alias gbup='gb --set-upstream-to=origin/$(gbs) $(gbs)'
 function gc() { git checkout "${@:-master}"; } # Checkout master by default
 alias gco='gc'
 alias gcb='gc -b'
@@ -61,6 +62,15 @@ alias gbs='git branch | perl -ne '"'"'/^\* (?:\(detached from (.*)\)|(.*))/ && p
 alias gu-all='eachdir git pull'
 alias gp-all='eachdir git push'
 alias gs-all='eachdir git status'
+
+# Set upstream branch
+function gsu() {
+  local branch_name=$(git symbolic-ref --short HEAD)
+  [[ ! "$branch_name" ]] && echo 'Error: current git branch not detected' && return 1
+  local upstream="$(git config "branch.$branch_name.merge")"
+  [[ "$upstream" ]] && echo "Upstream for branch '$branch_name' already set." && return
+  git branch --set-upstream-to=origin/$branch_name $branch_name
+}
 
 # Rebase topic branch onto origin parent branch and update local parent branch
 # to match origin parent branch
@@ -101,11 +111,25 @@ function _grbo_err() {
 function ged() {
   local files
   local _IFS="$IFS"
-  IFS=$'\n' files=($(git diff --name-status "$@" | grep -v '^D' | cut -f2 | sort | uniq))
+  IFS=$'\n'
+  files=($(git diff --name-status "$@" | grep -v '^D' | cut -f2 | sort | uniq))
+  if [[ "$2" ]]; then
+    echo "Opening files modified between $1 and $2"
+  else
+    files+=($(git ls-files --others --exclude-standard))
+    if [[ "$1" ]]; then
+      echo "Opening files modified since $1"
+    else
+      echo "Opening unstaged/untracked modified files"
+    fi
+  fi
   IFS="$_IFS"
-  echo "Opening files modified $([[ "$2" ]] && echo "between $1 and $2" || echo "since $1")"
   gcd
-  q "${files[@]}"
+  if [[ "$(which code)" ]]; then
+    code "$(git rev-parse --show-toplevel)" -n "${files[@]}"
+  else
+    q "${files[@]}"
+  fi
   cd - > /dev/null
 }
 
@@ -203,6 +227,53 @@ function gstat() {
     echo "$line" | sed "s/\|/$e[0m$mode \|/"
   done
   IFS=$OLDIFS
+}
+
+# Rename/delete diff helper
+# (pipe to pbcopy for github comment-friendly output)
+#
+# 1. Check out a branch
+# 2. Get a list of changed files since master:
+#    $ git diff master --name-status
+# 3. Organize listed files into M/D pairs, eg:
+#    M    src/File.jsx
+#    D    src/FileFeatureFlagName.jsx
+#
+#    M    src/File.test.jsx
+#    D    src/FileFeatureFlagName.test.jsx
+# 4. For each pair, run this function, eg:
+#    $ git_diff_rename src/File.jsx src/FileFeatureFlagName.jsx
+#    $ git_diff_rename src/File.test.jsx src/FileFeatureFlagName.test.jsx
+function git_diff_rename() {
+  local prev_commit="$1"
+  local before="$3"
+  local after="$2"
+  if [ -p /dev/stdout ]; then
+    echo -en "<details>\n  <summary>Diff of <code>$before</code> -> <code>$after</code></summary>\n\n"
+    echo -en 'Command:\n```sh\n'
+    echo git diff $prev_commit:"$before" HEAD:"$after"
+    echo -en '```\n\nDiff:\n```diff\n'
+  fi
+  git diff $prev_commit:"$before" HEAD:"$after"
+  if [ -p /dev/stdout ]; then
+    echo -en '```\n</details>\n'
+  fi
+}
+
+# Open a handful of PRs to test the CI system (defaults to 5)
+function git_pr_blaster() {
+  local i new_branch branch="$(gbs)"
+  for i in $(seq 1 ${1:-5}); do
+    new_branch="$branch-test-do-not-merge-$i"
+    git checkout -b "$new_branch" && \
+      echo "$new_branch" >> TEST_PR_DO_NOT_MERGE.txt && \
+      git add . && \
+      git commit -m "$new_branch" && \
+      git push --no-verify && \
+      git checkout - && \
+      git branch -D "$new_branch" && \
+      open "$(gurl)/pull/new/$new_branch"
+  done
 }
 
 # OSX-specific Git shortcuts

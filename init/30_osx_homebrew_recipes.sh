@@ -16,7 +16,7 @@ recipes=(
   cowsay
   git
   git-extras
-  htop-osx
+  htop
   hub
   id3tool
   jq
@@ -25,9 +25,12 @@ recipes=(
   mercurial
   nmap
   postgresql
+  powerline-go
   reattach-to-user-namespace
   sl
+  smartmontools
   ssh-copy-id
+  telnet
   terminal-notifier
   the_silver_searcher
   thefuck
@@ -45,7 +48,7 @@ brew_install_recipes
 local binroot="$(brew --config | awk '/HOMEBREW_PREFIX/ {print $2}')"/bin
 
 # htop
-if [[ "$(type -P $binroot/htop)" ]] && [[ "$(stat -L -f "%Su:%Sg" "$binroot/htop")" != "root:wheel" || ! "$(($(stat -L -f "%DMp" "$binroot/htop") & 4))" ]]; then
+if [[ "$(type -P $binroot/htop)" ]] && [[ "$(stat -L -f "%Su:%Sg" "$binroot/htop")" != "root:wheel" ]]; then
   e_header "Updating htop permissions"
   sudo chown root:wheel "$binroot/htop"
   sudo chmod u+s "$binroot/htop"
