@@ -1,7 +1,9 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-echo 'Loading zshrc...'
+if [ "$DOTFILES_DEBUG" = yes ]; then
+  echo 'Loading zshrc...'
+fi
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/sierra/.oh-my-zsh"
@@ -68,14 +70,14 @@ DISABLE_AUTO_UPDATE="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  #asdf
+  asdf
   wakatime
   composer
   # docker
   # docker-compose
   git 
-  # git-extras
-  # git-flow
+  git-extras
+  git-flow
   vscode
   # web-search
   zsh-syntax-highlighting
@@ -113,7 +115,7 @@ src 01_path
 # src 01_prompt
 src 10_editor
 # src 10_powerline
-# src 10_tmux
+src 10_tmux
 src 20_system
 # src 30_connection
 src 30_docker
@@ -135,10 +137,12 @@ src 50_security
 src 50_system
 src 50_ubuntu_desktop
 src 50_ubuntu
-src 50_developer
 src 50_vcs
 src 50_web
 # src 60_windows
+src 80_work_station
+src 90_dump
+src 100_workflow
 
 # Deu problema pra rodar isso aqui
 # @todo _zsh_highlight:33: scalar parameter ZSH_DEBUG_CMD created globally in function _zsh_highlight
