@@ -45,13 +45,10 @@ casks=(
   karabiner-elements
   licecap
   macvim
-<<<<<<< HEAD
   menumeters
   meld
   messenger-for-desktop
-=======
   microsoft-remote-desktop-beta
->>>>>>> 09aa03cab27cdd2496df4a550b32a33af0f9f832
   midi-monitor
   moom
   ngrok
