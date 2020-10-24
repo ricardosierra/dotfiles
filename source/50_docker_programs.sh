@@ -912,13 +912,13 @@ notify_send(){
 # 		--name pandoc \
 # 		${DOCKER_REPO_PREFIX}pandoc ${args} ${rfile}
 # }
-alias php=php_cli
+# alias php=php_cli
 php_cli(){
     if [[ "$(type -P php)" ]]; then
         command php "$@"
         return 
     fi
-    images_remote_build sierratecnologia php:7.0
+    images_remote_build sierratecnologia php:7.4
 
     del_stopped php-cli  
 

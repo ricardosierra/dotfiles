@@ -3,21 +3,25 @@ alias docker-restart='docker-compose down && docker-compose rm && docker-compose
 alias docker-clean='docker-compose down && docker-compose rm'
 alias c='php ~/.config/composer/vendor/bin/composer'
 alias a='phpstan analyse'
+alias m='code .'
 
-alias products='cd ~/Desenvolvimento/Business/Sitec/Products'
-alias mp='cd ~/Desenvolvimento/Business/Sitec/Products/MinhaPeca'
-alias Girls='cd ~/Desenvolvimento/Business/Sitec/Products/Girls'
-alias Boss='cd ~/Desenvolvimento/Business/Sitec/Products/Boss'
+alias products='cd $DEV_FOLDER_PRODUCTS'
+alias mp='cd $DEV_FOLDER_PRODUCTS/MinhaPeca'
+alias Girls='cd $DEV_FOLDER_PRODUCTS/Girls'
+alias Boss='cd $DEV_FOLDER_PRODUCTS/Boss'
 
-alias internal='cd ~/Desenvolvimento/Business/Sitec/Libs/Internal'
+alias Novacao='cd $DEV_FOLDER_PRODUCTS/novacao'
+alias eng='cd $DEV_FOLDER_PRODUCTS/eunagarupa'
 
-alias business='cd ~/Desenvolvimento/Business'
-
-alias libs='cd ~/Desenvolvimento/Libs'
-alias Tools='cd ~/Desenvolvimento/Libs/Tools'
-alias Facilitador='cd ~/Desenvolvimento/Libs/Facilitador'
+alias libs='cd $DEV_FOLDER_LIBS'
+alias Tools='cd $DEV_FOLDER_LIBS/Tools'
+alias Facilitador='cd $DEV_FOLDER_LIBS/Facilitador'
 
 
-alias hobbi='cd ~/Desenvolvimento/Tecnologia/Hobbi'
-alias bilo='cd ~/Desenvolvimento/Business/Bilo'
-alias sc='cd ~/Desenvolvimento/Business/StopClub'
+alias rica='cd $BUSINESS_FOLDER_ROOT'
+#alias bilo='cd ~/Desenvolvimento/Business/Bilo'
+#alias sc='cd ~/Desenvolvimento/Business/StopClub'
+
+# alias internal='cd ~/Desenvolvimento/Business/Sitec/Libs/Internal'
+
+# alias business='cd ~/Desenvolvimento/Business'

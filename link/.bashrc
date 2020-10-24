@@ -1,7 +1,7 @@
 
 
 if [ "$DOTFILES_DEBUG" = yes ]; then
-	#echo 'Loading bashrc...'
+	echo 'Loading bashrc...'
 fi
 
 # Case-insensitive globbing (used in pathname expansion)

@@ -2,10 +2,10 @@
 # Work Workflow shortcuts
 
 # Add all files by default
-alias workflow-send="jf"
-alias wfs="jf"
-alias ws="jf"
-function jf() { 
+alias wfds="workflow-demanda-send"
+alias wds="workflow-demanda-send"
+alias wd="workflow-demanda-send"
+function workflow-demanda-send() { 
   local branch_name
   branch_name="$(git symbolic-ref HEAD 2>/dev/null)" ||
   branch_name="(unnamed branch)"     # detached HEAD
@@ -17,6 +17,41 @@ function jf() {
   git push origin "feature/${1:-.}"
   git checkout "$branch_name"
 } 
+# Add all files by default
+alias wffs="workflow-fix-send"
+alias wfs="workflow-fix-send"
+alias wf="workflow-fix-send"
+function workflow-fix-send() { 
+  local branch_name
+  branch_name="$(git symbolic-ref HEAD 2>/dev/null)" ||
+  branch_name="(unnamed branch)"     # detached HEAD
+  branch_name=${branch_name##refs/heads/}
+
+  git checkout -b "fix/${1:-.}"
+  git add .
+  eval git commit -am "\"$@\""
+  git push origin "fix/${1:-.}"
+  git checkout "$branch_name"
+} 
+# Add all files by default
+alias wfhs="workflow-hotfix-send"
+alias whs="workflow-hotfix-send"
+alias wh="workflow-hotfix-send"
+function workflow-hotfix-send() { 
+  local branch_name
+  branch_name="$(git symbolic-ref HEAD 2>/dev/null)" ||
+  branch_name="(unnamed branch)"     # detached HEAD
+  branch_name=${branch_name##refs/heads/}
+
+  git checkout -b "hotfix/${1:-.}"
+  git add .
+  eval git commit -am "\"$@\""
+  git push origin "hotfix/${1:-.}"
+  git checkout "$branch_name"
+} 
+
+
+
 
 # Add all files by default
 alias workflow-publish="wfp"
