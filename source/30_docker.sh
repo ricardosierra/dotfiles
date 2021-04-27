@@ -249,3 +249,14 @@ nginx_config(){
 	# open browser
 	browser-exec "http://${server}"
 }
+
+
+
+function de() { 
+  local result=$(get-actual-directory)   # or result=`get-actual-directory`
+  #echo $result
+  result=$(strtolower $result)
+
+  docker exec -it ${result}_${1}_1 bash 
+
+} 

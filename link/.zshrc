@@ -109,6 +109,7 @@ source $HOME/.commonrc
 
 #src
 src 00_dotfiles
+src 00_helps
 src 01_console
 src 01_exports
 src 01_path
@@ -156,7 +157,7 @@ src 100_workflow
 ################ FINAL DOTFILES ######################
 ######################################################
 ######################################################
-
-if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-  env TERM=screen-256color tmux attach -t default || env TERM=screen-256color tmux new -s default
-fi
+# Executa o Tmux caso exista
+# if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+#   env TERM=screen-256color tmux attach -t default || env TERM=screen-256color tmux new -s default
+# fi

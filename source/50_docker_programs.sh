@@ -7,7 +7,7 @@
 # #alias npm="docker run -ti --rm -u $UID -v `pwd`:/data dragonmantank/nodejs-grunt-bower npm"
 # #alias bower="docker run -ti --rm -u $UID -v `pwd`:/data dragonmantank/nodejs-grunt-bower bower"
 
-export DOCKER_REPO_PREFIX=jess/
+export DOCKER_REPO_PREFIX=sierratecnologia/
 export DOCKERFILES_PATH=~/.dockerfiles
 
 if is_windows; then
@@ -236,54 +236,54 @@ cheese(){
             --name cheese \
             ${DOCKER_REPO_PREFIX}cheese
 }
-alias google-chrome="chrome"
-chrome(){
-    if [[ "$(type -P google-chrome)" ]] && [[ "$1" != "tor" ]]; then
-        command google-chrome "$@" &> /dev/null
-        return 
-    fi
-    images_local_build chrome stable
-    # add flags for proxy if passed
-    local proxy=
-    local map=
-    local args=$@
-    if [[ "$1" == "tor" ]]; then
-        relies_on torproxy
+# alias google-chrome="chrome"
+# chrome(){
+#     if [[ "$(type -P google-chrome)" ]] && [[ "$1" != "tor" ]]; then
+#         command google-chrome "$@" &> /dev/null
+#         return 
+#     fi
+#     images_local_build chrome stable
+#     # add flags for proxy if passed
+#     local proxy=
+#     local map=
+#     local args=$@
+#     if [[ "$1" == "tor" ]]; then
+#         relies_on torproxy
 
-        map="MAP * ~NOTFOUND , EXCLUDE torproxy"
-        proxy="socks5://torproxy:9050"
-        args="https://check.torproject.org/api/ip ${@:2}"
-    fi
+#         map="MAP * ~NOTFOUND , EXCLUDE torproxy"
+#         proxy="socks5://torproxy:9050"
+#         args="https://check.torproject.org/api/ip ${@:2}"
+#     fi
 
-    del_stopped chrome
+#     del_stopped chrome
 
-    # one day remove /etc/hosts bind mount when effing
-    # overlay support inotify, such bullshit
-    sudo docker run -d \
-        --user $(id -u):$(id -g) \
-        --memory 2gb \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -e DISPLAY=unix$DISPLAY \
-        -v $HOME/Downloads:/root/Downloads \
-        -v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
-        -v $HOME/Torrents:/root/Torrents \
-        -v $HOME/.chrome:/data \
-        -v /dev/shm:/dev/shm \
-        -v /etc/hosts:/etc/hosts \
-        --security-opt seccomp:/etc/docker/seccomp/chrome.json \
-        --device /dev/snd \
-        --device /dev/dri \
-        --device /dev/video0 \
-        --device /dev/usb \
-        --device /dev/bus/usb \
-        --group-add audio \
-        --group-add video \
-        --name chrome \
-        ${DOCKER_REPO_PREFIX}chrome --user-data-dir=/data \
-        --proxy-server="$proxy" \
-        --host-resolver-rules="$map" $args &> /dev/null
-}
+#     # one day remove /etc/hosts bind mount when effing
+#     # overlay support inotify, such bullshit
+#     sudo docker run -d \
+#         --user $(id -u):$(id -g) \
+#         --memory 2gb \
+#         -v /etc/localtime:/etc/localtime:ro \
+#         -v /tmp/.X11-unix:/tmp/.X11-unix \
+#         -e DISPLAY=unix$DISPLAY \
+#         -v $HOME/Downloads:/root/Downloads \
+#         -v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
+#         -v $HOME/Torrents:/root/Torrents \
+#         -v $HOME/.chrome:/data \
+#         -v /dev/shm:/dev/shm \
+#         -v /etc/hosts:/etc/hosts \
+#         --security-opt seccomp:/etc/docker/seccomp/chrome.json \
+#         --device /dev/snd \
+#         --device /dev/dri \
+#         --device /dev/video0 \
+#         --device /dev/usb \
+#         --device /dev/bus/usb \
+#         --group-add audio \
+#         --group-add video \
+#         --name chrome \
+#         ${DOCKER_REPO_PREFIX}chrome --user-data-dir=/data \
+#         --proxy-server="$proxy" \
+#         --host-resolver-rules="$map" $args &> /dev/null
+# }
 clementine(){
     if [[ "$(type -P clementine)" ]]; then
         command clementine "$@"
@@ -510,20 +510,20 @@ gimp(){
             --name gimp \
             ${DOCKER_REPO_PREFIX}gimp
 }
-gitk(){
-    if [[ "$(type -P gitk)" ]]; then
-        command gitk "$@"
-        return 
-    fi
-    images_remote_build sierratecnologia gitk
+# gitk(){
+#     if [[ "$(type -P gitk)" ]]; then
+#         command gitk "$@"
+#         return 
+#     fi
+#     images_remote_build sierratecnologia gitk
 
-    docker run -d -ti \
-        --user $(id -u):$(id -g) \
-            -e DISPLAY=$DISPLAY \
-            -v /tmp/.X11-unix:/tmp/.X11-unix \
-            -v `pwd`:/var/www \
-            sierratecnologia/gitk "$@"
-}
+#     docker run -d -ti \
+#         --user $(id -u):$(id -g) \
+#             -e DISPLAY=$DISPLAY \
+#             -v /tmp/.X11-unix:/tmp/.X11-unix \
+#             -v `pwd`:/var/www \
+#             sierratecnologia/gitk "$@"
+# }
 # hollywood(){
 #     if [[ "$(type -P hollywood)" ]]; then
 #         command hollywood "$@"
@@ -724,14 +724,14 @@ mysql-workbench(){
         command mysql-workbench "$@"
         return 
     fi
-  images_local_build mysql-workbench
+  images_local_build raphabot mysql-workbench
 
-	docker run -ti --rm \
+	sudo docker run -ti --rm \
                 --user $(id -u):$(id -g) \
 		-e DISPLAY=$DISPLAY \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v `pwd`:/root \
-		${DOCKER_REPO_PREFIX}mysql-workbench
+		raphabot/mysql-workbench
 }
 # mutt(){
 #   images_local_build mutt
