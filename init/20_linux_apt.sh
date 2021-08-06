@@ -49,6 +49,9 @@ else
   sudo yum -qq dist-upgrade
 fi
 
+# Install asdf
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.1
+
 # Install APT packages.
 packages=(
     # Impressora
@@ -79,8 +82,6 @@ packages=(
     network-manager-openvpn
     network-manager-openvpn-gnome
     zenmap
-    python
-    python-pip
     rxvt-unicode
     silversearcher-ag
     sl
@@ -102,6 +103,12 @@ packages=(
     hostess
     nmap
 
+    # Asdf needs
+    re2c
+    libgd-dev libcurl4-openssl-dev libonig-dev libmcrypt-dev libzip-dev libpq-dev #others requeriments
+
+    # php requeriments
+    libmagickwand-dev libmagickcore-dev
 
     # Editors
     gimp
@@ -118,6 +125,30 @@ packages=(
     ufraw
     jpegoptim
 )
+
+
+# More APT packages
+if is_debianOS || is_kali; then
+  packages+=(
+    silversearcher-ag
+    ssh-askpass-gnome
+    ssh-askpass
+    openssh-server
+  )
+elif is_archlinux; then
+  packages+=(
+    the_silver_searcher
+    openssh-askpass
+    openssh
+  )
+#UBuntu
+else
+  packages+=(
+    silversearcher-ag
+    ssh-askpass
+    openssh-server
+  )
+fi
 
 
 
@@ -538,30 +569,6 @@ then
 fi
 
 
-
-
-# More APT packages
-if is_debianOS || is_kali; then
-  packages+=(
-    silversearcher-ag
-    ssh-askpass-gnome
-    ssh-askpass
-    openssh-server
-  )
-elif is_archlinux; then
-  packages+=(
-    the_silver_searcher
-    openssh-askpass
-    openssh
-  )
-#UBuntu
-else
-  packages+=(
-    silversearcher-ag
-    ssh-askpass
-    openssh-server
-  )
-fi
 
 
 

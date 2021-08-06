@@ -2,6 +2,9 @@
 
 is_linux || is_osx || return 1
 
+asdf plugin-add python
+asdf install python latest
+
 # Install Fabric
 if [[ ! "$(type -P fab)" ]]; then
   e_header "Installing Fabric"

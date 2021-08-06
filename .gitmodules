@@ -34,6 +34,9 @@
 [submodule "rbenv-update"]
   path = link/.rbenv/plugins/rbenv-update
   url = https://github.com/rkh/rbenv-update.git
-[submodule "rbenv-update"]
+[submodule "oh-my-zsh"]
   path = link/.oh-my-zsh
   url = https://github.com/robbyrussell/oh-my-zsh.git
+[submodule "oh-my-zsh-wakatime"]
+  path = link/.oh-my-zsh/custom/plugins/wakatime
+  url = https://github.com/sobolevn/wakatime-zsh-plugin.git

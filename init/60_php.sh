@@ -12,6 +12,15 @@ install_php_dependences() {
   composer global require "phpstan/phpstan:*"
 }
 
+asdf install php latest
+
+pecl install redis
+pecl install imagick
+pecl install xdebug
+
+echo "extension=redis.so
+extension=imagick.so" >> $(asdf where php)/conf.d/php.ini
+
 
 if [[ "$(type -P composer)" ]]; then
 	install_php_dependences
