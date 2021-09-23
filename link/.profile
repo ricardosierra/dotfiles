@@ -43,3 +43,6 @@ if [ -n "$PS1" ] ; then                       # are we interactive?
     #    [ -r ~/.bashrc     ] && . ~/.bashrc        # tty/prompt/function setup for interactive shells
    [ -r ~/.bash_login ] && . ~/.bash_login    # any at-login tasks for login shell only
 fi  
+
+export PATH="/home/sierra/.local/share/solana/install/active_release/bin:$PATH"
+export PATH="/home/sierra/.asdf/installs/python/3.9.6/lib/python3.9/site-packages:$PATH"

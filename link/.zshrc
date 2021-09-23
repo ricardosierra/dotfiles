@@ -5,6 +5,25 @@ if [ "$DOTFILES_DEBUG" = yes ]; then
   echo 'Loading zshrc...'
 fi
 
+###############################
+# Before is need
+#############################
+
+# Simulando o shopt no zsh
+alias shopt='$HOME/.dotfiles/dependency/shopt'
+# auto-completion
+#if [ -f /etc/profile.d/bash_completion.sh ]; then
+#  . /etc/profile.d/bash_completion.sh
+#fi
+#fpath=(~/.zsh/completion $fpath)
+#autoload -Uz compinit && compinit -i
+
+
+
+#################################
+# OH MY ZSH
+##################################
+
 # Path to your oh-my-zsh installation.
 export ZSH="/home/sierra/.oh-my-zsh"
 
@@ -84,6 +103,13 @@ plugins=(
   zsh-autosuggestions
 )
 
+# Deu problema pra rodar isso aqui
+# @todo _zsh_highlight:33: scalar parameter ZSH_DEBUG_CMD created globally in function _zsh_highlight
+# Load the shell complete
+for file in ~/.completion/.*[^~]; do
+	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
+done
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -99,8 +125,6 @@ source $ZSH/oh-my-zsh.sh
 ######################################################
 ######################################################
 
-# Simulando o shopt no zsh
-alias shopt='/home/sierra/.dotfiles/dependency/shopt'
 # Load Bash RC Common Source
 source $HOME/.commonrc
 
@@ -145,12 +169,6 @@ src 80_work_station
 src 90_dump
 src 100_workflow
 
-# Deu problema pra rodar isso aqui
-# @todo _zsh_highlight:33: scalar parameter ZSH_DEBUG_CMD created globally in function _zsh_highlight
-# Load the shell complete
-#for file in ~/.completion/.*[^~]; do
-#	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
-#done
 
 ######################################################
 ######################################################
@@ -158,6 +176,6 @@ src 100_workflow
 ######################################################
 ######################################################
 # Executa o Tmux caso exista
-# if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-#   env TERM=screen-256color tmux attach -t default || env TERM=screen-256color tmux new -s default
-# fi
+if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+  env TERM=screen-256color tmux attach -t default || env TERM=screen-256color tmux new -s default
+fi

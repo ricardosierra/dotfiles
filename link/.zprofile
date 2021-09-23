@@ -10,3 +10,4 @@ echo 'Loading zprofile...'
 # if [ -f "$HOME/.profile" ]; then
 #     . "$HOME/.profile"
 # fi
+export PATH="/home/sierra/.local/share/solana/install/active_release/bin:$PATH"

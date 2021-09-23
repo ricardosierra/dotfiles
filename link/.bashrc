@@ -29,6 +29,10 @@ esac
 # Load Bash RC Common Source
 source $HOME/.commonrc
 
+# ASDF
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
+
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
 	xterm-color) color_prompt=yes;;
