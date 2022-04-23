@@ -9,6 +9,7 @@ echo 'Dotfiles - Ricardo R. Sierra - http://ricardosierra.com.br/'
 
 # Where the magic happens.
 export DOTFILES=~/.dotfiles
+export CORE=/sierra/Core
 export DOCKERFILES=~/.dockerfiles
 
 # Logging stuff.

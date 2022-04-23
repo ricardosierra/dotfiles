@@ -1,0 +1,34 @@
+#!/bin/bash
+
+sudo apt-get clean
+sudo apt-get autoclean
+
+journalctl --disk-usage
+sudo journalctl --vacuum-time=3d
+journalctl --disk-usage
+
+
+# Removes old revisions of snaps
+# CLOSE ALL SNAPS BEFORE RUNNING THIS
+du -h /var/lib/snapd/snaps
+set -eu
+snap list --all | awk '/disabled/{print $1, $3}' |
+    while read snapname revision; do
+        sudo snap remove "$snapname" --revision="$revision"
+    done
+du -h /var/lib/snapd/snaps
+
+
+
+
+du -sh ~/.cache/thumbnails
+rm -rf ~/.cache/thumbnails/*
+
+
+#4. Remove old Linux kernels that were manually installed [For Experts]
+sudo dpkg --list 'linux-image*'
+# sudo apt-get remove linux-image-VERSION
+
+
+# REmove Orphans package
+sudo apt-get install gtkorphan

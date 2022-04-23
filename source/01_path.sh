@@ -8,6 +8,10 @@ paths=(
   /bin
   /usr/games
   /snap/bin
+
+  # SIERRA
+  $CORE/bin
+
   # Opt Programs
   /opt/flutter/bin
   # COMPOSER
@@ -28,6 +32,7 @@ paths=(
   $DOTFILES/bin/pentest
   $DOTFILES/bin/security
   $DOTFILES/bin/sed
+  $DOTFILES/bin/system
   $DOTFILES/bin/text
   # Android
   $ANDROID_HOME
