@@ -26,7 +26,7 @@ if [[ "$1" == "--help" ]]; then
 	echo "Extra Convertions:"
 	echo "    mp3 -> wav"
 	echo " \n"
-	echo "Usage: multi_convert extensaoAntiga extensaoNova"
+	echo "Usage: convert-multi extensaoAntiga extensaoNova"
 	exit;
 fi
 
@@ -34,6 +34,11 @@ fi
 if [[ ! "$(type -P ebb)" ]]; then
 	echo "Comando ebb não encontrado, por favor o instale usando o comando abaixo:"
 	echo "sudo apt install texlive-binaries"
+	exit;
+fi
+if [[ ! "$(type -P ffmpeg)" ]]; then
+	echo "Comando ffmpeg não encontrado, por favor o instale usando o comando abaixo:"
+	echo "sudo apt install ffmpeg yasm libvpx. libx264."
 	exit;
 fi
 
@@ -92,6 +97,10 @@ do
 		# Mp3 for Wav file
 		if [[ "${es[$j]}" == "mp3" && "${nova}" == "wav" ]]; then
 			lame --decode "${es[$j]}" `echo "$1" | sed 's/.mp3$/.wav/'`;
+		elif [[ "${nova}" == "mp4" ]]; then
+			# ffmpeg -i Kazam_screencast_00002.mp4 -vcodec MPEG4 -acodec aac   Kazam_screencast_00002_novo.mp4 
+			ffmpeg -i "${file[$j]}" "$newNameFile"
+			# ffmpeg -i "${file[$j]}" -vcodec MPEG4 -acodec aac "$newNameFile"
 		else
 			convert "${file[$j]}" "$newNameFile"
 			[[ "${es[$j]}" == "png" ]] || ebb "$newNameFile"
