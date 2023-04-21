@@ -1,7 +1,9 @@
 # Init Variables
 export DOTFILES=~/.dotfiles
 
-echo 'Loading commounrc...'
+if [ "$DOTFILES_DEBUG" = yes ]; then
+  echo 'Loading commounrc...'
+fi
 
 # Verify Dotfiles Config
 if ! [ -f $DOTFILES/copy/.dotfilesconfig.local ]; then

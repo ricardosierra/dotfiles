@@ -180,3 +180,6 @@ Check it out:
 <https://github.com/gf3/dotfiles>  
 <https://github.com/mathiasbynens/dotfiles>  
 (and 15+ years of accumulated crap)
+
+### outros exemplos de dotfiles
+https://github.com/fatso83/dotfiles

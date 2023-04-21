@@ -103,6 +103,16 @@ plugins=(
   zsh-autosuggestions
 )
 
+
+# For complete working
+autoload bashcompinit
+bashcompinit
+
+# auto-completion
+if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
+  . /opt/local/etc/profile.d/bash_completion.sh
+fi
+
 # Deu problema pra rodar isso aqui
 # @todo _zsh_highlight:33: scalar parameter ZSH_DEBUG_CMD created globally in function _zsh_highlight
 # Load the shell complete

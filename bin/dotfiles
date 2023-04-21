@@ -658,7 +658,7 @@ function git_update_dockerfiles() {
     new_dockerfiles_install=1
     prompt_delay=15
     e_header "Downloading dockerfiles"
-    git clone --recursive git://github.com/ricardorsierra/dockerfiles.git $DOCKERFILES
+    git clone --recursive git@github.com:ricardosierra/dockerfiles.git $DOCKERFILES
     cd $DOCKERFILES
   elif [[ "$1" != "restart" ]]; then
     # Make sure we have the latest files.

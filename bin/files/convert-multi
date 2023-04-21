@@ -99,6 +99,7 @@ do
 			lame --decode "${es[$j]}" `echo "$1" | sed 's/.mp3$/.wav/'`;
 		elif [[ "${nova}" == "mp4" ]]; then
 			# ffmpeg -i Kazam_screencast_00002.mp4 -vcodec MPEG4 -acodec aac   Kazam_screencast_00002_novo.mp4 
+			echo "Rodando ffmpeg -i "${file[$j]}" "$newNameFile""
 			ffmpeg -i "${file[$j]}" "$newNameFile"
 			# ffmpeg -i "${file[$j]}" -vcodec MPEG4 -acodec aac "$newNameFile"
 		else

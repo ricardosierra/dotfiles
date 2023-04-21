@@ -9,6 +9,8 @@ alias products='cd $DEV_FOLDER_PRODUCTS'
 alias mp='cd $DEV_FOLDER_PRODUCTS/MinhaPeca'
 alias Girls='cd $DEV_FOLDER_PRODUCTS/Girls'
 alias Boss='cd $DEV_FOLDER_PRODUCTS/Boss'
+alias ofs='/sierra/Dev/InnovSoftware/ofs'
+alias banlek='/sierra/Dev/Banlek/BanlekLaravel'
 
 alias Novacao='cd $DEV_FOLDER_PRODUCTS/novacao'
 alias eng='cd $DEV_FOLDER_PRODUCTS/eunagarupa'

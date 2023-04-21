@@ -44,6 +44,13 @@ paths=(
   /usr/local/go/bin
   $GOPATH/bin
   /usr/share/bcc/tools
+
+  # PHPSTudio
+  $HOME/Programas/PhpStorm/bin
+
+  /var/lib/flatpak/exports/share
+  $HOME/home/sierra/.local/share/flatpak/exports/share
+
 )
 
 # Configure PATHS (Caso ja exista, remove e entao add denovo. Caso o path seja vazio nao add o : no final)

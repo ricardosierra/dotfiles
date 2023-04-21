@@ -4,7 +4,9 @@
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
 
-echo 'Loading zprofile...'
+if [ "$DOTFILES_DEBUG" = yes ]; then
+  echo 'Loading zprofile...'
+fi
 
 # # Esse arquivo é chamado pelo zsh
 # if [ -f "$HOME/.profile" ]; then
