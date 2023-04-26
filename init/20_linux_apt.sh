@@ -50,7 +50,7 @@ else
 fi
 
 # Install asdf
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.1
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.11.3
 
 # Install APT packages.
 packages=(

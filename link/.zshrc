@@ -88,6 +88,11 @@ DISABLE_AUTO_UPDATE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+
+# ASDF  
+. "$HOME/.asdf/asdf.sh"
+
+
 plugins=(
   asdf
   wakatime
@@ -103,6 +108,11 @@ plugins=(
   zsh-autosuggestions
 )
 
+# ASDF README
+# append completions to fpath
+fpath=(${ASDF_DIR}/completions $fpath)
+# initialise completions with ZSH's compinit
+autoload -Uz compinit && compinit
 
 # For complete working
 autoload bashcompinit

@@ -418,55 +418,55 @@ dia(){
             -v `pwd`:/root \
             ${DOCKER_REPO_PREFIX}dia
 }
-firefox(){
-    if [[ "$(type -P firefox)" ]]; then
-        command firefox "$@" &> /dev/null
-        return 
-    fi
-    images_local_build firefox
+# firefox(){
+#     if [[ "$(type -P firefox)" ]]; then
+#         command firefox "$@" &> /dev/null
+#         return 
+#     fi
+#     images_local_build firefox
 
-    del_stopped firefox
+#     del_stopped firefox
 
-    # add flags for proxy if passed
-    local proxy=
-    local map=
-    local args=$@
-    if [[ "$1" == "tor" ]]; then
-        relies_on torproxy
+#     # add flags for proxy if passed
+#     local proxy=
+#     local map=
+#     local args=$@
+#     if [[ "$1" == "tor" ]]; then
+#         relies_on torproxy
 
-        map="MAP * ~NOTFOUND , EXCLUDE torproxy"
-        proxy="socks5://torproxy:9050"
-        args="https://check.torproject.org/api/ip ${@:2}"
-    fi
+#         map="MAP * ~NOTFOUND , EXCLUDE torproxy"
+#         proxy="socks5://torproxy:9050"
+#         args="https://check.torproject.org/api/ip ${@:2}"
+#     fi
 
-    sudo docker run -d \
-        --user $(id -u):$(id -g) \
-        --memory 2gb \
-        --net host \
-        --cpuset-cpus 0 \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -e DISPLAY=unix$DISPLAY \
-        -e GDK_SCALE \
-        -e GDK_DPI_SCALE \
-        -v $HOME/.firefox/cache:/root/.cache/mozilla \
-        -v $HOME/.firefox/mozilla:/root/.mozilla \
-        -v $HOME/Downloads:/root/Downloads \
-        -v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
-        -v $HOME/Torrents:/root/Torrents \
-        -v /dev/shm:/dev/shm \
-        -v /etc/hosts:/etc/hosts \
-        --device /dev/snd \
-        --device /dev/dri \
-        --device /dev/video0 \
-        --device /dev/usb \
-        --device /dev/bus/usb \
-        --group-add audio \
-        --group-add video \
-        --name firefox \
-        --proxy-server="$proxy" \
-        ${DOCKER_REPO_PREFIX}firefox "$@" &> /dev/null
-}
+#     sudo docker run -d \
+#         --user $(id -u):$(id -g) \
+#         --memory 2gb \
+#         --net host \
+#         --cpuset-cpus 0 \
+#         -v /etc/localtime:/etc/localtime:ro \
+#         -v /tmp/.X11-unix:/tmp/.X11-unix \
+#         -e DISPLAY=unix$DISPLAY \
+#         -e GDK_SCALE \
+#         -e GDK_DPI_SCALE \
+#         -v $HOME/.firefox/cache:/root/.cache/mozilla \
+#         -v $HOME/.firefox/mozilla:/root/.mozilla \
+#         -v $HOME/Downloads:/root/Downloads \
+#         -v $HOME/$DOTFILES_FOLDER_PICTURES:/root/Pictures \
+#         -v $HOME/Torrents:/root/Torrents \
+#         -v /dev/shm:/dev/shm \
+#         -v /etc/hosts:/etc/hosts \
+#         --device /dev/snd \
+#         --device /dev/dri \
+#         --device /dev/video0 \
+#         --device /dev/usb \
+#         --device /dev/bus/usb \
+#         --group-add audio \
+#         --group-add video \
+#         --name firefox \
+#         --proxy-server="$proxy" \
+#         ${DOCKER_REPO_PREFIX}firefox "$@" &> /dev/null
+# }
 # gcalcli(){
 #     images_local_build gcalcli
 
