@@ -48,6 +48,12 @@ apt_packages+=(
   telnet
   thefuck
   tree
+  mlocate
+  re2c
+  libxml2-dev
+  # Precisei remover a libgd3
+  libgd-dev
+  libpq-dev
 )
 
 

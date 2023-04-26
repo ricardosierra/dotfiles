@@ -173,6 +173,7 @@ src 50_history
 # src 50_misc
 src 50_net
 src 50_node
+src 50_dev
 # src 50_osx
 # src 50_pebble
 # src 50_prompt
