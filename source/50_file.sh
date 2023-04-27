@@ -21,7 +21,7 @@ alias l="ls -lF ${colorflag}"
 alias la="ls -laF ${colorflag}"
 
 # Directory listing
-if [[ "$(type -P tree)" ]]; then
+if [[ "$(pinpoint tree)" ]]; then
   alias ll='tree --dirsfirst -aLpughDFiC 1'
   alias lsd='ll -d'
 else

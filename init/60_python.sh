@@ -6,21 +6,21 @@ asdf plugin-add python
 asdf install python latest
 
 # Install Fabric
-if [[ ! "$(type -P fab)" ]]; then
+if [[ ! "$(pinpoint fab)" ]]; then
   e_header "Installing Fabric"
   (
     sudo pip install fabric
   )
 fi
 
-if [[ ! "$(type -P pylint)" ]]; then
+if [[ ! "$(pinpoint pylint)" ]]; then
   e_header "Installing Pylint"
   (
     sudo pip install pylint
   )
 fi
 
-if [[ ! "$(type -P grip)" ]]; then
+if [[ ! "$(pinpoint grip)" ]]; then
   e_header "Installing grip"
   (
     sudo pip install grip

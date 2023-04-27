@@ -113,7 +113,7 @@ fi
 # Container Aliases
 #
 android-studio(){
-    if [[ "$(type -P android-studio)" ]]; then
+    if [[ "$(pinpoint android-studio)" ]]; then
         command android-studio "$@"
         return 
     fi
@@ -141,7 +141,7 @@ apt_file(){
 }
 alias a=atom
 atom(){
-    if [[ "$(type -P atom)" ]]; then
+    if [[ "$(pinpoint atom)" ]]; then
         command atom "$@"
         return 
     fi
@@ -156,7 +156,7 @@ atom(){
 }
 alias apt-file="apt_file"
 audacity(){
-    if [[ "$(type -P audacity)" ]]; then
+    if [[ "$(pinpoint audacity)" ]]; then
         command audacity "$@"
         return 
     fi
@@ -217,7 +217,7 @@ cadvisor(){
     browser-exec "http://cadvisor:8080"
 }
 cheese(){
-    if [[ "$(type -P cheese)" ]]; then
+    if [[ "$(   c)" ]]; then
         command cheese "$@"
         return 
     fi
@@ -238,7 +238,7 @@ cheese(){
 }
 # alias google-chrome="chrome"
 # chrome(){
-#     if [[ "$(type -P google-chrome)" ]] && [[ "$1" != "tor" ]]; then
+#     if [[ "$(pinpoint google-chrome)" ]] && [[ "$1" != "tor" ]]; then
 #         command google-chrome "$@" &> /dev/null
 #         return 
 #     fi
@@ -285,7 +285,7 @@ cheese(){
 #         --host-resolver-rules="$map" $args &> /dev/null
 # }
 clementine(){
-    if [[ "$(type -P clementine)" ]]; then
+    if [[ "$(pinpoint clementine)" ]]; then
         command clementine "$@"
         return 
     fi
@@ -307,7 +307,7 @@ clementine(){
 }
 
 # composer(){
-#     if [[ "$(type -P composer)" ]]; then
+#     if [[ "$(pinpoint composer)" ]]; then
 #             command composer "$@"
 #             return
 #     fi
@@ -405,7 +405,7 @@ dbvis(){
             ${DOCKER_REPO_PREFIX}dbvis
 }
 dia(){
-    if [[ "$(type -P dia)" ]]; then
+    if [[ "$(pinpoint dia)" ]]; then
         command dia "$@"
         return 
     fi
@@ -419,7 +419,7 @@ dia(){
             ${DOCKER_REPO_PREFIX}dia
 }
 # firefox(){
-#     if [[ "$(type -P firefox)" ]]; then
+#     if [[ "$(pinpoint firefox)" ]]; then
 #         command firefox "$@" &> /dev/null
 #         return 
 #     fi
@@ -490,7 +490,7 @@ dia(){
 #             ${DOCKER_REPO_PREFIX}gcloud "$@"
 # }
 gimp(){
-    if [[ "$(type -P gimp)" ]]; then
+    if [[ "$(pinpoint gimp)" ]]; then
         command gimp "$@"
         return 
     fi
@@ -511,7 +511,7 @@ gimp(){
             ${DOCKER_REPO_PREFIX}gimp
 }
 # gitk(){
-#     if [[ "$(type -P gitk)" ]]; then
+#     if [[ "$(pinpoint gitk)" ]]; then
 #         command gitk "$@"
 #         return 
 #     fi
@@ -525,7 +525,7 @@ gimp(){
 #             sierratecnologia/gitk "$@"
 # }
 # hollywood(){
-#     if [[ "$(type -P hollywood)" ]]; then
+#     if [[ "$(pinpoint hollywood)" ]]; then
 #         command hollywood "$@"
 #         return 
 #     fi
@@ -537,7 +537,7 @@ gimp(){
 #             ${DOCKER_REPO_PREFIX}hollywood
 # }
 htop(){
-    if [[ "$(type -P htop)" ]]; then
+    if [[ "$(pinpoint htop)" ]]; then
         command htop "$@"
         return 
     fi
@@ -637,7 +637,7 @@ htop(){
 #             ${DOCKER_REPO_PREFIX}kvm
 # }
 # libreoffice(){
-#     if [[ "$(type -P libreoffice)" ]]; then
+#     if [[ "$(pinpoint libreoffice)" ]]; then
 #         command libreoffice "$@"
 #         return 
 #     fi
@@ -674,7 +674,7 @@ htop(){
 #             ${DOCKER_REPO_PREFIX}lynx "$@"
 # }
 # masscan(){
-#     if [[ "$(type -P masscan)" ]]; then
+#     if [[ "$(pinpoint masscan)" ]]; then
 #         command masscan "$@"
 #         return 
 #     fi
@@ -689,7 +689,7 @@ htop(){
 #             ${DOCKER_REPO_PREFIX}masscan "$@"
 # }
 maltego(){
-    if [[ "$(type -P maltego)" ]]; then
+    if [[ "$(pinpoint maltego)" ]]; then
         command maltego "$@"
         return 
     fi
@@ -720,7 +720,7 @@ maltego(){
 # 		${DOCKER_REPO_PREFIX}mpd
 # }
 mysql-workbench(){
-    if [[ "$(type -P mysql-workbench)" ]]; then
+    if [[ "$(pinpoint mysql-workbench)" ]]; then
         command mysql-workbench "$@"
         return 
     fi
@@ -831,7 +831,7 @@ netbeans_php(){
 		sierratecnologia/netbeans-php
 }
 netcat(){
-    if [[ "$(type -P netcat)" ]]; then
+    if [[ "$(pinpoint netcat)" ]]; then
         command netcat "$@"
         return 
     fi
@@ -857,7 +857,7 @@ nginx(){
 	sudo hostess add sierra 127.0.0.1
 }
 nmap(){
-    if [[ "$(type -P nmap)" ]]; then
+    if [[ "$(pinpoint nmap)" ]]; then
         command nmap "$@"
         return 
     fi
@@ -894,7 +894,7 @@ notify_send(){
 	docker exec --user $(id -u):$(id -g) -i notify_osd notify-send "$1" "${args}"
 }
 # pandoc(){
-#     if [[ "$(type -P pandoc)" ]]; then
+#     if [[ "$(pinpoint pandoc)" ]]; then
 #         command pandoc "$@"
 #         return 
 #     fi
@@ -914,7 +914,7 @@ notify_send(){
 # }
 # alias php=php_cli
 php_cli(){
-    if [[ "$(type -P php)" ]]; then
+    if [[ "$(pinpoint php)" ]]; then
         command php "$@"
         return 
     fi
@@ -1162,7 +1162,7 @@ scilab(){
 # 		${DOCKER_REPO_PREFIX}shorewall "$@"
 # }
 skype(){
-    if [[ "$(type -P skype)" ]]; then
+    if [[ "$(pinpoint skype)" ]]; then
         command skype "$@"
         return 
     fi
@@ -1186,7 +1186,7 @@ skype(){
 		${DOCKER_REPO_PREFIX}skype
 }
 slack(){
-    if [[ "$(type -P slack)" ]]; then
+    if [[ "$(pinpoint slack)" ]]; then
         command slack "$@"
         return 
     fi
@@ -1212,7 +1212,7 @@ slack(){
 		${DOCKER_REPO_PREFIX}slack "$@"
 }
 spotify(){
-    if [[ "$(type -P spotify)" ]]; then
+    if [[ "$(pinpoint spotify)" ]]; then
         command spotify "$@"
         return 
     fi
@@ -1240,12 +1240,12 @@ alias subl=sublime-text-3
 alias subl=sublime-text-3
 alias sublime=sublime-text-3
 sublime-text-3(){
-    if [[ "$(type -P sublime-text-3)" ]]; then
+    if [[ "$(pinpoint sublime-text-3)" ]]; then
         command sublime-text-3 "$@"
         return 
     fi
 
-		if [[ "$(type -P subl)" ]]; then
+		if [[ "$(pinpoint subl)" ]]; then
 			  command subl "$@"
 				return
 		fi
@@ -1275,7 +1275,7 @@ ssh2john(){
 }
 
 steam(){
-    if [[ "$(type -P steam)" ]]; then
+    if [[ "$(pinpoint steam)" ]]; then
         command steam "$@"
         return 
     fi
@@ -1318,7 +1318,7 @@ tarsnap(){
             ${DOCKER_REPO_PREFIX}tarsnap "$@"
 }
 telnet(){
-    if [[ "$(type -P telnet)" ]]; then
+    if [[ "$(pinpoint telnet)" ]]; then
         command telnet "$@"
         return 
     fi

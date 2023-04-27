@@ -4,6 +4,6 @@
 mkdir -p $DOTFILES/caches/vim
 
 # Download Vim plugins.
-if [[ "$(type -P vim)" ]]; then
+if [[ "$(pinpoint vim)" ]]; then
   vim +PlugUpgrade +PlugUpdate +qall
 fi

@@ -22,6 +22,6 @@ echo "extension=redis.so
 extension=imagick.so" >> $(asdf where php)/conf.d/php.ini
 
 
-if [[ "$(type -P composer)" ]]; then
+if [[ "$(pinpoint composer)" ]]; then
 	install_php_dependences
 fi

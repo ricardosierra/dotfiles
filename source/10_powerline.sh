@@ -1,5 +1,5 @@
 # Essa bagaça nao ta funcionando no linux
-if [[ is_linux ]]
+if [ is_linux ]
   return 1;
 fi
 

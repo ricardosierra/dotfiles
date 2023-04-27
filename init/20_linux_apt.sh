@@ -589,7 +589,7 @@ if (( ${#packages[@]} > 0 )); then
 fi
 
 # Install Git Extras
-if [[ ! "$(type -P git-extras)" ]]; then
+if [[ ! "$(pinpoint git-extras)" ]]; then
   echo ""
   echo [+] "Deseja instalar o Git Extras ? y/n" ;
   read -n 1 digx
@@ -603,7 +603,7 @@ if [[ ! "$(type -P git-extras)" ]]; then
 fi
 
 # Install Google-Chrome
-if [[ ! "$(type -P google-chrome)" ]]; then
+if [[ ! "$(pinpoint google-chrome)" ]]; then
   echo ""
   echo [+] "Deseja instalar o Google Chrome? y/n" ;
   read -n 1 digx

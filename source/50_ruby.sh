@@ -2,7 +2,7 @@ export PATH
 
 # @todo Commando type nao funciona com -P no zsh, nem o whitch
  
-if [[ "$(type -P rbenv)" && ! "$(type -t _rbenv)" ]]; then
+if [[ "$(pinpoint rbenv)" && ! "$(type -t _rbenv)" ]]; then
   eval "$(rbenv init -)"
 elif [[ -e /etc/profile.d/rvm.sh ]]; then
   # rvm init
@@ -11,7 +11,7 @@ else
   # rbenv init.
   PATH="$(path_remove $DOTFILES/vendor/rbenv/bin):$DOTFILES/vendor/rbenv/bin"
 
-  if [[ "$(type -P rbenv)" && ! "$(type -t _rbenv)" ]]; then
+  if [[ "$(pinpoint rbenv)" && ! "$(type -t _rbenv)" ]]; then
     eval "$(rbenv init -)"
   fi
 fi

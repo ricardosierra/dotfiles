@@ -81,6 +81,6 @@ install_docker() {
 }
 
 # Install Docker
-if [[ ! "$(type -P docker)" ]]; then
+if [[ ! "$(pinpoint docker)" ]]; then
   install_docker
 fi

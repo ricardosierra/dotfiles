@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ ! "$(type -P rbenv)" ]]; then
+if [[ ! "$(pinpoint rbenv)" ]]; then
   sudo apt install rbenv
 fi
 
@@ -7,7 +7,7 @@ fi
 source $DOTFILES/source/50_ruby.sh
 
 # Install Ruby.
-if [[ "$(type -P rbenv)" ]]; then
+if [[ "$(pinpoint rbenv)" ]]; then
   versions=(2.4.0)
 
   rubies=($(setdiff "${versions[*]}" "$(rbenv whence ruby)"))

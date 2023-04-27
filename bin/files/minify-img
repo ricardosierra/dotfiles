@@ -28,12 +28,12 @@ if [[ "$1" == "--help" ]]; then
 fi
 
 # Dependencias
-if [[ ! "$(type -P jpegoptim)" ]]; then
+if [[ ! "$(pinpoint jpegoptim)" ]]; then
 	echo "Comando jpegoptim não encontrado, por favor o instale usando o comando abaixo:"
 	echo "sudo apt install jpegoptim"
 	exit;
 fi
-if [[ ! "$(type -P optipng)" ]]; then
+if [[ ! "$(pinpoint optipng)" ]]; then
 	echo "Comando optipng não encontrado, por favor o instale usando o comando abaixo:"
 	echo "sudo apt install optipng"
 	exit;

@@ -31,12 +31,12 @@ if [[ "$1" == "--help" ]]; then
 fi
 
 # Dependencias
-if [[ ! "$(type -P ebb)" ]]; then
+if [[ ! "$(pinpoint ebb)" ]]; then
 	echo "Comando ebb não encontrado, por favor o instale usando o comando abaixo:"
 	echo "sudo apt install texlive-binaries"
 	exit;
 fi
-if [[ ! "$(type -P ffmpeg)" ]]; then
+if [[ ! "$(pinpoint ffmpeg)" ]]; then
 	echo "Comando ffmpeg não encontrado, por favor o instale usando o comando abaixo:"
 	echo "sudo apt install ffmpeg yasm libvpx. libx264."
 	exit;
