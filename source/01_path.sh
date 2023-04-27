@@ -15,8 +15,8 @@ paths=(
   # Opt Programs
   /opt/flutter/bin
   # COMPOSER
-  $HOME/.config/composer/vendor/bin
-  $HOME/.composer/vendor/bin
+  # $HOME/.config/composer/vendor/bin
+  # $HOME/.composer/vendor/bin
   # Add local binaries
   $HOME/bin
   $HOME/opt/local/bin
