@@ -10,9 +10,9 @@
 export DOCKER_REPO_PREFIX=sierratecnologia/
 export DOCKERFILES_PATH=~/.dockerfiles
 
-if is_windows; then
-    return ;
-fi
+# if is_windows; then
+#     return ;
+# fi
 
 # # All Docker Programs
 # docker_programs=(

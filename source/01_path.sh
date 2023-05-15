@@ -66,7 +66,7 @@ for p in "${paths[@]}"; do
 done
 unset p paths
 
-# For Windows
-if is_windows; then
-	PATH="/c/Ruby23/bin:$PATH"
-fi
+# # For Windows
+# if is_windows; then
+# 	PATH="/c/Ruby23/bin:$PATH"
+# fi

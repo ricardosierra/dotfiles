@@ -77,16 +77,16 @@ function get_os() {
     is_$os; [[ $? == ${1:-0} ]] && echo $os
   done
 }
-# WINDOWS
-function is_windows() {
-    if [[ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]]; then
-      return 0
-    elif [[ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]]; then
-      return 0
-    else
-      return 1
-    fi
-}
+# WINDOWS #FIX BUG @TODO
+# function is_windows() {
+#     if [[ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]]; then
+#       return 0
+#     elif [[ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]]; then
+#       return 0
+#     else
+#       return 1
+#     fi
+# }
 
 # MAC
 function is_osx() {
