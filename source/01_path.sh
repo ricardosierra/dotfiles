@@ -1,3 +1,5 @@
+#!/usr/bin/zsh
+
 paths=(
   # Sistem Bins
   /usr/sbin
@@ -56,8 +58,10 @@ paths=(
 # Configure PATHS (Caso ja exista, remove e entao add denovo. Caso o path seja vazio nao add o : no final)
 export PATH
 for p in "${paths[@]}"; do
-  if [[ -d "$p" ]] then
-    if [[ -z "$PATH" ]] then
+  if [[ -d "$p" ]]
+  then
+    if [[ -z "$PATH" ]]
+    then
       PATH="$p"
     else
       PATH="$p:$(path_remove "$p")"

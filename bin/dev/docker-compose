@@ -22,20 +22,20 @@ VERSION=1.28.6
 
 IMAGE="docker/compose:$VERSION"
 
-# WINDOWS
-function is_windows() {
-    if [[ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]]; then
-      return 0
-    elif [[ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]]; then
-      return 0
-    else
-      return 1
-    fi
-}
-if is_windows; then
-	"/c/Program Files/Docker Toolbox/docker-compose.exe" "$@"
-	return ;
-fi
+# # WINDOWS @todo Corrigir funcao de identificar windows
+# function is_windows() {
+#     if [[ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]]; then
+#       return 0
+#     elif [[ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]]; then
+#       return 0
+#     else
+#       return 1
+#     fi
+# }
+# if is_windows; then
+# 	"/c/Program Files/Docker Toolbox/docker-compose.exe" "$@"
+# 	return ;
+# fi
 
 
 # Setup options for connecting to docker host
