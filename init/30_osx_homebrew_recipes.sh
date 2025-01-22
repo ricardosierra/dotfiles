@@ -4,9 +4,9 @@
 is_osx || return 1
 
 # Exit if Homebrew is not installed.
-[[ ! "$(pinpoint brew)" ]] && e_error "Brew recipes need Homebrew to install." && return 1
+command -v brew >/dev/null 2>&1 || { e_error "Homebrew não está instalado. Abortei."; exit 1; }
 
-# Homebrew recipes
+# H Lista de fórmulas do Homebrew para instalar
 recipes=(
   ansible
   awscli
@@ -47,20 +47,21 @@ brew_install_recipes
 # This is where brew stores its binary symlinks
 local binroot="$(brew --config | awk '/HOMEBREW_PREFIX/ {print $2}')"/bin
 
-# htop
-if [[ "$(pinpoint $binroot/htop)" ]] && [[ "$(stat -L -f "%Su:%Sg" "$binroot/htop")" != "root:wheel" ]]; then
-  e_header "Updating htop permissions"
+
+# Atualiza permissões do htop
+if [[ -x "$binroot/htop" ]] && [[ "$(stat -f "%Su:%Sg" "$binroot/htop")" != "root:wheel" ]]; then
+  e_header "Atualizando permissões do htop..."
   sudo chown root:wheel "$binroot/htop"
   sudo chmod u+s "$binroot/htop"
 fi
 
-# bash
-if [[ "$(pinpoint $binroot/bash)" && "$(cat /etc/shells | grep -q "$binroot/bash")" ]]; then
-  e_header "Adding $binroot/bash to the list of acceptable shells"
+# Configura o Bash do Homebrew como shell padrão
+if [[ -x "$binroot/bash" ]] && ! grep -q "$binroot/bash" /etc/shells; then
+  e_header "Adicionando $binroot/bash à lista de shells aceitáveis..."
   echo "$binroot/bash" | sudo tee -a /etc/shells >/dev/null
 fi
-if [[ "$(dscl . -read ~ UserShell | awk '{print $2}')" != "$binroot/bash" ]]; then
-  e_header "Making $binroot/bash your default shell"
-  sudo chsh -s "$binroot/bash" "$USER" >/dev/null 2>&1
-  e_arrow "Please exit and restart all your shells."
+if [[ "$(dscl . -read /Users/$USER UserShell | awk '{print $2}')" != "$binroot/bash" ]]; then
+  e_header "Tornando $binroot/bash o shell padrão..."
+  sudo chsh -s "$binroot/bash" "$USER"
+  e_arrow "Reinicie todos os terminais para aplicar as mudanças."
 fi

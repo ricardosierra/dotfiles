@@ -1,7 +1,8 @@
-# Essa bagaça nao ta funcionando no linux
-if [ is_linux ]
-  return 1;
+# Nao executa no linux
+if is_linux; then
+  return 1
 fi
+
 
 [[ ! "$(which powerline-daemon)" ]] && return 1
 

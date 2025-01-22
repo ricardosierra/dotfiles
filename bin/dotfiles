@@ -72,21 +72,15 @@ function is_dotfiles_bin() {
 #############################################################################
 #############################################################################
 #############################################################################
-function get_os() {
-  for os in osx windows ubuntu debian; do
-    is_$os; [[ $? == ${1:-0} ]] && echo $os
-  done
-}
 # WINDOWS #FIX BUG @TODO
-# function is_windows() {
-#     if [[ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]]; then
-#       return 0
-#     elif [[ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]]; then
-#       return 0
-#     else
-#       return 1
-#     fi
-# }
+function is_windows() {
+  # if [[ "$(uname -s)" == MINGW32_NT* || "$(uname -s)" == MINGW64_NT* ]]; then
+  #   return 0  # Verdadeiro: Está no Windows
+  # fi
+  return 1  # Falso: Não está no Windows
+}
+
+
 
 # MAC
 function is_osx() {
@@ -139,10 +133,16 @@ function is_ubuntu_desktop() {
   dpkg -l ubuntu-desktop >/dev/null 2>&1 || return 1
 }
 function get_os() {
-  for os in osx ubuntu ubuntu_desktop; do
-    is_$os; [[ $? == ${1:-0} ]] && echo $os
+  for os in osx ubuntu debian windows; do
+    if is_$os; then
+      echo $os
+      return 0
+    fi
   done
+  echo "unknown"
+  return 1
 }
+
 #############################################################################
 #############################################################################
 #############################################################################
@@ -728,16 +728,28 @@ function install_git() {
 }
 
 function install_dotfile_bin() {
-  # Add binaries into the path
-  [[ -d $DOTFILES/bin ]] && PATH=$DOTFILES/bin:$PATH
-  export PATH
-  # browser-exec with default browser
-  if is_windows; then
-    ln -sf $DOTFILES/bin/browser-exec /usr/local/bin/xdg-open;
+  # Verifica se o diretório de binários existe
+  if [[ -d $DOTFILES/bin ]]; then
+    PATH=$DOTFILES/bin:$PATH
+    export PATH
+
+    # Cria o link simbólico para o "xdg-open"
+    if is_windows; then
+      # Caminho do Windows (pode não suportar permissões sudo)
+      [[ ! -f /usr/local/bin/xdg-open ]] && ln -sf $DOTFILES/bin/browser-exec /usr/local/bin/xdg-open
+    else
+      # Caminho para sistemas baseados em Unix
+      if [[ ! -f /usr/local/bin/xdg-open ]]; then
+        sudo ln -sf $DOTFILES/bin/browser-exec /usr/local/bin/xdg-open
+      else
+        echo "xdg-open já existe em /usr/local/bin"
+      fi
+    fi
   else
-    sudo ln -sf $DOTFILES/bin/browser-exec /usr/local/bin/xdg-open;
+    echo "Diretório $DOTFILES/bin não encontrado. Função ignorada."
   fi
 }
+
 
 main(){
   # Enough with the functions, let's do stuff.
