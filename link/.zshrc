@@ -25,7 +25,7 @@ alias shopt='$HOME/.dotfiles/dependency/shopt'
 ##################################
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/sierra/.oh-my-zsh"
+export ZSH="~/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
