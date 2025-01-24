@@ -519,7 +519,7 @@ function do_stuff() {
   local subfolder=($2)
 
   if [ "$subfolder" != "" ]; then
-      files=($DOTFILES/$1/$subfolder/*)
+    files=($DOTFILES/$1/$subfolder/*)
       subfolder=($subfolder/)
   fi
 
@@ -544,7 +544,7 @@ function do_stuff() {
       if [[ $(declare -f "$1_dest") ]]; then
         dest="$("$1_dest" "$base")"
       else
-          dest="$HOME/$base"
+        dest="$HOME/$base"
       fi
       # Run _test function only if declared.
       if [[ $(declare -f "$1_test") ]]; then
@@ -555,20 +555,20 @@ function do_stuff() {
           continue
         fi
         # Destination file/folder already exists in ~/.
-        if [[ -e "$dest" ]]; then
+      if [[ -e "$dest" ]]; then
             # Create backup dir if it doesn't already exist.
-            [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
+        [[ -e "$backup_dir" ]] || mkdir -p "$backup_dir"
             # Create backup subfolder dir if it doesn't already exist.
-            [[ -e "${backup_dir}${subfolder}" ]] || mkdir -p "${backup_dir}${subfolder}"
+        [[ -e "${backup_dir}${subfolder}" ]] || mkdir -p "${backup_dir}${subfolder}"
             # Destination is file? Back it up !
             if [ ! -d $dest ]; then
   						  # Set backup flag, so a nice message can be shown at the end.
-               backup=1
+          backup=1
                e_arrow "Backing file ${dest}."
                # Backup file / link / whatever.
-               mv "$dest" "${backup_dir}${subfolder}"
-            fi
+          mv "$dest" "${backup_dir}${subfolder}"
         fi
+      fi
       fi
       # Do stuff.
       "$1_do" "$base" "$file"
@@ -641,18 +641,7 @@ EOF
   fi
 fi
 
-# Ensure that we can actually, like, compile anything.
-if [[ ! "$(pinpoint gcc)" ]] && is_osx; then
-  e_error "XCode or the Command Line Tools for XCode must be installed first."
-  exit 1
-fi
 
-# If Git is not installed, install it (Ubuntu only, since Git comes standard
-# with recent XCode or CLT)
-if [[ ! "$(pinpoint git)" ]] && is_ubuntu; then
-  e_header "Installing Git"
-  sudo apt-get -qq install git-core
-fi
 function git_update_dockerfiles() {
   #Download DockerFiles
   if [[ ! -d $DOCKERFILES ]]; then
@@ -708,24 +697,50 @@ function git_update_dotfiles() {
 }
 
 function install_git() {
-  # If Git is not installed, install it (Ubuntu only, since Git comes standard
-  # with recent XCode or CLT)
-  if [[ ! "$(pinpoint git)" ]] && is_linux; then
-    e_header "Installing Git"
-    if is_debian; then
-      sudo apt-get -qq install git-core
-    fi
-    if is_redhat; then
-      sudo yum install git-all
-    fi
+  # Verifica se o comando 'git' está disponível
+  if [[ "$(command -v git)" ]]; then
+      return 
   fi
+    
 
-  # If Git isn't installed by now, something exploded. We gots to quit!
-  if [[ ! "$(pinpoint git)" ]]; then
-    e_error "Git should be installed. It isn't. Aborting."
+  # Para Linux
+  if [[ "$(uname -s)" == "Linux" ]]; then
+    e_header "Instalando Git no Linux"
+
+    # Detecta distribuições específicas
+    if grep -qi "debian\|ubuntu" /etc/os-release; then
+      sudo apt-get -qq update && sudo apt-get -qq install git-core
+    elif grep -qi "rhel\|centos\|fedora" /etc/os-release; then
+      sudo yum install git-all -y
+    else
+      e_error "Distribuição Linux não suportada. Instale Git manualmente."
+      exit 1
+    fi
+
+  # Para macOS
+  elif [[ "$(uname -s)" == "Darwin" ]]; then
+    e_header "Instalando Git no macOS"
+    if command -v brew >/dev/null 2>&1; then
+      brew install git
+    else
+      e_error "Homebrew não está instalado. Instale-o primeiro com o comando:"
+      echo "  /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+      exit 1
+    fi
+  else
+    e_error "Sistema operacional não suportado. Instale o Git manualmente."
     exit 1
   fi
+
+  # Verifica novamente se o Git foi instalado com sucesso
+  if [[ ! "$(command -v git)" ]]; then
+    e_error "Falha ao instalar o Git. Abortar."
+    exit 1
+  else
+    e_header "Git instalado com sucesso!"
+  fi
 }
+
 
 function install_dotfile_bin() {
   # Verifica se o diretório de binários existe
@@ -758,10 +773,15 @@ main(){
 
   generate_custom_files
 
-  # Ensure that we can actually, like, compile anything.
-  if [[ ! "$(pinpoint gcc)" ]] && is_osx; then
-    e_error "XCode or the Command Line Tools for XCode must be installed first."
-    exit 1
+  # Certifique-se de que GCC está disponível no macOS
+  if is_osx; then
+    if ! pinpoint gcc; then
+      e_error "XCode ou os Command Line Tools do XCode precisam ser instalados."
+      echo "Execute o comando abaixo para instalar os Command Line Tools:"
+      echo
+      echo "  xcode-select --install"
+      exit 1
+    fi
   fi
 
   install_git
