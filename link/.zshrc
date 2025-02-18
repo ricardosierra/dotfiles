@@ -5,6 +5,18 @@ if [ "$DOTFILES_DEBUG" = yes ]; then
   echo 'Loading zshrc...'
 fi
 
+######################################################
+######################################################
+############# DEPENDENCIAS SISTEMA ###################
+######################################################
+######################################################
+
+if [ "$(uname)" = "Darwin" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+
+
 ###############################
 # Before is need
 #############################
@@ -95,7 +107,7 @@ DISABLE_AUTO_UPDATE="true"
 
 plugins=(
   asdf
-  wakatime
+  zsh-wakatime
   composer
   # docker
   # docker-compose

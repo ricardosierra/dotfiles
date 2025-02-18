@@ -12,4 +12,3 @@ fi
 # if [ -f "$HOME/.profile" ]; then
 #     . "$HOME/.profile"
 # fi
-export PATH="~/.local/share/solana/install/active_release/bin:$PATH"

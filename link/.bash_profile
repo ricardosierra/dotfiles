@@ -11,6 +11,7 @@
 
 if [ $(uname) == "Darwin" ];
 then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
     source ~/.bash_profile_osx
 elif [ $(uname) == "Linux" ]
 then
