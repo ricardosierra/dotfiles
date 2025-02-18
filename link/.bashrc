@@ -125,8 +125,9 @@ for file in ~/.completion/.*[^~]; do
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
 done
 
-if [[ ! "$TMUX" ]]; then
-	tmux
+if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
+    exec tmux new-session -A -s default
 fi
+
 
 clear

@@ -209,6 +209,6 @@ src 100_workflow
 ######################################################
 ######################################################
 # Executa o Tmux caso exista
-if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-  env TERM=screen-256color tmux attach -t default || env TERM=screen-256color tmux new -s default
+if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
+    env TERM=screen-256color exec tmux new-session -A -s default
 fi
