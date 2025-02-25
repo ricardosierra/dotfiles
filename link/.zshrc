@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
 if [ "$DOTFILES_DEBUG" = yes ]; then
   echo 'Loading zshrc...'
@@ -59,7 +59,7 @@ ZSH_THEME="robbyrussell"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-DISABLE_AUTO_UPDATE="true"
+# DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
 # DISABLE_UPDATE_PROMPT="true"
@@ -82,7 +82,7 @@ DISABLE_AUTO_UPDATE="true"
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
@@ -101,13 +101,18 @@ DISABLE_AUTO_UPDATE="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 
-# ASDF  
-. "$HOME/.asdf/asdf.sh"
+
+###############################
+# CONFIGURAÇÃO DO ASDF (INSTALAÇÃO MANUAL)
+###############################
+
+export ASDF_DIR="$HOME/.asdf"
+. "$ASDF_DIR/asdf.sh"
 
 
 plugins=(
   asdf
-  zsh-wakatime
+  # zsh-wakatime
   composer
   # docker
   # docker-compose
@@ -142,6 +147,7 @@ for file in ~/.completion/.*[^~]; do
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
 done
 
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -161,7 +167,8 @@ source $ZSH/oh-my-zsh.sh
 source $HOME/.commonrc
 
 # FixBugs
-# local ZSH_DEBUG_CMD
+# Corrigir erro de highlight no zsh
+unset ZSH_DEBUG_CMD
 
 #src
 src 00_dotfiles
@@ -208,7 +215,11 @@ src 100_workflow
 ################ FINAL DOTFILES ######################
 ######################################################
 ######################################################
-# Executa o Tmux caso exista
-if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
-    env TERM=screen-256color exec tmux new-session -A -s default
-fi
+# # Executa o Tmux caso exista
+# if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
+#      # Verifica se a variável TERM está definida corretamente
+#     if [[ -z "$TERM" || "$TERM" != "screen-256color" ]]; then
+#         export TERM=screen-256color
+#     fi
+#     exec tmux new-session -A -s default
+# fi

@@ -137,6 +137,7 @@ tre() {
 }
 
 # Get colors in manual pages
+unalias man 2>/dev/null
 man() {
 	env \
 		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
@@ -146,7 +147,7 @@ man() {
 		LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
 		LESS_TERMCAP_ue=$(printf "\e[0m") \
 		LESS_TERMCAP_us=$(printf "\e[1;32m") \
-		man "$@"
+        command man "$@"
 }
 
 # get dbus session
