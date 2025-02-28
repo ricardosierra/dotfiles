@@ -213,7 +213,7 @@ tags
 # Folders
 _obj
 _test
-
+
 
 *.cgo1.go
 *.cgo2.c
@@ -227,3 +227,6 @@ _testmain.go
 *.prof
 # VS Code
 .vscode
+
+# Sierra
+.data/
