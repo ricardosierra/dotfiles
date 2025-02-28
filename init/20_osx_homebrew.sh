@@ -4,13 +4,16 @@
 is_osx || return 1
 
 # Install Homebrew.
-if [[ ! "$(pinpoint brew)" ]]; then
-  e_header "Installing Homebrew"
-  true | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+if ! command -v brew >/dev/null 2>&1; then
+  e_header "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  echo >> /Users/sierra/.bash_profile
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/sierra/.bash_profile
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 # Exit if, for some reason, Homebrew is not installed.
-[[ ! "$(pinpoint brew)" ]] && e_error "Homebrew failed to install." && return 1
+command -v brew >/dev/null 2>&1 || { e_error "Homebrew não está instalado. Abortei."; exit 1; }
 
 e_header "Updating Homebrew"
 brew doctor

@@ -22,8 +22,3 @@ if [ -z "$SSH_AUTH_SOCK" ] ; then
   eval `ssh-agent -s`
   ssh-add
 fi
-
-
-
-
-export PATH="/home/sierra/.local/share/solana/install/active_release/bin:$PATH"

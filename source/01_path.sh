@@ -51,7 +51,7 @@ paths=(
   $HOME/Programas/PhpStorm/bin
 
   /var/lib/flatpak/exports/share
-  $HOME/home/sierra/.local/share/flatpak/exports/share
+  $HOME~/.local/share/flatpak/exports/share
 
 )
 

@@ -1,9 +1,31 @@
+# Para Debuger: No início:
+# set -x
+# zmodload zsh/zprof
+# export $DOTFILES_DEBUG='yes'
+
+# Compilando o Copiz para melhorar performance
+autoload -Uz compinit && compinit -C
+
+
+
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
 if [ "$DOTFILES_DEBUG" = yes ]; then
   echo 'Loading zshrc...'
 fi
+
+######################################################
+######################################################
+############# DEPENDENCIAS SISTEMA ###################
+######################################################
+######################################################
+
+if [ "$(uname)" = "Darwin" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+
 
 ###############################
 # Before is need
@@ -11,6 +33,7 @@ fi
 
 # Simulando o shopt no zsh
 alias shopt='$HOME/.dotfiles/dependency/shopt'
+
 # auto-completion
 #if [ -f /etc/profile.d/bash_completion.sh ]; then
 #  . /etc/profile.d/bash_completion.sh
@@ -25,7 +48,8 @@ alias shopt='$HOME/.dotfiles/dependency/shopt'
 ##################################
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/sierra/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
+# export ZSH="$HOME/.dotfiles/link/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -47,7 +71,7 @@ ZSH_THEME="robbyrussell"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-DISABLE_AUTO_UPDATE="true"
+# DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
 # DISABLE_UPDATE_PROMPT="true"
@@ -70,7 +94,7 @@ DISABLE_AUTO_UPDATE="true"
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
@@ -89,8 +113,16 @@ DISABLE_AUTO_UPDATE="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 
-# ASDF  
-. "$HOME/.asdf/asdf.sh"
+
+###############################
+# CONFIGURAÇÃO DO ASDF (INSTALAÇÃO MANUAL)
+###############################
+
+export ASDF_DATA_DIR="$HOME/.asdf"
+export PATH="$ASDF_DATA_DIR/shims:$PATH"
+export PATH="$HOME/.bin:$PATH"
+# export ASDF_DIR="$HOME/.asdf"
+# . "$ASDF_DIR/asdf.sh"
 
 
 plugins=(
@@ -130,6 +162,7 @@ for file in ~/.completion/.*[^~]; do
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
 done
 
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -149,7 +182,8 @@ source $ZSH/oh-my-zsh.sh
 source $HOME/.commonrc
 
 # FixBugs
-# local ZSH_DEBUG_CMD
+# Corrigir erro de highlight no zsh
+unset ZSH_DEBUG_CMD
 
 #src
 src 00_dotfiles
@@ -197,6 +231,12 @@ src 100_workflow
 ######################################################
 ######################################################
 # Executa o Tmux caso exista
-if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-  env TERM=screen-256color tmux attach -t default || env TERM=screen-256color tmux new -s default
+if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
+     # Verifica se a variável TERM está definida corretamente
+    if [[ -z "$TERM" || "$TERM" != "screen-256color" ]]; then
+        export TERM=screen-256color
+    fi
+    tmux new-session -A -s default
 fi
+# No final:
+# zprof

@@ -4,13 +4,13 @@
 is_osx || return 1
 
 # Exit if Homebrew is not installed.
-[[ ! "$(pinpoint brew)" ]] && e_error "Brew casks need Homebrew to install." && return 1
+command -v brew >/dev/null 2>&1 || { e_error "Homebrew não está instalado. Abortei."; exit 1; }
 
 # Ensure the cask kegs are installed.
 kegs=(
-  homebrew/cask-drivers
-  homebrew/cask-fonts
-  homebrew/cask-versions
+  # homebrew/cask-drivers # Obsoleto
+  # homebrew/cask-fonts   # Obsoleto
+  # homebrew/cask-versions # Obsoleto
 )
 brew_tap_kegs
 
@@ -77,6 +77,8 @@ casks=(
   vlc
   xscreensaver
   zeplin
+  # Desenvolvimento
+  pidof
   # Quick Look plugins
   qlcolorcode
   qlmarkdown
@@ -97,11 +99,11 @@ casks=(
 )
 
 # Install Homebrew casks.
-casks=($(setdiff "${casks[*]}" "$(brew cask list 2>/dev/null)"))
+casks=($(setdiff "${casks[*]}" "$(brew list --cask 2>/dev/null)"))
 if (( ${#casks[@]} > 0 )); then
   e_header "Installing Homebrew casks: ${casks[*]}"
   for cask in "${casks[@]}"; do
-    brew cask install $cask
+    brew install --cask $cask
   done
 fi
 
