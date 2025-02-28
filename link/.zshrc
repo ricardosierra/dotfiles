@@ -1,12 +1,10 @@
 # Para Debuger: No início:
 # set -x
 # zmodload zsh/zprof
-# export $DOTFILES_DEBUG='yes'
+# export DOTFILES_DEBUG='yes'
 
 # Compilando o Copiz para melhorar performance
-autoload -Uz compinit && compinit -C
-
-
+# autoload -Uz compinit && compinit -C
 
 # If you come from bash you might have to change your $PATH.
 export PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
@@ -118,11 +116,14 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # CONFIGURAÇÃO DO ASDF (INSTALAÇÃO MANUAL)
 ###############################
 
-export ASDF_DATA_DIR="$HOME/.asdf"
-export PATH="$ASDF_DATA_DIR/shims:$PATH"
-export PATH="$HOME/.bin:$PATH"
-# export ASDF_DIR="$HOME/.asdf"
-# . "$ASDF_DIR/asdf.sh"
+# Versao 0.16 - Nao funcionou o php
+# export ASDF_DATA_DIR="$HOME/.asdf"
+# export PATH="$ASDF_DATA_DIR/shims:$PATH"
+# export PATH="$HOME/.bin:$PATH"
+
+# Versao 0.15 - Nao funcionou o php
+export ASDF_DIR="$HOME/.asdf"
+. "$ASDF_DIR/asdf.sh"
 
 
 plugins=(

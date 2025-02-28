@@ -42,6 +42,9 @@ recipes=(
   copyclip
   # Dependencias do php
   re2c
+  gd
+  freetype
+  libzip
   # Dependencia LInux
   ext4fuse
   coreutils

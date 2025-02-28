@@ -1,5 +1,10 @@
 # Package management
-if is_debian; then
+if is_osx; then
+  alias update="brew -qq update && brew upgrade"
+  alias install="brew install"
+  alias remove="brew remove"
+  alias search="brew search"
+elif is_debian; then
   alias update="sudo apt -qq update && sudo apt upgrade"
   alias install="sudo apt install"
   alias remove="sudo apt remove"
