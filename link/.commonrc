@@ -35,6 +35,23 @@ function dotfiles() {
 }
 
 
+############################
+# DEV FOLDER
+############################
+# Se a pasta /sierra/Dev existir, use-a; caso contrário, use $HOME/Dev
+if [ -d "/sierra/Dev" ]; then
+    DEV_FOLDER="/sierra/Dev"
+else
+    DEV_FOLDER="$HOME/Dev"
+fi
+# Se a pasta definida não existir, cria-a
+if [ ! -d "$DEV_FOLDER" ]; then
+    mkdir -p "$DEV_FOLDER"
+fi
+export DEV_FOLDER
+
+
+
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.

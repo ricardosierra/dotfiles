@@ -38,6 +38,8 @@ recipes=(
   tmux-xpanes
   tree
   wget
+  # Helpers
+  copyclip
   # Dependencias do php
   re2c
   # Dependencia LInux
