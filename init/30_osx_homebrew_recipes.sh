@@ -38,6 +38,12 @@ recipes=(
   tmux-xpanes
   tree
   wget
+  # Dependencias do php
+  re2c
+  # Dependencia LInux
+  ext4fuse
+  coreutils
+  gnu-sed gawk
 )
 
 brew_install_recipes

@@ -8,3 +8,8 @@ is_osx || return 1
 if [[ ! -d "$('xcode-select' -print-path 2>/dev/null)" ]]; then
   sudo xcode-select -switch /Library/Developer/CommandLineTools
 fi
+
+# Install asdf
+curl -LO https://github.com/asdf-vm/asdf/releases/download/v0.16.4/asdf-v0.16.4-darwin-arm64.tar.gz
+tar -xzf asdf-v0.16.4-darwin-arm64.tar.gz
+xattr -d com.apple.quarantine ~/.bin/asdf

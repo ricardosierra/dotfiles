@@ -1,3 +1,13 @@
+# Para Debuger: No início:
+# set -x
+# zmodload zsh/zprof
+# export $DOTFILES_DEBUG='yes'
+
+# Compilando o Copiz para melhorar performance
+autoload -Uz compinit && compinit -C
+
+
+
 # If you come from bash you might have to change your $PATH.
 export PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
@@ -23,6 +33,7 @@ fi
 
 # Simulando o shopt no zsh
 alias shopt='$HOME/.dotfiles/dependency/shopt'
+
 # auto-completion
 #if [ -f /etc/profile.d/bash_completion.sh ]; then
 #  . /etc/profile.d/bash_completion.sh
@@ -37,7 +48,8 @@ alias shopt='$HOME/.dotfiles/dependency/shopt'
 ##################################
 
 # Path to your oh-my-zsh installation.
-export ZSH="~/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
+# export ZSH="$HOME/.dotfiles/link/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -106,8 +118,11 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # CONFIGURAÇÃO DO ASDF (INSTALAÇÃO MANUAL)
 ###############################
 
-export ASDF_DIR="$HOME/.asdf"
-. "$ASDF_DIR/asdf.sh"
+export ASDF_DATA_DIR="$HOME/.asdf"
+export PATH="$ASDF_DATA_DIR/shims:$PATH"
+export PATH="$HOME/.bin:$PATH"
+# export ASDF_DIR="$HOME/.asdf"
+# . "$ASDF_DIR/asdf.sh"
 
 
 plugins=(
@@ -215,7 +230,7 @@ src 100_workflow
 ################ FINAL DOTFILES ######################
 ######################################################
 ######################################################
-# # Executa o Tmux caso exista
+# Executa o Tmux caso exista
 # if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
 #      # Verifica se a variável TERM está definida corretamente
 #     if [[ -z "$TERM" || "$TERM" != "screen-256color" ]]; then
@@ -223,3 +238,5 @@ src 100_workflow
 #     fi
 #     exec tmux new-session -A -s default
 # fi
+# No final:
+# zprof

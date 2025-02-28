@@ -11,7 +11,6 @@
 
 if [ $(uname) == "Darwin" ];
 then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
     source ~/.bash_profile_osx
 elif [ $(uname) == "Linux" ]
 then
@@ -23,8 +22,3 @@ if [ -z "$SSH_AUTH_SOCK" ] ; then
   eval `ssh-agent -s`
   ssh-add
 fi
-
-
-
-
-export PATH="~/.local/share/solana/install/active_release/bin:$PATH"
