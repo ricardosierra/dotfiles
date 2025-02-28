@@ -127,7 +127,7 @@ export PATH="$HOME/.bin:$PATH"
 
 plugins=(
   asdf
-  # zsh-wakatime
+  wakatime
   composer
   # docker
   # docker-compose
@@ -231,12 +231,12 @@ src 100_workflow
 ######################################################
 ######################################################
 # Executa o Tmux caso exista
-# if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
-#      # Verifica se a variável TERM está definida corretamente
-#     if [[ -z "$TERM" || "$TERM" != "screen-256color" ]]; then
-#         export TERM=screen-256color
-#     fi
-#     exec tmux new-session -A -s default
-# fi
+if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
+     # Verifica se a variável TERM está definida corretamente
+    if [[ -z "$TERM" || "$TERM" != "screen-256color" ]]; then
+        export TERM=screen-256color
+    fi
+    tmux new-session -A -s default
+fi
 # No final:
 # zprof
