@@ -73,8 +73,8 @@ install_docker() {
     e_header "Installing Docker"
     if (is_osx); then
         install_docker_mac
-    elif (is_windows); then
-        install_docker_windows
+    # elif (is_windows); then
+    #     install_docker_windows
     else
         install_docker_linux
     fi

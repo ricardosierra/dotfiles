@@ -18,24 +18,24 @@ export DOCKER_CONTENT_TRUST=0
 set -e
 
 #VERSION=`git ls-remote https://github.com/docker/compose | grep refs/tags | grep -oP "[0-9]+\.[0-9][0-9]+\.[0-9]+$" | tail -n 1`
-VERSION=1.28.6
+VERSION=2.29.7
 
 IMAGE="docker/compose:$VERSION"
 
-# WINDOWS
-function is_windows() {
-    if [[ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]]; then
-      return 0
-    elif [[ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]]; then
-      return 0
-    else
-      return 1
-    fi
-}
-if is_windows; then
-	"/c/Program Files/Docker Toolbox/docker-compose.exe" "$@"
-	return ;
-fi
+# # WINDOWS @todo Corrigir funcao de identificar windows
+# function is_windows() {
+#     if [[ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]]; then
+#       return 0
+#     elif [[ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]]; then
+#       return 0
+#     else
+#       return 1
+#     fi
+# }
+# if is_windows; then
+# 	"/c/Program Files/Docker Toolbox/docker-compose.exe" "$@"
+# 	return ;
+# fi
 
 
 # Setup options for connecting to docker host

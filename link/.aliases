@@ -21,6 +21,8 @@ alias Facilitador='cd $DEV_FOLDER_LIBS/Facilitador'
 
 
 alias rica='cd $BUSINESS_FOLDER_ROOT'
+alias ofs='/sierra/Dev/InnovSoftware/ofs'
+alias banlek='/sierra/Dev/Banlek'
 #alias bilo='cd ~/Desenvolvimento/Business/Bilo'
 #alias sc='cd ~/Desenvolvimento/Business/StopClub'
 
