@@ -3,8 +3,6 @@
 # zmodload zsh/zprof
 # export DOTFILES_DEBUG='yes'
 
-# Compilando o Copiz para melhorar performance
-# autoload -Uz compinit && compinit -C
 
 # If you come from bash you might have to change your $PATH.
 export PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
@@ -31,13 +29,6 @@ fi
 
 # Simulando o shopt no zsh
 alias shopt='$HOME/.dotfiles/dependency/shopt'
-
-# auto-completion
-#if [ -f /etc/profile.d/bash_completion.sh ]; then
-#  . /etc/profile.d/bash_completion.sh
-#fi
-#fpath=(~/.zsh/completion $fpath)
-#autoload -Uz compinit && compinit -i
 
 
 
@@ -121,13 +112,16 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # export PATH="$ASDF_DATA_DIR/shims:$PATH"
 # export PATH="$HOME/.bin:$PATH"
 
-# Versao 0.15 - Nao funcionou o php
+# Versao 0.15 - Nao funcionou o php na 16
 export ASDF_DIR="$HOME/.asdf"
 . "$ASDF_DIR/asdf.sh"
 
+# ASDF README
+# append completions to fpath
+fpath=(${ASDF_DIR}/completions $fpath)
 
 plugins=(
-  asdf
+#   asdf
   wakatime
   composer
   # docker
@@ -141,13 +135,10 @@ plugins=(
   zsh-autosuggestions
 )
 
-# ASDF README
-# append completions to fpath
-fpath=(${ASDF_DIR}/completions $fpath)
 # initialise completions with ZSH's compinit
-autoload -Uz compinit && compinit
+autoload -Uz compinit && compinit -C
 
-# For complete working
+# Converte qualquer completion do bash para o zsh
 autoload bashcompinit
 bashcompinit
 
@@ -156,9 +147,8 @@ if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
   . /opt/local/etc/profile.d/bash_completion.sh
 fi
 
-# Deu problema pra rodar isso aqui
-# @todo _zsh_highlight:33: scalar parameter ZSH_DEBUG_CMD created globally in function _zsh_highlight
-# Load the shell complete
+# Carrega todos os completions em looping
+export GIT_SOURCING_ZSH_COMPLETION=1
 for file in ~/.completion/.*[^~]; do
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
 done
@@ -172,6 +162,7 @@ source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
+
 
 ######################################################
 ######################################################
@@ -209,7 +200,7 @@ src 50_history
 src 50_net
 src 50_node
 src 50_dev
-# src 50_osx
+src 50_osx
 # src 50_pebble
 # src 50_prompt
 # src 50_ruby
@@ -228,7 +219,7 @@ src 100_workflow
 
 ######################################################
 ######################################################
-################ FINAL DOTFILES ######################
+####################### TMUX #########################
 ######################################################
 ######################################################
 # Executa o Tmux caso exista
