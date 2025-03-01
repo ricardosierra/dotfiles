@@ -237,7 +237,20 @@ if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscod
     if [[ -z "$TERM" || "$TERM" != "screen-256color" ]]; then
         export TERM=screen-256color
     fi
-    tmux new-session -A -s default
+
+    if tmux has-session -t default 2>/dev/null; then
+        # Se a sessão "default" existe, verifica se já está attachada em algum terminal
+        if tmux list-clients -t default 2>/dev/null | grep -q .; then
+            if [ "$DOTFILES_DEBUG" = yes ]; then
+                echo "Sessão tmux já aberta. Não iniciando nova sessão."
+            fi
+        else
+            tmux attach-session -t default
+        fi
+    else
+        tmux new-session -s default
+    fi
 fi
+
 # No final:
 # zprof
