@@ -76,7 +76,7 @@ alias db='docker build -t '
 alias dbc='docker build -t --no-cache '
 alias drl='docker rm -f `docker ps -ql`'
 alias drall='docker rm -f `docker ps -qa`'
-alias dexec='docker exec '
+function dexec -> Executa docker exec -it @nome do container bash
 dexl() { docker exec -i -t $(docker ps -l -q) /bin/sh ;}
 dex() { docker exec -i -t $@ /bin/sh ;}
 alias dlog='docker logs $(docker ps -l -q)'

@@ -71,7 +71,20 @@ alias db='docker build -t '
 alias dbc='docker build -t --no-cache '
 alias drl='docker rm -f `docker ps -ql`'
 alias drall='docker rm -f `docker ps -qa`'
-alias dexec='docker exec '
+# alias dexec='docker exec '
+dexec() {
+  if [ -z "$1" ]; then
+    echo "Uso: dexec <parte-do-nome-do-container>"
+    return 1
+  fi
+  ID=$(docker ps --format "{{.ID}} {{.Names}}" | grep "$1" | awk '{print $1}')
+  if [ -z "$ID" ]; then
+    echo "Container com nome contendo '$1' não encontrado."
+    return 1
+  fi
+  docker exec -it "$ID" bash
+}
+
 dexl() { docker exec -i -t $(docker ps -l -q) /bin/sh ;}
 dex() { docker exec -i -t $@ /bin/sh ;}
 alias dlog='docker logs $(docker ps -l -q)'
