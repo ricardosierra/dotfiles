@@ -89,6 +89,14 @@ casks=(
   quicknfo
   suspicious-package
   webpquicklook
+  # Leitura/abertura de arquivos arbitrários
+  libreoffice        # docx/xlsx/pptx/odt — também converte via CLI (`soffice`)
+  calibre            # e-books (epub/mobi/azw3/cbz) + conversor CLI (`ebook-convert`)
+  keka               # GUI universal de archives (RAR, 7z, ISO, etc.)
+  iina               # player de mídia moderno baseado em mpv
+  # VMs e bootable USB
+  utm                # virtualização ARM/x86 nativa (substitui VirtualBox no Apple Silicon)
+  balenaetcher       # gravação de ISOs em USB (GUI)
   # Drivers
   sonos
   xbox360-controller-driver-unofficial
