@@ -230,3 +230,15 @@ _testmain.go
 
 # Sierra
 .data/
+
+
+# Claude Ia em Repositorios da Banlek
+############################
+.claude/
+.gemini/
+gemini.md
+.agent/:
+CLAUDE.md
+.cursor/
+.cursorrules
+
