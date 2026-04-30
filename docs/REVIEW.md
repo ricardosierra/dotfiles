@@ -1,6 +1,8 @@
 # Revisão Global do Dotfiles
 
 > Snapshot em 2026-04-30. Este documento **lista achados sem aplicar fix nenhum**. Para cada item há um prompt pronto-para-rodar em `docs/PROMPTS.md`.
+>
+> **Continuação em [`REVIEW2.md`](REVIEW2.md)** — segunda rodada de auditoria deep cobrindo `source/`, `init/` e `bin/dotfiles` (30 achados novos, sem duplicar IDs daqui).
 
 ## Bugs confirmados
 
