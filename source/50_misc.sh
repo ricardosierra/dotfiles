@@ -7,6 +7,13 @@ shopt -s checkwinsize
 
 alias grep='grep --color=auto'
 
+# Reset the Claude timer and usage %
+alias claude-reset='rm -f /tmp/claude_start /tmp/claude_usage && echo "Claude timer reset."'
+
+# Sync Claude timer to values from the Claude dashboard.
+# Usage: claude-set 3h29m 86%
+alias claude-set='~/.dotfiles/scripts/claude_set.sh'
+
 # Prevent less from clearing the screen while still showing colors.
 export LESS=-XR
 

@@ -68,6 +68,63 @@ Scripts in the `/init` subdirectory will be executed. A whole bunch of things wi
 * Ruby, gems and rbenv via the [init/50_ruby.sh](init/50_ruby.sh) script
 * Vim plugins via the [init/50_vim.sh](init/50_vim.sh) script
 
+## Claude Usage Timer
+
+A 5-hour countdown timer displayed in the tmux status bar to track Claude AI session usage.
+
+### What it does
+
+Shows the remaining time in your current Claude session directly in tmux:
+
+```
+Claude 04h59m | 14:32
+```
+
+The color changes based on remaining time:
+- **Green**: more than 2 hours left
+- **Yellow**: 2 hours or less
+- **Red**: 30 minutes or less
+
+### How to reset the timer
+
+```bash
+claude-reset
+```
+
+This removes `/tmp/claude_start`, causing the timer to restart at 5h00m on the next tmux status refresh (within 60 seconds).
+
+### How it works internally
+
+- `scripts/claude_timer.sh` reads (or creates) `/tmp/claude_start`, which stores a Unix timestamp.
+- It computes elapsed time via `date +%s`, subtracts from 18000 seconds (5 hours), and outputs `HHhMMm` with tmux color codes.
+- tmux runs the script every 60 seconds via `status-interval 60`.
+- The timer survives shell restarts (state lives in `/tmp`) but resets on reboot.
+
+### ⚠️ Limitações conhecidas
+
+O timer **não funciona direito** sem intervenção manual. Sintomas reportados:
+
+- Fica preso em `Claude 00h00m` mesmo quando ainda há tempo de sessão restante.
+- Nunca exibe a porcentagem usada (`%`) sem rodar `claude-set` antes.
+
+Causas:
+
+- O script **não consulta a API/dashboard do Claude**. Ele apenas conta 5h a
+  partir da primeira invocação — se o tmux ficou aberto >5h ou o
+  `/tmp/claude_start` ficou stale, `REMAINING` é fixado em 0 e o display
+  congela em `00h00m` (`scripts/claude_timer.sh:27`).
+- A porcentagem vem exclusivamente de `/tmp/claude_usage`, que precisa ser
+  populado manualmente via `claude-set 3h29m 86%`. Sem isso, o `%` simplesmente
+  não aparece.
+- Não há sincronização automática entre máquinas.
+
+**Workaround atual:** rodar `claude-reset` para zerar, ou
+`claude-set <tempo> <pct>` para sincronizar com o valor real do dashboard.
+
+Conserto definitivo está documentado como prompt em `docs/PROMPTS.md`.
+
+---
+
 ## Hacking my dotfiles
 
 Because the [dotfiles][dotfiles] script is completely self-contained, you should be able to delete everything else from your dotfiles repo fork, and it will still work. The only thing it really cares about are the `/copy`, `/link` and `/init` subdirectories, which will be ignored if they are empty or don't exist.
