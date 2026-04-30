@@ -131,3 +131,4 @@ fi
 
 
 clear
+. "$HOME/.cargo/env"

@@ -46,3 +46,4 @@ fi
 
 export PATH="~/.local/share/solana/install/active_release/bin:$PATH"
 export PATH="~/.asdf/installs/python/3.9.6/lib/python3.9/site-packages:$PATH"
+. "$HOME/.cargo/env"
