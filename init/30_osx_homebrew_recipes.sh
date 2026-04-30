@@ -49,6 +49,27 @@ recipes=(
   ext4fuse
   coreutils
   gnu-sed gawk
+  # Ferramentas pra ler qualquer tipo de arquivo
+  antiword           # .doc legado (Word 6/97/2000/2003)
+  dcraw              # RAW de câmeras (CR2, NEF, ARW, etc.)
+  exiftool           # metadados de qualquer arquivo
+  fd                 # find moderno
+  ffmpeg             # áudio/vídeo (qualquer container)
+  file-formula       # `file` GNU mais novo que o do macOS
+  imagemagick        # conversão/leitura de imagens (incl. HEIC, PSD)
+  libarchive         # bsdtar — lê tar, ar, iso, xar, lha, cpio, etc.
+  mediainfo          # metadados detalhados de mídia
+  mupdf-tools        # mutool — PDF/EPUB/XPS/CBZ
+  p7zip              # 7z, zip, rar (read), iso, dmg
+  pandoc             # converte praticamente qualquer formato de documento
+  poppler            # pdftotext/pdfimages/pdfinfo
+  qpdf               # inspeção/manipulação de PDF
+  ripgrep            # busca em árvore (rg)
+  sevenzip           # 7-Zip 24+ oficial (sucessor do p7zip)
+  sleuthkit          # análise forense de filesystems (fsstat, fls, icat)
+  tesseract          # OCR (extrai texto de imagem)
+  testdisk           # photorec — recupera arquivos / inspeciona partições
+  unar               # The Unarchiver CLI — RAR, 7z, StuffIt, ACE, etc.
 )
 
 brew_install_recipes
