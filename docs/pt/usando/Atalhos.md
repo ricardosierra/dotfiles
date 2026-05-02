@@ -1,119 +1,144 @@
+# Atalhos Docker
 
+Referência completa dos aliases e funções Docker disponíveis após instalar o dotfiles.
 
+---
 
-# Docker
+## Containers — executar
 
+| Alias/Função | Comando real | Descrição |
+|-------------|-------------|-----------|
+| `drun` | `docker run -it --rm` | Executar container interativo e remover ao sair |
+| `dc` / `docker_exec` | `dockexec` | Abrir bash em um container pelo nome |
+| `dexec` / `dex` | `docker exec -it $@ /bin/sh` | Shell em container pelo nome |
+| `dexl` | shell no último container | Shell no container criado mais recentemente |
 
-alias drun='docker run -it --rm'
+---
 
-# Docker Machine
-alias dmachine='cd ~/Downloads/dmachine'
-alias dm='sudo docker-machine '
-alias dml='docker-machine ls '
-alias devstar='docker-machine start dev'
-alias denv='env | grep  DOCKER'
-alias dkenv='eval "$(sudo docker-machine env dev)"'
-alias dmc='docker-machine create '
-alias dmip='docker-machine ip '
-alias dmub='docker run -d -p ubuntu /bin/bash'
-alias dmstar='docker-machine start '
-alias dmstop='docker-machine stop '
-alias mstar='docker-machine start '
-alias mstop='docker-machine stop '
+## Containers — listar e inspecionar
 
-# GetIP addresses
-alias dc="dockexec"
-alias docker_exec="dockexec"
-dockexecl() { docker exec -i -t $(docker ps -l -q) bash ;}
-dockexec() { docker exec -i -t $@ bash ;}
-alias dockip='docker inspect --format "{{ .NetworkSettings.IPAddress }}"'
-alias dockipl='docker inspect --format "{{ .NetworkSettings.IPAddress }}" $(docker ps -q)'
-alias dip='docker inspect --format "{{ .NetworkSettings.IPAddress }}" '
-alias dipl='docker inspect  $(docker ps -qq) | grep IPAddress'
+| Alias | Comando real | Descrição |
+|-------|-------------|-----------|
+| `dls` | `docker ps -a` | Listar todos os containers |
+| `dlsl` | `docker ps -l` | Último container criado |
+| `dcount` | `docker ps -qa \| wc -l` | Contar containers |
+| `din` | `docker inspect` | Inspecionar container |
+| `dinl` | inspect do último | Inspecionar o último container |
+| `dina` | inspect de todos | Inspecionar todos os containers |
+| `dp` | `docker port` do último | Portas do último container |
+| `dport` | `docker port` do último | Alias para `dp` |
+| `dlog` | logs do último | Logs do último container |
+| `dl` | `docker logs` | Logs de um container |
 
-# Start/Stop the  containers
-alias mstar1='docker-machine start $(docker-machine ls | tail -1 | awk "{print $1}")'
-alias mstop1='docker-machine stop $(docker-machine ls | tail -1 | awk "{print $1}")'
-alias dmk='docker-machine kill'
-# Gracefully stop and delete all container
-alias dra='docker rm $(docker stop $(docker ps -aq))'
-# Kill and delete all containers
-alias drk='docker rm $(docker kill $(docker ps -aq))'
+---
 
-# Inspect the last container created
-alias dmin='docker-machine inspect $(docker-machine ls | tail -1 | awk "{print $1}")'
+## Containers — iniciar e parar
 
-# Remove the last container created
-alias dmrm='docker-machine rm $(docker-machine ls | tail -1 | awk "{print $1}")'
+| Alias | Comando real | Descrição |
+|-------|-------------|-----------|
+| `start` | `docker start $(docker ps -qa)` | Iniciar todos os containers |
+| `stop` | `docker stop $(docker ps -qa)` | Parar todos os containers |
+| `startl` | start do último | Iniciar o último container |
+| `stopl` | stop do último | Parar o último container |
+| `dtop` | `docker stop` | Parar container específico |
 
-# Docker Network aliases
-alias dnr='docker network rm'
-alias dnl='docker network ls'
-alias dnc='docker network create'
-alias dni='docker network inspect'
-alias dnia='docker network inspect $(docker network ls -q)'
-alias dnrm='docker network rm $(docker network ls -q)'
+---
 
-# Docker Engine aliases
-alias di='docker images'
-alias di5='docker images | head -n5'
-# start/stop all containers
-alias start='docker start $(docker ps -qa)'
-alias stop='docker stop $(docker ps -qa)'
-# start/stop last containers
-alias startl='docker start $(docker ps -qal)'
-alias stopl='docker stop $(docker ps -qal)'
-alias dl='docker logs '
-alias dri='docker rmi '
-alias dr='docker rm -f '
-alias dls='docker ps -a '
-alias dlsl='docker ps -l '
-alias dcount='docker ps -qa | wc -l'
-alias dtop='docker stop '
-alias din='docker inspect '
-alias dp='docker port $(docker ps -l -q)'
-alias db='docker build -t '
-alias dbc='docker build -t --no-cache '
-alias drl='docker rm -f `docker ps -ql`'
-alias drall='docker rm -f `docker ps -qa`'
-function dexec -> Executa docker exec -it @nome do container bash
-dexl() { docker exec -i -t $(docker ps -l -q) /bin/sh ;}
-dex() { docker exec -i -t $@ /bin/sh ;}
-alias dlog='docker logs $(docker ps -l -q)'
-alias drun='docker run -i -t -name '
-alias dport='docker port $(docker ps -l -q)'
+## Containers — remover
 
-# Docker inspect the last container created
-alias dinl='docker inspect $(docker ps -qal)'
-# Docker inspect all containers
-alias dina='docker inspect $(docker ps -qa)'
+| Alias | Comando real | Descrição |
+|-------|-------------|-----------|
+| `dr` | `docker rm -f` | Remover container forçadamente |
+| `drl` | remove o último | Remover o último container |
+| `drall` | remove todos | Remover todos os containers |
+| `dra` | stop + remove todos | Parar e remover todos graciosamente |
+| `drk` | kill + remove todos | Matar e remover todos |
 
-# Inspect and parse all IPs for all containers
-alias dnip='docker inspect $(docker ps -qa) | grep IPA | grep [0-9]'
+---
 
-# Example Docker network inspect all network subnets
-alias dnnet='docker network inspect $(docker network ls -q) | grep "Subnet\|Gateway"'
+## Imagens
 
-# On demand foreground OS bash shells that delete on shell exit
-alias alpinerm='docker run -it --rm alpine /bin/sh'
-alias ubunturm='docker run -it --rm ubuntu'
-alias debianrm='docker run -it --rm debian'
-alias fedorarm='docker run -it --rm fedora'
-alias centosrm='docker run -it --rm centos'
-alias busyrm='docker run -it --rm busybox'
-alias nethostrm='docker run -it --rm --net=host ubuntu'
+| Alias | Comando real | Descrição |
+|-------|-------------|-----------|
+| `di` | `docker images` | Listar imagens |
+| `di5` | `docker images \| head -n5` | Últimas 5 imagens |
+| `dri` | `docker rmi` | Remover imagem |
+| `db` | `docker build -t` | Build de imagem com tag |
+| `dbc` | `docker build -t --no-cache` | Build sem cache |
 
-# On demand foreground OS bash shells that stops on shell exit
-alias alpine='docker run -it alpine /bin/sh'
-alias ubuntu='docker run -it ubuntu'
-alias debian='docker run -it debian'
-alias fedora='docker run -it fedora'
-alias busy='docker run -it busybox'
-alias nethost='docker run -it --net=host ubuntu'
+---
 
-# On demand background OS bash shells running in daemon mode
-alias alpined='docker run -itd alpine /bin/sh'
-alias ubuntud='docker run -itd ubuntu'
-alias debiand='docker run -itd debian'
-alias fedorad='docker run -itd fedora'
-alias busyd='docker run -itd busybox'
+## Redes
+
+| Alias | Comando real | Descrição |
+|-------|-------------|-----------|
+| `dnr` | `docker network rm` | Remover rede |
+| `dnl` | `docker network ls` | Listar redes |
+| `dnc` | `docker network create` | Criar rede |
+| `dni` | `docker network inspect` | Inspecionar rede |
+| `dnia` | inspect de todas as redes | Inspecionar todas as redes |
+| `dnrm` | remove todas as redes | Remover todas as redes |
+| `dip` | inspect do IP de um container | IP de um container específico |
+| `dipl` | IPs de todos containers | Listar IPs de todos os containers |
+| `dockip` | `docker inspect --format NetworkSettings.IPAddress` | IP de um container |
+| `dockipl` | IP de todos os ativos | IP de todos os containers ativos |
+| `dnip` | IPs parseados | Todos os IPs em execução |
+| `dnnet` | subnets de todas as redes | Subnets e gateways de todas as redes |
+
+---
+
+## Docker Machine
+
+| Alias | Comando real | Descrição |
+|-------|-------------|-----------|
+| `dm` | `sudo docker-machine` | Docker Machine com sudo |
+| `dml` | `docker-machine ls` | Listar máquinas |
+| `devstar` | `docker-machine start dev` | Iniciar máquina "dev" |
+| `denv` | `env \| grep DOCKER` | Ver variáveis Docker |
+| `dkenv` | `eval "$(docker-machine env dev)"` | Ativar ambiente da máquina "dev" |
+| `dmc` | `docker-machine create` | Criar máquina |
+| `dmip` | `docker-machine ip` | IP de uma máquina |
+| `dmstar` / `mstar` | `docker-machine start` | Iniciar máquina |
+| `dmstop` / `mstop` | `docker-machine stop` | Parar máquina |
+| `dmk` | `docker-machine kill` | Matar máquina |
+| `dmin` | inspect da última máquina | Inspecionar última máquina |
+| `dmrm` | remove a última máquina | Remover última máquina |
+| `mstar1` | start da última máquina | Iniciar a última máquina listada |
+| `mstop1` | stop da última máquina | Parar a última máquina listada |
+
+---
+
+## Shells Docker sob demanda
+
+Aliases para abrir um shell interativo em um container de SO — o container é **removido ao sair** (`--rm`):
+
+| Alias | SO | Comportamento |
+|-------|-----|--------------|
+| `alpinerm` | Alpine | Primeiro plano, remove ao sair |
+| `ubunturm` | Ubuntu | Primeiro plano, remove ao sair |
+| `debianrm` | Debian | Primeiro plano, remove ao sair |
+| `fedorarm` | Fedora | Primeiro plano, remove ao sair |
+| `centosrm` | CentOS | Primeiro plano, remove ao sair |
+| `busyrm` | BusyBox | Primeiro plano, remove ao sair |
+| `nethostrm` | Ubuntu (net=host) | Primeiro plano, remove ao sair |
+
+Aliases que **param ao sair** (sem `--rm`):
+
+| Alias | SO |
+|-------|-----|
+| `alpine` | Alpine |
+| `ubuntu` | Ubuntu |
+| `debian` | Debian |
+| `fedora` | Fedora |
+| `busy` | BusyBox |
+| `nethost` | Ubuntu (net=host) |
+
+Aliases em modo **daemon** (background):
+
+| Alias | SO |
+|-------|-----|
+| `alpined` | Alpine |
+| `ubuntud` | Ubuntu |
+| `debiand` | Debian |
+| `fedorad` | Fedora |
+| `busyd` | BusyBox |

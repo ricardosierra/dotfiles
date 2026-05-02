@@ -1,242 +1,220 @@
 # Dotfiles
 
-OSX / Ubuntu / Fedora / KaliLinux / Debian dotfiles.
-Is a fork from "cowbow" Ben Alman.
-And more inspiration by jfrazelle
+> OSX · Ubuntu · Fedora · KaliLinux · Debian  
+> Fork do ["Cowboy" Ben Alman](https://github.com/cowboy/dotfiles) — inspirado por [jfrazelle](https://github.com/jfrazelle/dotfiles)
 
-## Be careful
+---
 
-It is advisable to run this script on a newly installed operating system, because it changes the terminal and other features that you may have changed in the system.
+**Documentação / Documentation / Documentación**
 
-![My awesome bash prompt](./docs/)
+| Idioma | Arquivos |
+|--------|----------|
+| [English](#installation) | [About](docs/en/About.md) · [Install](docs/en/Install.md) · [Folders & Functions](docs/en/dotfiles/FoldersAndFunctions.md) |
+| [Português (Brasil)](#instalação) | [Introdução](docs/pt/Introducao.md) · [Funcionamento](docs/pt/Funcionamento.md) · [Personalizando](docs/pt/Personalizando.md) · [Atalhos](docs/pt/usando/Atalhos.md) |
+| [Español](#instalación) | [Acerca de](docs/es/Acerca.md) · [Instalación](docs/es/Instalacion.md) · [Carpetas y Funciones](docs/es/dotfiles/CarpetasYFunciones.md) |
 
-## Documentation
-[About](docs/en/About.md)
-[Folders](docs/en/FoldersAndFunctions.md)
-[Install](docs/en/Install.md)
+---
 
-[dotfiles]: bin/dotfiles
+## Aviso importante
 
-## How the "dotfiles" command works
+Execute este script preferencialmente em um sistema operacional recém-instalado — ele substitui configurações do terminal e outros arquivos que você pode ter personalizado.
 
-When [dotfiles][dotfiles] is run for the first time, it does a few things:
+**Se você não é o autor deste repo, faça um fork antes de instalar.** O repositório pode estar em estado de transição e causaria problemas no seu sistema.
 
-1. In Ubuntu, Git is installed if necessary via APT (it's already there in OSX).
-1. This repo is cloned into your user directory, under `~/.dotfiles`.
-1. Files in `/copy` are copied into `~/`. ([read more](#the-copy-step))
-1. Files in `/link` are symlinked into `~/`. ([read more](#the-link-step))
-1. You are prompted to choose scripts in `/init` to be executed. The installer attempts to only select relevant scripts, based on the detected OS and the script filename.
-1. Your chosen init scripts are executed (in alphanumeric order, hence the funky names). ([read more](#the-init-step))
+---
 
-On subsequent runs, step 1 is skipped, step 2 just updates the already-existing repo, and step 5 remembers what you selected the last time. The other steps are the same.
+## How the `dotfiles` command works
 
-### Other subdirectories
+When [`dotfiles`](bin/dotfiles) is run for the first time:
 
-* The `/backups` directory gets created when necessary. Any files in `~/` that would have been overwritten by files in `/copy` or `/link` get backed up there.
-* The `/bin` directory contains executable shell scripts (including the [dotfiles][dotfiles] script) and symlinks to executable shell scripts. This directory is added to the path.
-* The `/caches` directory contains cached files, used by some scripts or functions.
-* The `/conf` directory just exists. If a config file doesn't **need** to go in `~/`, reference it from the `/conf` directory.
-* The `/source` directory contains files that are sourced whenever a new shell is opened (in alphanumeric order, hence the funky names).
-* The `/test` directory contains unit tests for especially complicated bash functions.
-* The `/vendor` directory contains third-party libraries.
+1. On Ubuntu, Git is installed via APT if necessary (already present on macOS).
+2. This repo is cloned to `~/.dotfiles`.
+3. Files in `/copy` are copied into `~/`.
+4. Files in `/link` are symlinked into `~/`.
+5. You choose which `/init` scripts to execute — the installer pre-selects relevant ones based on your OS.
+6. Init scripts run in alphanumeric order.
 
-### The "copy" step
-Any file in the `/copy` subdirectory will be copied into `~/`. Any file that _needs_ to be modified with personal information (like [copy/.gitconfig](copy/.gitconfig) which contains an email address and private key) should be _copied_ into `~/`. Because the file you'll be editing is no longer in `~/.dotfiles`, it's less likely to be accidentally committed into your public dotfiles repo.
+On subsequent runs, step 1 is skipped, step 2 updates the repo, and step 5 remembers previous selections.
 
-### The "link" step
-Any file in the `/link` subdirectory gets symlinked into `~/` with `ln -s`. Edit one or the other, and you change the file in both places. Don't link files containing sensitive data, or you might accidentally commit that data! If you're linking a directory that might contain sensitive data (like `~/.ssh`) add the sensitive files to your [.gitignore](.gitignore) file!
+### Directory overview
 
-### The "init" step
-Scripts in the `/init` subdirectory will be executed. A whole bunch of things will be installed, but _only_ if they aren't already.
+| Directory | Purpose |
+|-----------|---------|
+| `/backups` | Created automatically — backs up files overwritten by copy/link steps |
+| `/bin` | Executable scripts and symlinks, added to `$PATH` |
+| `/caches` | Cached data used by scripts and functions |
+| `/conf` | Config files that don't belong in `~/` |
+| `/copy` | Files copied verbatim into `~/` (use for files with sensitive personal data) |
+| `/link` | Files symlinked into `~/` (changes in either location affect both) |
+| `/source` | Shell files sourced on every new shell, in alphanumeric order |
+| `/init` | Install scripts (OS-detected, run once) |
+| `/test` | Unit tests for complex bash functions |
+| `/vendor` | Third-party libraries (git submodules) |
 
-#### OS X
+### The copy step
 
-* Minor XCode init via the [init/10_osx_xcode.sh](init/10_osx_xcode.sh) script
-* Homebrew via the [init/20_osx_homebrew.sh](init/20_osx_homebrew.sh) script
-* Homebrew recipes via the [init/30_osx_homebrew_recipes.sh](init/30_osx_homebrew_recipes.sh) script
-* Homebrew casks via the [init/30_osx_homebrew_casks.sh](init/30_osx_homebrew_casks.sh) script
-* [Fonts](/ricardorsierra/dotfiles/tree/master/conf/osx/fonts) via the [init/50_osx_fonts.sh](init/50_osx_fonts.sh) script
+Files in `/copy` are copied to `~/`. Use this for files that contain personal data (like `.gitconfig` with your email) — since the copy lives outside `~/.dotfiles`, it won't be accidentally committed.
 
-#### Linux (Tested in Ubuntu)
-* APT packages and git-extras via the [init/20_ubuntu_apt.sh](init/20_ubuntu_apt.sh) script
+### The link step
 
-#### Windows
-* The code was not meant to be run on windows. However with git bash installed you will be able to run without problems.
+Files in `/link` are symlinked with `ln -s`. Editing either location changes both. Never link files with sensitive data; add them to [`.gitignore`](.gitignore) instead.
 
-#### Linux / OS X
-* Node.js, npm and nave via the [init/50_node.sh](init/50_node.sh) script
-* Ruby, gems and rbenv via the [init/50_ruby.sh](init/50_ruby.sh) script
-* Vim plugins via the [init/50_vim.sh](init/50_vim.sh) script
+### The init step
+
+Scripts in `/init` install software idempotently — only if not already installed.
+
+**macOS:** XCode CLI tools → Homebrew → formulas → casks → fonts  
+**Linux (Ubuntu/Debian):** APT packages + git-extras  
+**Both:** Node.js + npm · Ruby + rbenv · Vim plugins
+
+---
+
+## Installation
+
+### macOS
+
+Requires [Xcode Command Line Tools](https://developer.apple.com/downloads/):
+
+```sh
+xcode-select --install
+```
+
+Then install dotfiles:
+
+```sh
+export DOTFILES_GH_USER=ricardorsierra
+export DOTFILES_GH_BRANCH=master
+bash -c "$(curl -fsSL https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
+```
+
+_Tested on macOS 10.15+_
+
+### Linux
+
+```sh
+export DOTFILES_GH_USER=ricardorsierra
+export DOTFILES_GH_BRANCH=master
+bash -c "$(wget -qO- https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
+```
+
+_Tested on Ubuntu 14.04 LTS, 16 LTS, 17 · KaliLinux 16.10_
+
+---
+
+## Instalação
+
+### macOS
+
+```sh
+export DOTFILES_GH_USER=ricardorsierra
+export DOTFILES_GH_BRANCH=master
+bash -c "$(curl -fsSL https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
+```
+
+### Linux
+
+```sh
+export DOTFILES_GH_USER=ricardorsierra
+export DOTFILES_GH_BRANCH=master
+bash -c "$(wget -qO- https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
+```
+
+Veja [Personalizando](docs/pt/Personalizando.md) para configurar variáveis e adicionar seus próprios aliases.
+
+---
+
+## Instalación
+
+### macOS
+
+```sh
+export DOTFILES_GH_USER=ricardorsierra
+export DOTFILES_GH_BRANCH=master
+bash -c "$(curl -fsSL https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
+```
+
+Vea [Acerca de](docs/es/Acerca.md) para más información.
+
+---
+
+## Aliases and Functions
+
+`~/.bashrc` and `~/.bash_profile` are minimal and should not need editing. Add custom aliases, functions, and settings to files in the `source/` directory — they are auto-sourced on every new shell.
+
+Useful patterns:
+- Personal aliases → `~/.aliases`
+- Custom exports → `~/.exports`
+- Extra PATH entries → `~/.path`
+
+See [Personalizando](docs/pt/Personalizando.md) for details.
+
+---
+
+## Prompt
+
+The bash prompt ([`source/50_prompt.sh`](source/50_prompt.sh)) shows git/svn status, a timestamp, and exit codes. Colors change based on login method.
+
+Git repos show **[branch:flags]**:
+
+| Flag | Meaning |
+|------|---------|
+| `?` | Untracked files |
+| `!` | Changed but unstaged |
+| `+` | Staged files |
+
+---
 
 ## Claude Usage Timer
 
-A 5-hour countdown timer displayed in the tmux status bar to track Claude AI session usage.
-
-### What it does
-
-Shows the remaining time in your current Claude session directly in tmux:
+A 5-hour countdown displayed in the tmux status bar to track Claude AI session time.
 
 ```
 Claude 04h59m | 14:32
 ```
 
-The color changes based on remaining time:
-- **Green**: more than 2 hours left
-- **Yellow**: 2 hours or less
-- **Red**: 30 minutes or less
+Color indicates urgency:
+- Green — more than 2 hours remaining
+- Yellow — 2 hours or less
+- Red — 30 minutes or less
 
-### How to reset the timer
-
+**Reset the timer:**
 ```bash
 claude-reset
 ```
 
-This removes `/tmp/claude_start`, causing the timer to restart at 5h00m on the next tmux status refresh (within 60 seconds).
+**Sync manually with real usage from the dashboard:**
+```bash
+claude-set 3h29m 86%
+```
 
-### How it works internally
+### How it works
 
-- `scripts/claude_timer.sh` reads (or creates) `/tmp/claude_start`, which stores a Unix timestamp.
-- It computes elapsed time via `date +%s`, subtracts from 18000 seconds (5 hours), and outputs `HHhMMm` with tmux color codes.
-- tmux runs the script every 60 seconds via `status-interval 60`.
-- The timer survives shell restarts (state lives in `/tmp`) but resets on reboot.
+- [`scripts/claude_timer.sh`](scripts/claude_timer.sh) reads or creates `/tmp/claude_start` (Unix timestamp).
+- Computes elapsed time via `date +%s`, outputs `HHhMMm` with tmux color codes.
+- tmux refreshes every 60 seconds via `status-interval 60`.
+- Survives shell restarts; resets on reboot.
 
-### ⚠️ Limitações conhecidas
+### Known limitations
 
-O timer **não funciona direito** sem intervenção manual. Sintomas reportados:
+- The script does **not** call the Claude API — it counts 5h from first invocation. If tmux stayed open more than 5h or `/tmp/claude_start` is stale, `REMAINING` is clamped to 0 and the display freezes at `00h00m`.
+- The percentage (`%`) comes only from `/tmp/claude_usage`, populated exclusively by `claude-set`. Without it, `%` does not appear.
+- No automatic sync between machines.
 
-- Fica preso em `Claude 00h00m` mesmo quando ainda há tempo de sessão restante.
-- Nunca exibe a porcentagem usada (`%`) sem rodar `claude-set` antes.
-
-Causas:
-
-- O script **não consulta a API/dashboard do Claude**. Ele apenas conta 5h a
-  partir da primeira invocação — se o tmux ficou aberto >5h ou o
-  `/tmp/claude_start` ficou stale, `REMAINING` é fixado em 0 e o display
-  congela em `00h00m` (`scripts/claude_timer.sh:27`).
-- A porcentagem vem exclusivamente de `/tmp/claude_usage`, que precisa ser
-  populado manualmente via `claude-set 3h29m 86%`. Sem isso, o `%` simplesmente
-  não aparece.
-- Não há sincronização automática entre máquinas.
-
-**Workaround atual:** rodar `claude-reset` para zerar, ou
-`claude-set <tempo> <pct>` para sincronizar com o valor real do dashboard.
-
-Conserto definitivo está documentado como prompt em `docs/PROMPTS.md`.
+Fix documented as a prompt in [`docs/PROMPTS.md`](docs/PROMPTS.md).
 
 ---
 
-## Hacking my dotfiles
+## Hacking
 
-Because the [dotfiles][dotfiles] script is completely self-contained, you should be able to delete everything else from your dotfiles repo fork, and it will still work. The only thing it really cares about are the `/copy`, `/link` and `/init` subdirectories, which will be ignored if they are empty or don't exist.
+Because [`dotfiles`](bin/dotfiles) is self-contained, you can delete everything else from your fork and it will still work — it only needs `/copy`, `/link`, and `/init` (ignored if empty or missing).
 
-If you modify things and notice a bug or an improvement, [file an issue](https://github.com/ricardorsierra/dotfiles/issues) or [a pull request](https://github.com/ricardorsierra/dotfiles/pulls) and let me know.
+Found a bug? [File an issue](https://github.com/ricardorsierra/dotfiles/issues) or [open a PR](https://github.com/ricardorsierra/dotfiles/pulls).
 
-Also, before installing, be sure to [read my gently-worded note](#heed-this-critically-important-warning-before-you-install).
-
-## Installation
-
-### OS X Notes
-
-You need to have [XCode](https://developer.apple.com/downloads/index.action?=xcode) or, at the very minimum, the [XCode Command Line Tools](https://developer.apple.com/downloads/index.action?=command%20line%20tools), which are available as a much smaller download.
-
-The easiest way to install the XCode Command Line Tools in OSX 10.9+ is to open up a terminal, type `xcode-select --install` and [follow the prompts](http://osxdaily.com/2014/02/12/install-command-line-tools-mac-os-x/).
-
-_Tested in OSX 10.15_
-
-### Ubuntu Notes
-
-You might want to set up your ubuntu server [like I do it](https://github.com/ricardorsierra/dotfiles/wiki/ubuntu-setup), but then again, you might not.
-
-Either way, you should at least update/upgrade APT with `sudo apt-get -qq update && sudo apt-get -qq dist-upgrade` first.
-
-_Tested in Ubuntu 14.04 LTS_
-_Tested in Ubuntu 16 LTS_
-_Tested in Ubuntu 17_
-
-### Heed this critically important warning before you install
-
-**If you're not me, please _do not_ install dotfiles directly from this repo!**
-
-Why? Because I often completely break this repo while updating. Which means that if I do that and you run the `dotfiles` command, your home directory will burst into flames, and you'll have to go buy a new computer. No, not really, but it will be very messy.
-
-### Actual installation (for you)
-
-1. [Read my gently-worded note](#heed-this-critically-important-warning-before-you-install)
-1. Fork this repo
-1. Open a terminal/shell and do this (change `ricardorsierra` and `master` as appropriate):
-
-#### Linux
-
-```sh
-export DOTFILES_GH_USER=ricardorsierra
-export DOTFILES_GH_BRANCH=master
-bash -c "$(wget -qO- https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
-```
-
-#### macOS / windows
-
-```sh
-export DOTFILES_GH_USER=ricardorsierra
-export DOTFILES_GH_BRANCH=master
-bash -c "$(curl -fsSL https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
-```
-
-Since you'll be using the [dotfiles][dotfiles] command on subsequent runs, you'll only have to set the `DOTFILES_GH_USER` variable for the initial install, but if you have a custom branch, you _will_ need to export `DOTFILES_GH_BRANCH` for subsequent runs.
-
-There's a lot of stuff that requires admin access via `sudo`, so be warned that you might need to enter your password here or there.
-
-### Actual installation (for me)
-
-#### Linux
-
-```sh
-bash -c "$(wget -qO- https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
-```
-
-#### macOS
-
-```sh
-bash -c "$(curl -fsSL https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
-```
-
-## Aliases and Functions
-To keep things easy, the `~/.bashrc` and `~/.bash_profile` files are extremely simple, and should never need to be modified. Instead, add your aliases, functions, settings, etc into one of the files in the `source` subdirectory, or add a new file. They're all automatically sourced when a new shell is opened. Take a look, I have [a lot of aliases and functions](source). I even have a [fancy prompt](source/50_prompt.sh) that shows the current directory, time and current git/svn repo status.
-
-## Scripts
-In addition to the aforementioned [dotfiles][dotfiles] script, there are a few other [bin scripts](bin). This includes [nave](https://github.com/isaacs/nave), which is a [git submodule](vendor).
-
-* [dotfiles][dotfiles] - (re)initialize dotfiles. It might ask for your password (for `sudo`).
-* [src](link/.bashrc#L8-18) - (re)source all files in `/source` directory
-* Look through the [bin](bin) subdirectory for a few more.
-
-## Prompt
-I think [my bash prompt](source/50_prompt.sh) is awesome. It shows git and svn repo status, a timestamp, error exit codes, and even changes color depending on how you've logged in.
-
-Git repos display as **[branch:flags]** where flags are:
-
-**?** untracked files  
-**!** changed (but unstaged) files  
-**+** staged files
-
-SVN repos display as **[rev1:rev2]** where rev1 and rev2 are:
-
-**rev1** last changed revision  
-**rev2** revision
-
-Check it out:
-
-![My awesome bash prompt](http://farm8.staticflickr.com/7142/6754488927_563dd73553_b.jpg)
-## Documentação em Português (Brasil)
-[Introdução](docs/ptbr/Introducao.md)
-[Personalizando](docs/ptbr/Personalizando.md)
-[Funcionamento](docs/ptbr/Funcionamento.md)
+---
 
 ## Inspiration
-<https://github.com/cowbow/dotfiles>
-<https://github.com/jfrazelle/dotfiles>  
-<https://github.com/gf3/dotfiles>  
-<https://github.com/mathiasbynens/dotfiles>  
-(and 15+ years of accumulated crap)
 
-### outros exemplos de dotfiles
-https://github.com/fatso83/dotfiles
+- <https://github.com/cowboy/dotfiles>
+- <https://github.com/jfrazelle/dotfiles>
+- <https://github.com/gf3/dotfiles>
+- <https://github.com/mathiasbynens/dotfiles>

@@ -1,34 +1,43 @@
-# Dotfiles
+# About This Dotfiles
 
-OSX / Ubuntu / Fedora / KaliLinux / Debian dotfiles.
-Is a fork from "Cowboy" Ben Alman.
-And more inspiration by jfrazelle
+## What is this?
 
-## Be careful
+This is a personal dotfiles repository — a collection of shell configuration files, install scripts, aliases, and tools that rebuild a full development environment from scratch on any machine.
 
-It is advisable to run this script on a newly installed operating system, because it changes the terminal and other features that you may have changed in the system.
+The goal: run one command on a fresh OS and get a fully configured, personalized terminal environment with all tools installed.
 
-## About this project
+## History
 
-I've been using bash on-and-off for a long time (since Slackware Linux was distributed on 1.44MB floppy disks). In all that time, every time I've set up a new Linux or OS X machine, I've copied over my `.bashrc` file and my `~/bin` folder to each machine manually. And I've never done a very good job of actually maintaining these files. It's been a total mess.
+Built over 15+ years of accumulated shell configuration, originally forked from [Cowboy's dotfiles](https://github.com/cowboy/dotfiles) by Ben Alman, with additional inspiration from [jfrazelle](https://github.com/jfrazelle/dotfiles), [gf3](https://github.com/gf3/dotfiles), and [mathiasbynens](https://github.com/mathiasbynens/dotfiles).
 
-I finally decided that I wanted to be able to execute a single command to "bootstrap" a new system to pull down all of my dotfiles and configs, as well as install all the tools I commonly use. In addition, I wanted to be able to re-execute that command at any time to synchronize anything that might have changed. Finally, I wanted to make it easy to re-integrate changes back in, so that other machines could be updated.
+## What's included
 
-That command is [dotfiles][dotfiles], and this is my "dotfiles" Git repo.
+- **Shell configuration** — prompt, aliases, functions, exports, PATH setup
+- **Install scripts** — Homebrew (macOS), APT (Linux), Node.js, Ruby, Vim plugins, fonts
+- **Docker helpers** — aliases for container management, image inspection, network operations, and on-demand OS shells
+- **Git workflow** — `gf`/`jf` commands for feature branch create-commit-push in one shot
+- **tmux integration** — Claude session timer, status bar configuration
+- **Global gitignore** — ignores common build artifacts, editor files, and AI tool caches
+- **Vim customization** — plugins and settings via init script
 
-[dotfiles]: bin/dotfiles
+## Platforms supported
 
-## Hacking my dotfiles
+| Platform | Status |
+|----------|--------|
+| macOS 10.15+ | Primary |
+| Ubuntu 14.04 – 22.04 LTS | Tested |
+| Debian | Compatible |
+| KaliLinux | Compatible |
+| Fedora | Partial |
+| Windows (Git Bash) | Limited |
 
-Because the [dotfiles][dotfiles] script is completely self-contained, you should be able to delete everything else from your dotfiles repo fork, and it will still work. The only thing it really cares about are the `/copy`, `/link` and `/init` subdirectories, which will be ignored if they are empty or don't exist.
+## Before you install
 
-If you modify things and notice a bug or an improvement, [file an issue](https://github.com/ricardorsierra/dotfiles/issues) or [a pull request](https://github.com/ricardorsierra/dotfiles/pulls) and let me know.
+If you're not the author of this repo, **fork it first** and remove anything you don't want. The install process modifies `.bashrc`, `.bash_profile`, and other shell files that may already be customized on your system.
 
-Also, before installing, be sure to [read my gently-worded note](#heed-this-critically-important-warning-before-you-install).
+Backups are created automatically in `~/.dotfiles/backups/` before any file is overwritten.
 
-## Inspiration
-<https://github.com/cowboy/dotfiles>
-<https://github.com/jfrazelle/dotfiles>  
-<https://github.com/gf3/dotfiles>  
-<https://github.com/mathiasbynens/dotfiles>  
-(and 15+ years of accumulated crap)
+## More documentation
+
+- [Installation](Install.md)
+- [Folders & Functions](dotfiles/FoldersAndFunctions.md)
