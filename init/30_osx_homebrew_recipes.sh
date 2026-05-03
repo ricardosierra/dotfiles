@@ -66,6 +66,7 @@ recipes=(
   qpdf               # inspeção/manipulação de PDF
   ripgrep            # busca em árvore (rg)
   sevenzip           # 7-Zip 24+ oficial (sucessor do p7zip)
+  shellcheck         # lint estático de shell scripts
   sleuthkit          # análise forense de filesystems (fsstat, fls, icat)
   tesseract          # OCR (extrai texto de imagem)
   testdisk           # photorec — recupera arquivos / inspeciona partições
