@@ -206,8 +206,10 @@ claude-set 3h29m 86%
 
 ### How it works
 
-- [`scripts/claude_timer.sh`](scripts/claude_timer.sh) reads or creates `/tmp/claude_start` (Unix timestamp).
+- [`scripts/claude_timer.sh`](scripts/claude_timer.sh) reads or creates `${XDG_RUNTIME_DIR:-/tmp}/claude_start` (Unix timestamp).
 - Computes elapsed time via `date +%s`, outputs `HHhMMm` with tmux color codes.
+- Auto-resets if the 5-hour window has expired (stale timer detection).
+- Uses `ccusage` for real usage % if available; falls back to manual `claude-set`.
 - tmux refreshes every 60 seconds via `status-interval 60`.
 - Survives shell restarts; resets on reboot.
 
