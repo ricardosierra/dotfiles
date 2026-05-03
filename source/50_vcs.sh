@@ -36,10 +36,10 @@ alias gdc='gd --cached'
 #
 # @see some:other:func()
 function cmt() {
-    eval git commit -m "\"$@\""
+    git commit -m "$*"
 }
 function cmta() {
-    eval git commit -am "\"$@\""
+    git commit -am "$*"
 }
 alias gb='git branch'
 alias gba='git branch -a'

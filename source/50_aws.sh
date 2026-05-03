@@ -147,7 +147,7 @@ function aws-logs() {
   done <<< "$text"
   if [[ "$next_token" != "$1" ]]; then
     info LOG "Fetching more..."
-    aws_logs $group_name $stream_name $next_token
+    aws-logs $group_name $stream_name $next_token
   else
     info LOG "Done!"
   fi

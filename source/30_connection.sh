@@ -8,50 +8,25 @@ check-ssh-add() {
 
 slogin() {
   check-ssh-add
-  QUOTE_ARGS=''
-  for ARG in "$@"
-  do
-    QUOTE_ARGS="${QUOTE_ARGS} '${ARG}'"
-  done
-  eval /usr/bin/slogin ${QUOTE_ARGS}
+  /usr/bin/slogin "$@"
 }
 
 ssh() {
   check-ssh-add
-  QUOTE_ARGS=''
-  for ARG in "$@"
-  do
-    QUOTE_ARGS="${QUOTE_ARGS} '${ARG}'"
-  done
-  eval /usr/bin/ssh ${QUOTE_ARGS}
+  /usr/bin/ssh "$@"
 }
 
 scp() {
- check-ssh-add
- QUOTE_ARGS=''
- for ARG in "$@"
- do
-   QUOTE_ARGS="${QUOTE_ARGS} '${ARG}'"
- done
- eval /usr/bin/scp ${QUOTE_ARGS}
+  check-ssh-add
+  /usr/bin/scp "$@"
 }
 
 sftp() {
- check-ssh-add
- QUOTE_ARGS=''
- for ARG in "$@"
- do
-   QUOTE_ARGS="${QUOTE_ARGS} '${ARG}'"
- done
- eval /usr/bin/sftp ${QUOTE_ARGS}
+  check-ssh-add
+  /usr/bin/sftp "$@"
 }
 
 git() {
- check-ssh-add
- QUOTE_ARGS=''
- for ARG in "$@"
- do
-   QUOTE_ARGS="${QUOTE_ARGS} '${ARG}'"
- done
- eval /usr/bin/git ${QUOTE_ARGS}
+  check-ssh-add
+  /usr/bin/git "$@"
 }
