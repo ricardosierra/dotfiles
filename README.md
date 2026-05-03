@@ -101,6 +101,23 @@ _Tested on Ubuntu 14.04 LTS, 16 LTS, 17 · KaliLinux 16.10_
 
 ---
 
+## Shell lint (opt-in)
+
+Scripts `.sh` (e qualquer arquivo com shebang `bash`/`sh`/`zsh`) são lintados automaticamente antes de cada `git push`, usando [shellcheck](https://www.shellcheck.net/). O hook não é ativado por padrão — habilite com:
+
+```sh
+./bin/dotfiles-install-hooks
+```
+
+- Só linta arquivos **modificados no push** (não o repo todo).
+- Submódulos (`link/.oh-my-zsh/`, `link/.tmux/plugins/`) são ignorados.
+- Sem `shellcheck` instalado: emite aviso e deixa o push seguir.
+- Com erros: aborta o push mostrando arquivo e linha.
+
+Para instalar `shellcheck`: `brew install shellcheck` ou rode o init `30_osx_homebrew_recipes.sh`.
+
+---
+
 ## Instalação
 
 ### macOS
