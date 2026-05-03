@@ -246,5 +246,5 @@ fi
 # No final:
 # zprof
 # Added by Antigravity
-export PATH="/Users/sierra/.antigravity/antigravity/bin:$PATH"
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 export PATH="$HOME/.artisaan/bin:$PATH"
