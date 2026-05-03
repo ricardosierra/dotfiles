@@ -194,14 +194,6 @@ claude-set 3h29m 86%
 - tmux refreshes every 60 seconds via `status-interval 60`.
 - Survives shell restarts; resets on reboot.
 
-### Known limitations
-
-- The script does **not** call the Claude API — it counts 5h from first invocation. If tmux stayed open more than 5h or `/tmp/claude_start` is stale, `REMAINING` is clamped to 0 and the display freezes at `00h00m`.
-- The percentage (`%`) comes only from `/tmp/claude_usage`, populated exclusively by `claude-set`. Without it, `%` does not appear.
-- No automatic sync between machines.
-
-Fix documented as a prompt in [`docs/PROMPTS.md`](docs/PROMPTS.md).
-
 ---
 
 ## Hacking
