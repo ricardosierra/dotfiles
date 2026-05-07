@@ -57,7 +57,11 @@ alias ~="cd ~"    # vai pra home (mais fácil de digitar que "cd")
 alias -- -="cd -" # volta pro diretório anterior (como "cd -")
 
 # tamanho de arquivo/diretório
-alias fs="stat -f '%z bytes'"
+if [[ "$(uname)" == "Darwin" ]]; then
+  alias fs="stat -f '%z bytes'"
+else
+  alias fs="stat -c '%s bytes'"
+fi
 alias df="df -h"   # uso de disco em formato legível
 
 # Recursively delete `.DS_Store` files

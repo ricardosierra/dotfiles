@@ -133,8 +133,11 @@ make_npx_alias pushstate-server
 make_npx_alias yaml2json
 
 function get_last_modified_js_file_recursive() {
-  find . -type d \( -name node_modules -o -name .git -o -name .build \) -prune -o -type f \( -name '*.js' -o -name '*.jsx' \) -print0 \
-    | xargs -0 stat -f '%m %N' \
+  local _stat_fmt
+  [[ "$(uname)" == "Darwin" ]] && _stat_fmt='-f %m %N' || _stat_fmt='-c %Y %n'
+  find . -type d \( -name node_modules -o -name .git -o -name .build \) -prune -o \
+    -type f \( -name '*.js' -o -name '*.jsx' \) -print0 \
+    | xargs -0 stat $_stat_fmt \
     | sort -rn \
     | head -1 \
     | cut -d' ' -f2-

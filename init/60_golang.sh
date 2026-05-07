@@ -2,7 +2,7 @@
 
 is_linux || is_osx || return 1
 
-export GO_VERSION=1.7.1
+export GO_VERSION=1.24.3
 export GO_SRC=/usr/local/go
 
 # if we are passing the version
@@ -19,7 +19,7 @@ fi
 # subshell because we `cd`
 (
 echo ${GO_VERSION}
-curl -sSL "https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz" | sudo tar -v -C /usr/local -xz
+curl -sSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" | sudo tar -v -C /usr/local -xz
 )
 
 # get commandline tools

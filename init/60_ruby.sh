@@ -8,7 +8,7 @@ source $DOTFILES/source/50_ruby.sh
 
 # Install Ruby.
 if [[ "$(pinpoint rbenv)" ]]; then
-  versions=(2.4.0)
+  versions=(3.3.0)
 
   rubies=($(setdiff "${versions[*]}" "$(rbenv whence ruby)"))
   if (( ${#rubies[@]} > 0 )); then

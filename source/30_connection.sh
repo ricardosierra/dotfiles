@@ -6,7 +6,7 @@
 # expira após 5 horas (mesmo intervalo do timer do Claude)
 check-ssh-add() {
   # if [ "$DESKTOP_SESSION" == "" ] then  # comentado: dava erro de parser no zsh
-    if [[ `ssh-add -l` != *id_?sa* ]] then
+    if [[ "$(ssh-add -l)" != *id_?sa* ]]; then
       ssh-add -t 5h   # adiciona com expiração de 5 horas
     fi
   # fi

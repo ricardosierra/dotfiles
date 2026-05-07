@@ -42,7 +42,7 @@ apt_packages+=(
   mercurial
   nmap
   postgresql
-  python-pip
+  python3-pip
   silversearcher-ag
   sl
   telnet
@@ -75,10 +75,6 @@ apt_packages+=(handbrake-cli)
 is_ubuntu_desktop && apt_packages+=(handbrake)
 
 
-# https://github.com/rvm/ubuntu_rvm
-add_ppa ppa:rael-gc/rvm
-apt_packages+=(rvm)
-
 # https://github.com/rbenv/ruby-build/wiki
 apt_packages+=(
   autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev
@@ -86,12 +82,9 @@ apt_packages+=(
 )
 
 
-# https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-16-04
-add_ppa ppa:ansible/ansible
+# ansible está nos repos oficiais desde Ubuntu 22.04
 apt_packages+=(ansible)
 
-# http://tipsonubuntu.com/2016/09/13/vim-8-0-released-install-ubuntu-16-04/
-add_ppa ppa:jonathonf/vim
 apt_packages+=(vim)
 
 # https://launchpad.net/~hnakamur/+archive/ubuntu/tmux
@@ -134,14 +127,8 @@ if is_ubuntu_desktop; then
   apt_source_texts+=("deb https://www.charlesproxy.com/packages/apt/ charles-proxy3 main")
   apt_packages+=(charles-proxy)
 
-  # https://github.com/aluxian/Messenger-for-Desktop#linux
-  apt_keys+=('--keyserver pool.sks-keyservers.net --recv 6DDA23616E3FE905FFDA152AE61DA9241537994D')
-  apt_source_files+=(aluxian)
-  apt_source_texts+=("deb https://dl.bintray.com/aluxian/deb/ beta main")
-  apt_packages+=(messengerfordesktop)
-
   # https://www.spotify.com/us/download/linux/
-  apt_keys+=('--keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BBEBDCB318AD50EC6865090613B00F1FD2C19886')
+  apt_keys+=(https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg)
   apt_source_files+=(spotify)
   apt_source_texts+=("deb http://repository.spotify.com stable non-free")
   apt_packages+=(spotify-client)
@@ -150,7 +137,7 @@ if is_ubuntu_desktop; then
   apt_keys+=(https://www.virtualbox.org/download/oracle_vbox_2016.asc)
   apt_source_files+=(virtualbox)
   apt_source_texts+=("deb http://download.virtualbox.org/virtualbox/debian $release_name contrib")
-  apt_packages+=(virtualbox-5.1)
+  apt_packages+=(virtualbox)
 
   # https://www.skype.com/en/download-skype/skype-for-linux/
   # https://community.skype.com/t5/Linux/Skype-for-Linux-Beta-signatures-couldn-t-be-verified-because-the/td-p/4645756
@@ -159,20 +146,12 @@ if is_ubuntu_desktop; then
   apt_source_texts+=("deb https://repo.skype.com/deb stable main")
   apt_packages+=(skypeforlinux)
 
-  # http://askubuntu.com/a/190674
-  add_ppa ppa:webupd8team/java
-  apt_packages+=(oracle-java8-installer)
-  function preinstall_oracle-java8-installer() {
-    echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
-    echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
-  }
+  # OpenJDK 21 LTS (substitui oracle-java8 — PPA morta desde 2017)
+  apt_packages+=(openjdk-21-jdk)
 
-  # https://github.com/colinkeenan/silentcast/#ubuntu
-  # https://github.com/colinkeenan/silentcast/#ubuntu-linux-full-install
-  add_ppa ppa:sethj/silentcast
-  add_ppa ppa:webupd8team/y-ppa-manager
+  # Silentcast (gravador de tela) + dependências
   apt_packages+=(
-    libav-tools x11-xserver-utils xdotool wininfo wmctrl python-gobject python-cairo xdg-utils yad
+    ffmpeg x11-xserver-utils xdotool wmctrl python3-gi python3-cairo xdg-utils yad
     silentcast
   )
 
@@ -197,14 +176,11 @@ if is_ubuntu_desktop; then
   # Manage online accounts via "gnome-control-center" in launcher
   apt_packages+=(gnome-control-center gnome-online-accounts)
 
-  # https://github.com/mitchellh/vagrant/issues/7411
-  deb_installed+=(/usr/bin/vagrant)
-  deb_sources+=(https://releases.hashicorp.com/vagrant/1.9.2/vagrant_1.9.2_x86_64.deb)
-  # https://github.com/vagrant-libvirt/vagrant-libvirt/issues/575
-  # apt_packages+=(vagrant)
-  # function postinstall_vagrant() {
-  #   sudo sed -i'' "s/Specification.all = nil/Specification.reset/" /usr/lib/ruby/vendor_ruby/vagrant/bundler.rb
-  # }
+  # Vagrant — via apt da HashiCorp (substitui .deb hardcoded 1.9.2)
+  apt_keys+=(https://apt.releases.hashicorp.com/gpg)
+  apt_source_files+=(hashicorp)
+  apt_source_texts+=("deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $release_name main")
+  apt_packages+=(vagrant)
 
   # https://be5invis.github.io/Iosevka/
   # https://launchpad.net/~laurent-boulard/+archive/ubuntu/fonts
@@ -225,9 +201,9 @@ if is_ubuntu_desktop; then
   deb_sources+=("https://github.com/nuttyartist/notes/releases/download/v1.0.0/notes_1.0.0_amd64-$release_name.deb")
 
   # https://www.dropbox.com/install-linux
-  apt_packages+=(python-gtk2 python-gpgme)
+  apt_packages+=(python3-gi python3-gpg)
   deb_installed+=(/usr/bin/dropbox)
-  deb_sources+=("https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_2015.10.28_amd64.deb")
+  deb_sources+=("https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_2024.01.22_amd64.deb")
 
   # http://askubuntu.com/a/852727
   apt_packages+=(cabextract)
@@ -240,14 +216,14 @@ if is_ubuntu_desktop; then
 
   # https://slack.com/downloads/instructions/linux
   deb_installed+=(/usr/bin/slack)
-  deb_sources+=(https://downloads.slack-edge.com/linux_releases/slack-desktop-2.5.2-amd64.deb)
+  deb_sources+=(https://downloads.slack-edge.com/releases/linux/4.41.105/prod/x64/slack-desktop-4.41.105-amd64.deb)
 
   # https://discordapp.com/download
   deb_installed+=(/usr/bin/discord)
   deb_sources+=("https://discordapp.com/api/download?platform=linux&format=deb")
 
   # http://askubuntu.com/questions/854480/how-to-install-the-steam-client/854481#854481
-  apt_packages+=(python-apt)
+  apt_packages+=(python3-apt)
   deb_installed+=(/usr/bin/steam)
   deb_sources+=(deb_source_steam)
   function deb_source_steam() {

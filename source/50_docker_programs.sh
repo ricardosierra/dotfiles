@@ -217,7 +217,7 @@ cadvisor(){
     browser-exec "http://cadvisor:8080"
 }
 cheese(){
-    if [[ "$(   c)" ]]; then
+    if [[ "$(pinpoint cheese)" ]]; then
         command cheese "$@"
         return 
     fi

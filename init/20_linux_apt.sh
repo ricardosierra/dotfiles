@@ -42,8 +42,7 @@ if is_debian; then
   sudo apt-get -qq update
   sudo apt-get -qq dist-upgrade
 elif is_archlinux; then
-  sudo pacman -qq update
-  sudo pacman -qq dist-upgrade
+  sudo pacman -Syuu --noconfirm
 else
   sudo yum -qq update
   sudo yum -qq dist-upgrade
