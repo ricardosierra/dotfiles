@@ -1,20 +1,26 @@
 
-# Get currently logged in aws account name
+# =============================================================================
+# AWS — funções pra gerenciar ECS e CloudWatch Logs
+# =============================================================================
+
+# aws-account: mostra o nome da conta AWS atual (alias configurado no IAM)
 function aws-account() {
   aws iam list-account-aliases | jq ".AccountAliases[0]" -r
 }
 
-# List all clusters for the current role
+# aws-list-clusters: lista todos os clusters ECS da role atual
 function aws-list-clusters() {
   aws ecs list-clusters | jq -r '.clusterArns|map((./"/")[1])|.[]'
 }
 
-# List all services for the specified cluster
+# aws-list-services: lista todos os serviços de um cluster
+# uso: aws-list-services <nome-do-cluster>
 function aws-list-services() {
   aws ecs list-services --cluster $1 | jq -r '.serviceArns|map((./"/")[1])|.[]'
 }
 
-# List all services by cluster for the current role
+# aws-list-services-by-cluster: lista todos os serviços agrupados por cluster
+# útil pra ter uma visão geral do que está rodando
 function aws-list-services-by-cluster() {
   local clusters services
   clusters=($(aws-list-clusters))
@@ -27,19 +33,23 @@ function aws-list-services-by-cluster() {
   done
 }
 
-# List all aws tasks for the given cluster and service
+# aws-list-tasks: lista as tasks rodando num serviço específico
+# uso: aws-list-tasks <cluster> <servico>
 function aws-list-tasks() {
   aws ecs list-tasks --cluster $1 --service-name $2 \
     | jq -r '.taskArns|map((./"/")[1])|.[]'
 }
 
-# List task definitions for all running tasks for the given cluster and service
+# aws-list-task-definitions: mostra as definições de task das tasks rodando
+# uso: aws-list-task-definitions <cluster> <servico>
 function aws-list-task-definitions() {
   local t=$(aws ecs describe-tasks --cluster $1 --tasks $(aws-list-tasks $1 $2))
   echo $t | jq -r '.tasks|map((.taskDefinitionArn/"/")[1])|.[]'
 }
 
-# Return the current task definition for the given cluster and service
+# aws-task-definition: retorna a definição de task atual
+# uso: aws-task-definition <cluster> <servico> [filtro-jq]
+# ou: aws-task-definition <td-name:revision> [filtro-jq]
 function aws-task-definition() {
   local tds
   if [[ "$1" =~ : ]]; then
@@ -54,7 +64,9 @@ function aws-task-definition() {
   done
 }
 
-# List all diffs over time for a given task definition env vars
+# aws-task-definition-env-history: mostra o histórico de mudanças nas variáveis
+# de ambiente de uma task definition ao longo das revisões
+# uso: aws-task-definition-env-history <td-name> [rev-inicial] [rev-final]
 function aws-task-definition-env-history() {
   local cur=$2 max=$3 next diff a b
   [[ ! "$cur" ]] && cur=0
@@ -91,14 +103,15 @@ function aws-task-definition-env-history() {
   done
 }
 
-# Print out VAR=VALUE lines for env of the current task definition for the given
-# cluster and service
+# aws-task-definition-env: mostra as variáveis de ambiente no formato VAR=VALOR
+# uso: aws-task-definition-env <cluster> <servico>
 function aws-task-definition-env() {
   aws-task-definition "$@" \
     -r '.taskDefinition.containerDefinitions[0].environment|map(.name+"="+.value)|.[]'
 }
 
-# Stop all aws tasks for the given cluster and service
+# aws-stop-tasks: para todas as tasks de um ou mais serviços num cluster
+# uso: aws-stop-tasks <cluster> <servico1> [servico2 ...]
 function aws-stop-tasks() {
   local tasks count cluster pad s t
   cluster=$1; shift
@@ -119,13 +132,15 @@ function aws-stop-tasks() {
   done
 }
 
-# Log info lines to stderr
+# info: loga linhas de info no stderr (usado internamente pelas funções aws)
 function info() {
   local prefix=$1; shift
   echo "[$prefix] $@" 1>&2
 }
 
-# aws logs get-log-events --log-group-name tech-products/precision-enrollment-worker --log-stream-name v2.1.0/precision-enrollment-worker/f29fdf40-708b-43d0-8b2a-1d2501f17f0c --start-time 1506964074570 --limit 5
+# aws-logs: lê logs do CloudWatch de um stream específico
+# pagina automaticamente até chegar ao fim
+# uso: aws-logs <grupo> <stream>
 function aws-logs() {
   local token text line next_token
   local group_name=$1; shift

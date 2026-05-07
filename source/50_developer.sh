@@ -1,15 +1,20 @@
 
+# =============================================================================
+# Desenvolvimento — HTTP server, C, Go e navegação em projetos
+# =============================================================================
 
-# Start an HTTP server from a directory, optionally specifying the port
+# server: sobe um servidor HTTP simples no diretório atual
+# uso: server [porta]  (padrão: 8000)
+# usa Python 2 SimpleHTTPServer com UTF-8 e text/plain como Content-Type padrão
 server() {
 	local port="${1:-8000}"
 	sleep 1 && open "http://localhost:${port}/" &
-	# Set the default Content-Type to `text/plain` instead of `application/octet-stream`
-	# And serve everything as UTF-8 (although not technically correct, this doesn’t break anything for binary files)
 	python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port"
 }
 
-# Compile and execute a C source on the fly
+# csource: compila e executa um arquivo C na hora, sem deixar rastro
+# compila em /tmp e apaga o binário após executar
+# uso: csource arquivo.c
 csource() {
 	[[ $1 ]]    || { echo "Missing operand" >&2; return 1; }
 	[[ -r $1 ]] || { printf "File %s does not exist or is not readable\n" "$1" >&2; return 1; }
@@ -19,9 +24,16 @@ csource() {
 	return 0;
 }
 
-######## go ########
+# =============================================================================
+# Go
+# =============================================================================
 
-# build go static binary from root of project
+# gostatic: gera binário estático do Go (sem dependências dinâmicas)
+# ideal pra distribuir pra qualquer Linux sem precisar instalar libs
+# uso: gostatic [diretorio] [netgo|cgo]
+#   gostatic           — usa o diretório atual, CGO desabilitado
+#   gostatic . netgo   — usa tags netgo (resolve DNS internamente)
+#   gostatic . cgo     — usa CGO com linking estático
 gostatic(){
 	local dir=$1
 	local arg=$2
@@ -53,6 +65,7 @@ gostatic(){
 				-o "$name" .
 			;;
 		*)
+			# modo padrão: CGO desabilitado, mais portável
 			set -x
 			CGO_ENABLED=0 go build -a \
 				-installsuffix cgo \
@@ -63,7 +76,9 @@ gostatic(){
 	)
 }
 
-# go to a folder easily in your gopath
+# gogo: vai pra pasta de um projeto Go no $GOPATH com facilidade
+# aceita nome parcial, GitHub URL ou só o nome do projeto
+# uso: gogo meu-projeto  ou  gogo github.com/user/repo
 gogo(){
 	local d=$1
 
@@ -72,12 +87,13 @@ gogo(){
 		return 1
 	fi
 
+	# aceita "github.com/user/repo" e extrai só o nome do repo
 	if [[ "$d" == github* ]]; then
 		d=$(echo $d | sed 's/.*\///')
 	fi
 	d=${d%/}
 
-	# search for the project dir in the GOPATH
+	# busca no GOPATH inteiro, ordena por comprimento de path (pega o mais raso primeiro)
 	local path=( `find "${GOPATH}/src" \( -type d -o -type l \) -iname "$d"  | awk '{print length, $0;}' | sort -n | awk '{print $2}'` )
 
 	if [ "$path" == "" ] || [ "${path[*]}" == "" ]; then
@@ -86,10 +102,10 @@ gogo(){
 		return 1
 	fi
 
-	# enter the first path found
 	cd "${path[0]}"
 }
 
+# golistdeps: lista todas as dependências externas do projeto atual (ou de um projeto Go)
 golistdeps(){
 	(
 	if [[ ! -z "$1" ]]; then

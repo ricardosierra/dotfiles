@@ -1,77 +1,107 @@
 
+# =============================================================================
+# Docker — aliases e funções pra agilizar o dia a dia
+# =============================================================================
+
+# executa container interativo e apaga ao sair (--rm)
 alias drun='docker run -it --rm'
 
-# Docker Machine
+# =============================================================================
+# Docker Machine (legado — pré-Docker Desktop)
+# =============================================================================
 alias dmachine='cd ~/Downloads/dmachine'
-alias dm='sudo docker-machine '
-alias dml='docker-machine ls '
-alias devstar='docker-machine start dev'
-alias denv='env | grep  DOCKER'
-alias dkenv='eval "$(sudo docker-machine env dev)"'
-alias dmc='docker-machine create '
-alias dmip='docker-machine ip '
+alias dm='sudo docker-machine '        # docker-machine com sudo
+alias dml='docker-machine ls '         # lista as máquinas
+alias devstar='docker-machine start dev'  # inicia a máquina "dev"
+alias denv='env | grep  DOCKER'        # mostra variáveis de ambiente docker
+alias dkenv='eval "$(sudo docker-machine env dev)"'  # ativa o ambiente da máquina dev
+alias dmc='docker-machine create '     # cria nova máquina
+alias dmip='docker-machine ip '        # IP de uma máquina
 alias dmub='docker run -d -p ubuntu /bin/bash'
-alias dmstar='docker-machine start '
-alias dmstop='docker-machine stop '
-alias mstar='docker-machine start '
-alias mstop='docker-machine stop '
+alias dmstar='docker-machine start '   # inicia uma máquina
+alias dmstop='docker-machine stop '    # para uma máquina
+alias mstar='docker-machine start '    # atalho alternativo
+alias mstop='docker-machine stop '     # atalho alternativo
 
-# GetIP addresses
+# =============================================================================
+# IP dos containers
+# =============================================================================
 alias dc="dockexec"
 alias docker_exec="dockexec"
+
+# abre bash no último container criado
 dockexecl() { docker exec -i -t $(docker ps -l -q) bash ;}
+
+# abre bash no container passado como argumento
 dockexec() { docker exec -i -t $@ bash ;}
+
+# pega o IP de um container pelo ID
 alias dockip='docker inspect --format "{{ .NetworkSettings.IPAddress }}"'
+
+# IP de todos os containers em execução
 alias dockipl='docker inspect --format "{{ .NetworkSettings.IPAddress }}" $(docker ps -q)'
 alias dip='docker inspect --format "{{ .NetworkSettings.IPAddress }}" '
 alias dipl='docker inspect  $(docker ps -qq) | grep IPAddress'
 
-# Start/Stop the  containers
+# =============================================================================
+# Start/Stop de containers
+# =============================================================================
 alias mstar1='docker-machine start $(docker-machine ls | tail -1 | awk "{print $1}")'
 alias mstop1='docker-machine stop $(docker-machine ls | tail -1 | awk "{print $1}")'
 alias dmk='docker-machine kill'
-# Gracefully stop and delete all container
+
+# para e remove todos os containers graciosamente
 alias dra='docker rm $(docker stop $(docker ps -aq))'
-# Kill and delete all containers
+
+# mata e remove todos os containers na marra
 alias drk='docker rm $(docker kill $(docker ps -aq))'
 
-# Inspect the last container created
+# inspeciona a última máquina Docker Machine criada
 alias dmin='docker-machine inspect $(docker-machine ls | tail -1 | awk "{print $1}")'
 
-# Remove the last container created
+# remove a última máquina Docker Machine
 alias dmrm='docker-machine rm $(docker-machine ls | tail -1 | awk "{print $1}")'
 
-# Docker Network aliases
-alias dnr='docker network rm'
-alias dnl='docker network ls'
-alias dnc='docker network create'
-alias dni='docker network inspect'
-alias dnia='docker network inspect $(docker network ls -q)'
-alias dnrm='docker network rm $(docker network ls -q)'
+# =============================================================================
+# Redes Docker
+# =============================================================================
+alias dnr='docker network rm'      # remove uma rede
+alias dnl='docker network ls'      # lista as redes
+alias dnc='docker network create'  # cria uma rede
+alias dni='docker network inspect' # inspeciona uma rede
+alias dnia='docker network inspect $(docker network ls -q)'  # inspeciona todas
+alias dnrm='docker network rm $(docker network ls -q)'       # remove todas
 
-# Docker Engine aliases
-alias di='docker images'
-alias di5='docker images | head -n5'
-# start/stop all containers
+# =============================================================================
+# Engine Docker — imagens e containers
+# =============================================================================
+alias di='docker images'           # lista imagens
+alias di5='docker images | head -n5'  # últimas 5 imagens
+
+# inicia/para TODOS os containers de uma vez
 alias start='docker start $(docker ps -qa)'
 alias stop='docker stop $(docker ps -qa)'
-# start/stop last containers
+
+# inicia/para apenas o ÚLTIMO container
 alias startl='docker start $(docker ps -qal)'
 alias stopl='docker stop $(docker ps -qal)'
-alias dl='docker logs '
-alias dri='docker rmi '
-alias dr='docker rm -f '
-alias dls='docker ps -a '
-alias dlsl='docker ps -l '
-alias dcount='docker ps -qa | wc -l'
-alias dtop='docker stop '
-alias din='docker inspect '
-alias dp='docker port $(docker ps -l -q)'
-alias db='docker build -t '
-alias dbc='docker build -t --no-cache '
-alias drl='docker rm -f `docker ps -ql`'
-alias drall='docker rm -f `docker ps -qa`'
-# alias dexec='docker exec '
+
+alias dl='docker logs '            # logs de um container
+alias dri='docker rmi '            # remove imagem
+alias dr='docker rm -f '           # remove container forçado
+alias dls='docker ps -a '          # lista todos os containers
+alias dlsl='docker ps -l '         # último container
+alias dcount='docker ps -qa | wc -l'  # quantidade de containers
+alias dtop='docker stop '          # para um container específico
+alias din='docker inspect '        # inspeciona um container
+alias dp='docker port $(docker ps -l -q)'   # portas do último container
+alias db='docker build -t '        # build com tag
+alias dbc='docker build -t --no-cache '  # build sem cache
+alias drl='docker rm -f `docker ps -ql`'    # remove o último container
+alias drall='docker rm -f `docker ps -qa`'  # remove todos os containers
+
+# dexec: abre bash num container buscando pelo nome (busca parcial)
+# uso: dexec nginx  (abre bash no container cujo nome contém "nginx")
 dexec() {
   if [ -z "$1" ]; then
     echo "Uso: dexec <parte-do-nome-do-container>"
@@ -85,33 +115,40 @@ dexec() {
   docker exec -it "$ID" bash
 }
 
+# shell /bin/sh no último container (útil pra Alpine que não tem bash)
 dexl() { docker exec -i -t $(docker ps -l -q) /bin/sh ;}
-dex() { docker exec -i -t $@ /bin/sh ;}
-alias dlog='docker logs $(docker ps -l -q)'
-alias drun='docker run -i -t -name '
-alias dport='docker port $(docker ps -l -q)'
 
-# Docker inspect the last container created
+# shell /bin/sh num container específico
+dex() { docker exec -i -t $@ /bin/sh ;}
+
+alias dlog='docker logs $(docker ps -l -q)'  # logs do último container
+alias drun='docker run -i -t -name '
+alias dport='docker port $(docker ps -l -q)'  # portas do último container
+
+# inspeciona o último container criado
 alias dinl='docker inspect $(docker ps -qal)'
-# Docker inspect all containers
+
+# inspeciona todos os containers em execução
 alias dina='docker inspect $(docker ps -qa)'
 
-# Inspect and parse all IPs for all containers
+# lista os IPs de todos os containers em execução
 alias dnip='docker inspect $(docker ps -qa) | grep IPA | grep [0-9]'
 
-# Example Docker network inspect all network subnets
+# mostra subnets e gateways de todas as redes Docker
 alias dnnet='docker network inspect $(docker network ls -q) | grep "Subnet\|Gateway"'
 
-# On demand foreground OS bash shells that delete on shell exit
+# =============================================================================
+# Shells de SO sob demanda — containers que se destroem ao sair (--rm)
+# =============================================================================
 alias alpinerm='docker run -it --rm alpine /bin/sh'
 alias ubunturm='docker run -it --rm ubuntu'
 alias debianrm='docker run -it --rm debian'
 alias fedorarm='docker run -it --rm fedora'
 alias centosrm='docker run -it --rm centos'
 alias busyrm='docker run -it --rm busybox'
-alias nethostrm='docker run -it --rm --net=host ubuntu'
+alias nethostrm='docker run -it --rm --net=host ubuntu'  # compartilha rede do host
 
-# On demand foreground OS bash shells that stops on shell exit
+# containers que param mas não são removidos ao sair
 alias alpine='docker run -it alpine /bin/sh'
 alias ubuntu='docker run -it ubuntu'
 alias debian='docker run -it debian'
@@ -119,39 +156,46 @@ alias fedora='docker run -it fedora'
 alias busy='docker run -it busybox'
 alias nethost='docker run -it --net=host ubuntu'
 
-# On demand background OS bash shells running in daemon mode
+# containers em modo daemon (background, ficam rodando)
 alias alpined='docker run -itd alpine /bin/sh'
 alias ubuntud='docker run -itd ubuntu'
 alias debiand='docker run -itd debian'
 alias fedorad='docker run -itd fedora'
 alias busyd='docker run -itd busybox'
 
-# Delete all containers matching the passed paramater
-# Example: "delcon ubuntu" or 'anything matching in docker ps output'
+# =============================================================================
+# Funções de limpeza e gerenciamento
+# =============================================================================
+
+# delcon: remove containers que batem com o filtro passado
+# uso: delcon ubuntu  (remove todos com "ubuntu" no nome/imagem)
 delcon() { docker rm -f $(docker ps  -a | grep $@ | awk '{print $1}') ;}
 
-# Stop all containers matching the passed paramater.
+# stopcon: para containers que batem com o filtro
 stopcon() { docker stop $(docker ps  -a | grep $@ | awk '{print $1}') ;}
 
-# Delete all with a <none> label bad makes will orphan a 'none' img
+# delnone: apaga todas as imagens órfãs (tag <none>) — sobras de builds quebrados
 delnone() { docker rmi $(docker images | grep none | awk '{print $3}') ;}
-# Delete all images matching the arg passed after 'delimg none'
+
+# delimg: apaga imagens que batem com o filtro
+# uso: delimg nginx
 delimg() { docker rmi $(docker images | grep $@ | awk '{print $3}') ;}
 
-# Find all orphaned files, tcp or http connections not being properly closed
+# conta conexões abertas no processo do Docker (útil pra debugar leaks)
 alias conns="sudo lsof -a -p $(pidof docker) | wc -l"
-# Same as above for unclosed threads but more generic name to pid match such as docker-dev-1.x
 alias conns2="lsof -a -p $(ps -e | grep docker | awk '{print $1}' | head -n1) | wc  -l"
 
-#docker-compose
-alias up='docker-compose up -d'
-alias down='docker-compose down'
+# docker-compose shortcuts
+alias up='docker-compose up -d'     # sobe os serviços em background
+alias down='docker-compose down'    # derruba os serviços
 
 alias images='docker images'
 
-#
-# Helper Functions
-#
+# =============================================================================
+# Funções helper para gerenciamento de imagens locais
+# =============================================================================
+
+# builda todas as imagens definidas em $docker_programs
 docker_build_all(){
     for elt in "${docker_programs[@]}";do
         echo "Fazendo Build de: $elt"
@@ -159,25 +203,25 @@ docker_build_all(){
     done
 }
 
-# Remove todas as camadas intermediárias dos containers
+# dcleanup: remove containers parados e imagens dangling (layers soltas)
 dcleanup(){
 	docker rm $(docker ps -aq 2>/dev/null) 2>/dev/null
 	docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
 	docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
 }
 
-# Limpa (Removendo) os containers
+# dclean_container: remove todos os containers (incluindo parados)
 dclean_container(){
   docker rm $(docker ps -a -q)
 }
 
-# Limpa Tudo
+# dcleanall: remove containers + imagens — limpa tudo de uma vez
 dcleanall(){
   docker rm $(docker ps -a -q)
   docker rmi $(docker images -q)
 }
 
-# Comando para Rodar um Programa usando uma imagem da internet
+# images_remote_build: placeholder pra rodar programas via imagem remota
 images_remote_build(){
 	local repository=$1
 	local programName=$2
@@ -185,31 +229,33 @@ images_remote_build(){
   echo "Running $programName with Docker"
 }
 
-# Comando para Rodar um Programa usando uma imagem da internet
+# images_local_build: builda uma imagem local a partir de $DOCKERFILES_PATH/<nome>
+# só builda se a imagem ainda não existir (idempotente)
 images_local_build(){
     local name=$1
     local version=$2
 
-    #Versão vira uma subpasta do repositorio
+    # versão vira subpasta (ex: nginx/1.21)
     if [[ "$version" != "" ]]; then
         directory="${name}/${version}"
-				contname="${name}:${version}"
+        contname="${name}:${version}"
     else
         directory="${name}"
-				contname="${name}"
+        contname="${name}"
     fi
-    #Se a pasta não existe, returna sem buildar nada
+
     if [ ! -d "${DOCKERFILES_PATH}/${directory}" ]; then
         echo "Erro - Dockerfile not found: "$directory
         return 1
     fi
 
     if [[ "$(docker images -q $contname 2> /dev/null)" == "" ]]; then
-                  echo "Docker Build: ${directory}"
-      docker build --disable-content-trust -t $contname ${DOCKERFILES_PATH}/${directory}
+        echo "Docker Build: ${directory}"
+        docker build --disable-content-trust -t $contname ${DOCKERFILES_PATH}/${directory}
     fi
 }
 
+# del_stopped: remove um container se ele estiver parado
 del_stopped(){
 	local name=$1
 	local state=$(docker inspect --format "{{.State.Running}}" $name 2>/dev/null)
@@ -218,6 +264,8 @@ del_stopped(){
 		docker rm $name
 	fi
 }
+
+# relies_on: garante que containers dependentes estejam rodando antes de continuar
 relies_on(){
 	local containers=$@
 
@@ -230,7 +278,8 @@ relies_on(){
 		fi
 	done
 }
-# creates an nginx config for a local route
+
+# nginx_config: cria config nginx pra rotear um domínio local pra uma rota interna
 nginx_config(){
 	server=$1
 	route=$2
@@ -253,23 +302,20 @@ nginx_config(){
 	}
 	EOF
 
-	# restart nginx
 	docker restart nginx
 
-	# add host to /etc/hosts
+	# adiciona o servidor em /etc/hosts
 	sudo hostess add $server 127.0.0.1
 
-	# open browser
 	browser-exec "http://${server}"
 }
 
-
-
-function de() { 
-  local result=$(get-actual-directory)   # or result=`get-actual-directory`
-  #echo $result
+# de: abre bash no container do serviço docker-compose do diretório atual
+# uso: de <nome-do-servico>  (ex: de app, de db, de nginx)
+# descobre o nome do projeto pelo nome da pasta atual (em lowercase)
+function de() {
+  local result=$(get-actual-directory)
   result=$(strtolower $result)
 
-  docker exec -it ${result}_${1}_1 bash 
-
-} 
+  docker exec -it ${result}_${1}_1 bash
+}
