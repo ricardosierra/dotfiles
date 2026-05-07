@@ -24,6 +24,12 @@ install_docker() {
     }
 
     install_docker_linux_ubuntu_package() {
+        # Distros derivadas do Ubuntu (Mint, Zorin, Pop!_OS) têm UBUNTU_CODENAME no os-release;
+        # isso garante que usamos o repo do Ubuntu correto em vez do codename da distro.
+        local codename
+        codename=$(. /etc/os-release 2>/dev/null && echo "$UBUNTU_CODENAME")
+        [[ -z "$codename" ]] && codename=$(lsb_release -cs 2>/dev/null)
+
         sudo apt-get update
         sudo apt-get install \
             linux-image-extra-$(uname -r) \
@@ -37,7 +43,7 @@ install_docker() {
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
         sudo add-apt-repository \
            "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-           $(lsb_release -cs) \
+           $codename \
            stable"
        sudo apt-get update
        sudo apt-get install docker-ce

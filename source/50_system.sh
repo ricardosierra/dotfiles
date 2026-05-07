@@ -33,7 +33,7 @@ fi
 # aceita IP diretamente ou resolve o hostname primeiro
 # uso: ipif 8.8.8.8  ou  ipif google.com
 ipif() {
-    if grep -P "(([1-9]\d{0,2})\.){3}(?2)" <<< "$1"; then
+    if [[ "$1" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
 	curl ipinfo.io/"$1"
     else
 	ipawk=($(host "$1" | awk '/address/ { print $NF }'))

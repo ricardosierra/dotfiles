@@ -1,6 +1,6 @@
 [[ "$1" != init && ! -e ~/.volta ]] && return 1
 
-export PATH="~/.nave/installed/default/bin:$PATH"
+export PATH="$HOME/.nave/installed/default/bin:$PATH"
 #PATH=~/.nave/installed/default/bin:"$(path_remove ~/.nave/installed/*/bin)"
 
 # Set a specific version of node as the "default" for "nave use default"

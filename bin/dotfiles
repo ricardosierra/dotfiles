@@ -9,7 +9,7 @@ echo 'Dotfiles - Ricardo R. Sierra - http://ricardosierra.com.br/'
 
 # Where the magic happens.
 export DOTFILES=~/.dotfiles
-export CORE=/sierra/Core
+[[ -d /sierra/Core ]] && export CORE=/sierra/Core
 export DOCKERFILES=~/.dockerfiles
 
 # Logging stuff.
@@ -108,29 +108,47 @@ function is_redhat() {
   return 1
 }
 function is_archlinux() {
-  [[ "$(cat /etc/issue 2> /dev/null)" =~ Arch ]] || return 1 # Aparece Arch Linux
+  [[ "$(cat /etc/issue 2>/dev/null)" =~ Arch ]] && return 0
+  [[ "$(. /etc/os-release 2>/dev/null && echo "$ID")" == "arch" ]] || return 1
 }
 # Especificos
 function is_debianOS() {
-  [[ "$(cat /etc/issue 2> /dev/null)" =~ Debian ]] || return 1
+  [[ "$(cat /etc/issue 2>/dev/null)" =~ Debian ]] && return 0
+  [[ "$(. /etc/os-release 2>/dev/null && echo "$ID")" == "debian" ]] || return 1
 }
 function is_redhatOS() {
-  [[ "$(cat /etc/issue 2> /dev/null)" =~ RedHat ]] || return 1
+  [[ "$(cat /etc/issue 2>/dev/null)" =~ RedHat ]] && return 0
+  [[ "$(. /etc/os-release 2>/dev/null && echo "$ID")" == "rhel" ]] || return 1
 }
 function is_centosOS() {
-  [[ "$(cat /etc/issue 2> /dev/null)" =~ CentOS ]] || return 1
+  [[ "$(cat /etc/issue 2>/dev/null)" =~ CentOS ]] && return 0
+  [[ "$(. /etc/os-release 2>/dev/null && echo "$ID")" == "centos" ]] || return 1
 }
 function is_fedora() {
-  [[ "$(cat /etc/issue 2> /dev/null)" =~ Fedora ]] || return 1
+  [[ "$(cat /etc/issue 2>/dev/null)" =~ Fedora ]] && return 0
+  [[ "$(. /etc/os-release 2>/dev/null && echo "$ID")" == "fedora" ]] || return 1
 }
 function is_kali() {
-  [[ "$(cat /etc/issue 2> /dev/null)" =~ Kali ]] || return 1
+  [[ "$(cat /etc/issue 2>/dev/null)" =~ Kali ]] && return 0
+  [[ "$(. /etc/os-release 2>/dev/null && echo "$ID")" == "kali" ]] || return 1
 }
+# Distros derivadas do Ubuntu também retornam true (Mint, Zorin OS, Pop!_OS, elementary OS)
 function is_ubuntu() {
-  [[ "$(cat /etc/issue 2> /dev/null)" =~ Ubuntu ]] || return 1
+  [[ "$(cat /etc/issue 2>/dev/null)" =~ Ubuntu ]] && return 0
+  local _id _id_like
+  _id=$(. /etc/os-release 2>/dev/null && echo "$ID")
+  _id_like=$(. /etc/os-release 2>/dev/null && echo "$ID_LIKE")
+  [[ "$_id" =~ ^(ubuntu|linuxmint|zorin|pop|elementary)$ ]] && return 0
+  [[ "$_id_like" =~ ubuntu ]] && return 0
+  return 1
 }
 function is_ubuntu_desktop() {
-  dpkg -l ubuntu-desktop >/dev/null 2>&1 || return 1
+  local pkg
+  for pkg in ubuntu-desktop ubuntu-gnome-desktop pop-desktop zorin-os-default-settings \
+              mint-meta-cinnamon mint-meta-mate mint-meta-xfce elementary-desktop; do
+    dpkg -l "$pkg" >/dev/null 2>&1 && return 0
+  done
+  return 1
 }
 function get_os() {
   for os in osx ubuntu debian windows; do

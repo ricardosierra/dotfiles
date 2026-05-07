@@ -16,25 +16,25 @@ check-ssh-add() {
 # assim você nunca recebe "Permission denied (publickey)" por esquecimento
 slogin() {
   check-ssh-add
-  /usr/bin/slogin "$@"
+  command slogin "$@"
 }
 
 ssh() {
   check-ssh-add
-  /usr/bin/ssh "$@"
+  command ssh "$@"
 }
 
 scp() {
   check-ssh-add
-  /usr/bin/scp "$@"
+  command scp "$@"
 }
 
 sftp() {
   check-ssh-add
-  /usr/bin/sftp "$@"
+  command sftp "$@"
 }
 
 git() {
   check-ssh-add
-  /usr/bin/git "$@"
+  command git "$@"
 }

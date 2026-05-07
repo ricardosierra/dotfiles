@@ -383,7 +383,11 @@ todo() {
         nl -b a "$HOME/.todo"
         eval printf %.0s- '{1..'"${COLUMNS:-$(tput cols)}"\}; echo
         read -p "Type a number to remove: " number
-        sed -i ${number}d $HOME/.todo "$HOME/.todo"
+        if [[ "$(uname)" == "Darwin" ]]; then
+            sed -i '' "${number}d" "$HOME/.todo"
+        else
+            sed -i "${number}d" "$HOME/.todo"
+        fi
     else
         printf "%s\n" "$*" >> "$HOME/.todo"
     fi
