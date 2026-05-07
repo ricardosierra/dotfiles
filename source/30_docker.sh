@@ -30,10 +30,10 @@ alias dc="dockexec"
 alias docker_exec="dockexec"
 
 # abre bash no último container criado
-dockexecl() { docker exec -i -t $(docker ps -l -q) bash ;}
+dockexecl() { docker exec -i -t "$(docker ps -l -q)" bash ;}
 
 # abre bash no container passado como argumento
-dockexec() { docker exec -i -t $@ bash ;}
+dockexec() { docker exec -i -t "$@" bash ;}
 
 # pega o IP de um container pelo ID
 alias dockip='docker inspect --format "{{ .NetworkSettings.IPAddress }}"'

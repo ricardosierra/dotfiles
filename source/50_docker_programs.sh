@@ -117,7 +117,7 @@ android-studio(){
         command android-studio "$@"
         return 
     fi
-    docker run -rm -ti \
+    docker run --rm -ti \
 	  --privileged \
 	  -v $HOME/AndroidStudioProjects:/home/ubuntu/AndroidStudioProjects \
 	  -v $HOME/.android:/home/ubuntu/.android \

@@ -834,7 +834,7 @@ main(){
 }
 
 # Help Function
-if [[ ARGV.include == "-h" || ARGV.include == "--help" || "$1" == "help" || "$1" == "h" || "$1" == "--help" || "$1" == "-h" || "$1" == "" ]]; then
+if [[ "$1" == "help" || "$1" == "h" || "$1" == "--help" || "$1" == "-h" || "$1" == "" ]]; then
     do_stuff helper
     exit;
 fi

@@ -50,7 +50,7 @@ export ANSIBLE_NOCOWS=1
 # "fuck": corrige o último comando errado automaticamente
 # ex: `git psuh` → `fuck` → executa `git push`
 if [[ "$(which thefuck)" ]]; then
-  eval $(thefuck --alias)
+  eval "$(thefuck --alias)"
 fi
 
 # =============================================================================
