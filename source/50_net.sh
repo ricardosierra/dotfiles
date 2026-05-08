@@ -1,16 +1,22 @@
-# IP addresses
+# =============================================================================
+# Rede — IP, DNS e monitoramento de tráfego HTTP
+# =============================================================================
+
+# IP externo via DNS do OpenDNS — mais rápido que curl pra sites externos
 alias wanip="dig +short myip.opendns.com @resolver1.opendns.com"
+
+# whois com servidor unificado (funciona melhor pra diferentes TLDs)
 alias whois="whois -h whois-servers.net"
 
-# Flush Directory Service cache
+# limpa o cache de DNS local (macOS)
 alias flush="dscacheutil -flushcache"
 
-# View HTTP traffic
+# monitora tráfego HTTP na interface en1 em tempo real
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
-# Ping the specified server (or the default 8.8.8.8) and say "ping"
-# through the speaker every time a ping is successful. Based on an
-# idea from @gnarf.
+# pingtest: faz ping num host e fala "ping" em voz alta a cada resposta bem-sucedida
+# usa `say` no macOS ou `spd-say` no Linux
+# uso: pingtest [host]  (padrão: 8.8.8.8)
 function pingtest() {
   local c
   for c in say spd-say; do [[ "$(which $c)" ]] && break; done
