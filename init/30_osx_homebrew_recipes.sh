@@ -78,7 +78,7 @@ brew_install_recipes
 # Misc cleanup!
 
 # This is where brew stores its binary symlinks
-local binroot="$(brew --config | awk '/HOMEBREW_PREFIX/ {print $2}')"/bin
+binroot="$(brew --config | awk '/HOMEBREW_PREFIX/ {print $2}')"/bin
 
 
 # Atualiza permissões do htop
