@@ -1,25 +1,43 @@
-# Homebrew installs python2 pip as "pip2"
-for pip_cmd in pip2 pip FAIL; do [[ "$(which $pip_cmd)" ]] && break; done
+# Python 3.12+ (PEP 668): pip recusa instalação em sistema sem flag explícita.
+# CLI tools → pipx (ambiente isolado, sem conflito com sistema)
+# Libraries → pip3 com --break-system-packages
 
-# Exit if pip is not installed.
-[[ $pip_cmd == FAIL ]] && e_error "Pip needs to be installed." && return 1
+# pipx: instala se necessário
+if ! command -v pipx &>/dev/null; then
+  if command -v pip3 &>/dev/null; then
+    pip3 install --break-system-packages pipx 2>/dev/null || sudo apt-get -qq install -y pipx
+  else
+    sudo apt-get -qq install -y pipx
+  fi
+fi
 
-# Add pip packages
-pip_packages=(
-  netifaces
-  psutil
+# CLI tools via pipx (cada um em ambiente isolado)
+pipx_tools=(
   tmuxp
 )
 
-# is_osx || pip_packages+=(powerline-status)
+for tool in "${pipx_tools[@]}"; do
+  if ! pipx list 2>/dev/null | grep -q "$tool"; then
+    e_arrow "pipx install $tool"
+    pipx install "$tool"
+  fi
+done
 
-installed_pip_packages="$($pip_cmd list 2>/dev/null | awk '{print $1}')"
-pip_packages=($(setdiff "${pip_packages[*]}" "$installed_pip_packages"))
+# Libraries Python via pip3 --break-system-packages
+pip_packages=(
+  netifaces
+  psutil
+)
 
-if (( ${#pip_packages[@]} > 0 )); then
-  e_header "Installing pip packages (${#pip_packages[@]})"
-  for package in "${pip_packages[@]}"; do
-    e_arrow "$package"
-    $pip_cmd install "$package"
-  done
+if command -v pip3 &>/dev/null; then
+  installed_pip_packages="$(pip3 list 2>/dev/null | awk '{print $1}')"
+  pip_packages=($(setdiff "${pip_packages[*]}" "$installed_pip_packages"))
+
+  if (( ${#pip_packages[@]} > 0 )); then
+    e_header "Installing pip packages (${#pip_packages[@]})"
+    for package in "${pip_packages[@]}"; do
+      e_arrow "$package"
+      pip3 install --break-system-packages "$package"
+    done
+  fi
 fi

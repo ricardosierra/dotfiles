@@ -101,7 +101,9 @@ for lang in "${menu_selects[@]}"; do
       else
         sudo apt-get -qq install -y python3 python3-pip python3-venv
       fi
-      pip install fabric pylint grip 2>/dev/null || pip3 install fabric pylint grip 2>/dev/null || true
+      for _tool in fabric pylint grip; do
+        pipx install "$_tool" 2>/dev/null || pip3 install --break-system-packages "$_tool" 2>/dev/null || true
+      done
       ;;
 
     # ── Go ────────────────────────────────────────────────────────────────────
