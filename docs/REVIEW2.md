@@ -404,6 +404,31 @@
 2. Criar prompts em `PROMPTS.md` para os achados mais ortogonais (SRC-01 git/ssh shadowing; INIT-02..INIT-05 docker; ORCH-01 CORE).
 3. Migrar achados menores (SRC-08, SRC-09, INIT-06, REPO-02) para issues GitHub se houver — granularidade pequena demais para PR único.
 
+## Correções aplicadas (2026-05-07)
+
+Sessão de revisão geral + compatibilidade Linux. Issues abaixo foram corrigidos:
+
+| ID | Arquivo | Fix |
+|----|---------|-----|
+| **SRC-01** | `source/30_connection.sh:17–40` | `/usr/bin/{git,ssh,scp,sftp,slogin}` → `command <cmd>` |
+| **SRC-02** | `source/50_node.sh:3` | `~/.nave/...` → `$HOME/.nave/...` no export PATH |
+| **SRC-04** | `source/50_file.sh:386` | `sed -i` portável: branch Darwin/Linux; removido argumento duplicado |
+| **SRC-06** | `source/50_system.sh:36` | `grep -P` (PCRE, quebra no macOS) → `[[ "$1" =~ regex ]]` |
+| **ORCH-01** | `bin/dotfiles:12` | `export CORE=/sierra/Core` → condicional `[[ -d ... ]] && export` |
+
+Adicionalmente, foram feitas melhorias de **compatibilidade com Linux** não cobertas nos audits anteriores:
+
+| Componente | Arquivo | Melhoria |
+|------------|---------|----------|
+| OS detection | `bin/dotfiles:111–155` | Todas as funções `is_*` ganham fallback via `/etc/os-release` além de `/etc/issue` |
+| Ubuntu derivatives | `bin/dotfiles:142–151` | `is_ubuntu()` agora reconhece `ID=linuxmint`, `zorin`, `pop`, `elementary` e `ID_LIKE=ubuntu` |
+| Desktop detection | `bin/dotfiles:152–158` | `is_ubuntu_desktop()` verifica metapacotes de Mint, Zorin, Pop!_OS, elementary além de `ubuntu-desktop` |
+| Docker codename | `init/50_docker.sh:26–29` | Usa `UBUNTU_CODENAME` do `/etc/os-release` como fallback do `lsb_release -cs` para distros derivadas |
+
+Issues confirmados como já corrigidos antes desta sessão: **B2**, **SRC-03**, **SRC-05**, **INIT-02**, **INIT-03**.
+
+---
+
 ## Apêndice — falsos-positivos descartados durante verificação
 
 - "main executada duas vezes" em `bin/dotfiles:825,837`: cada branch tem `exit;`, o `main` final só roda se nenhum branch matched. Não é bug.
