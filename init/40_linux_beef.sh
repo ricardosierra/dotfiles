@@ -13,7 +13,7 @@ read resp
 if [ "$resp" = "n" ]
 then
 	echo "Bye!"
-	exit
+	return 0
 fi
 
   echo "Instalando os pacotes necessarios..."

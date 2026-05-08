@@ -13,6 +13,7 @@
 [submodule ".tmux-tpm"]
   path = link/.tmux/plugins/tpm
   url = https://github.com/tmux-plugins/tpm.git
+  ignore = dirty
 [submodule "rbenv-vars"]
   path = link/.rbenv/plugins/rbenv-vars
   url = https://github.com/rbenv/rbenv-vars.git

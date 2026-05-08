@@ -30,8 +30,8 @@ esac
 source $HOME/.commonrc
 
 # ASDF
-. $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
+[ -f "$HOME/.asdf/asdf.sh" ] && . "$HOME/.asdf/asdf.sh"
+[ -f "$HOME/.asdf/completions/asdf.bash" ] && . "$HOME/.asdf/completions/asdf.bash"
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
@@ -125,10 +125,10 @@ for file in ~/.completion/.*[^~]; do
 	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
 done
 
-if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
+if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ] && [ -t 0 ]; then
     exec tmux new-session -A -s default
 fi
 
 
 clear
-. "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"

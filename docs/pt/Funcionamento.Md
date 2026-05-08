@@ -113,6 +113,8 @@ Bibliotecas de terceiros incluídas como submódulos git (ex: git-extras, oh-my-
 | `~/.exports` | Variáveis de ambiente customizadas |
 | `~/.path` | Entradas extras de PATH |
 
+Para a **referência completa** de todos os aliases e funções disponíveis (Git, Docker, AWS, Tmux, rede, desenvolvimento, etc.), veja [`docs/pt/usando/Atalhos.md`](usando/Atalhos.md).
+
 ---
 
 ## O prompt

@@ -101,6 +101,23 @@ _Tested on Ubuntu 14.04 LTS, 16 LTS, 17 · KaliLinux 16.10_
 
 ---
 
+## Shell lint (opt-in)
+
+Scripts `.sh` (e qualquer arquivo com shebang `bash`/`sh`/`zsh`) são lintados automaticamente antes de cada `git push`, usando [shellcheck](https://www.shellcheck.net/). O hook não é ativado por padrão — habilite com:
+
+```sh
+./bin/dotfiles-install-hooks
+```
+
+- Só linta arquivos **modificados no push** (não o repo todo).
+- Submódulos (`link/.oh-my-zsh/`, `link/.tmux/plugins/`) são ignorados.
+- Sem `shellcheck` instalado: emite aviso e deixa o push seguir.
+- Com erros: aborta o push mostrando arquivo e linha.
+
+Para instalar `shellcheck`: `brew install shellcheck` ou rode o init `30_osx_homebrew_recipes.sh`.
+
+---
+
 ## Instalação
 
 ### macOS
@@ -189,18 +206,12 @@ claude-set 3h29m 86%
 
 ### How it works
 
-- [`scripts/claude_timer.sh`](scripts/claude_timer.sh) reads or creates `/tmp/claude_start` (Unix timestamp).
+- [`scripts/claude_timer.sh`](scripts/claude_timer.sh) reads or creates `${XDG_RUNTIME_DIR:-/tmp}/claude_start` (Unix timestamp).
 - Computes elapsed time via `date +%s`, outputs `HHhMMm` with tmux color codes.
+- Auto-resets if the 5-hour window has expired (stale timer detection).
+- Uses `ccusage` for real usage % if available; falls back to manual `claude-set`.
 - tmux refreshes every 60 seconds via `status-interval 60`.
 - Survives shell restarts; resets on reboot.
-
-### Known limitations
-
-- The script does **not** call the Claude API — it counts 5h from first invocation. If tmux stayed open more than 5h or `/tmp/claude_start` is stale, `REMAINING` is clamped to 0 and the display freezes at `00h00m`.
-- The percentage (`%`) comes only from `/tmp/claude_usage`, populated exclusively by `claude-set`. Without it, `%` does not appear.
-- No automatic sync between machines.
-
-Fix documented as a prompt in [`docs/PROMPTS.md`](docs/PROMPTS.md).
 
 ---
 

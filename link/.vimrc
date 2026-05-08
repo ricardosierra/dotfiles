@@ -31,7 +31,7 @@ if has('unix')
   let &t_SI = "\<Esc>[6 q"
   let &t_SR = "\<Esc>[4 q"
   let &t_EI = "\<Esc>[2 q"
-elseif has('macuinx')
+elseif has('macunix')
   if exists('$TMUX')
     let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
     let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
@@ -176,31 +176,13 @@ endfunction
 noremap <leader>ss :call StripExtraWhiteSpace()<CR>
 
 
-" Search / replace
-set gdefault " By default add g flag to search/replace. Add g to toggle.
-set hlsearch " Highlight searches
-set incsearch " Highlight dynamically as pattern is typed.
-set ignorecase " Ignore case of searches.
-set smartcase " Ignore 'ignorecase' if search pattern contains uppercase characters.
-
-" Clear last search
-map <silent> <leader>/ <Esc>:nohlsearch<CR>
-
 " Ignore things
 set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd,*.o,*.obj,*.min.js
 set wildignore+=*/bower_components/*,*/node_modules/*
 set wildignore+=*/vendor/*,*/.git/*,*/.hg/*,*/.svn/*,*/log/*,*/tmp/*
 
-" Vim commands
-set hidden " When a buffer is brought to foreground, remember undo history and marks.
-set report=0 " Show all changes.
 set mouse=a " Enable mouse in all modes.
 set ttymouse=xterm2 " Ensure mouse works inside tmux
-set shortmess+=I " Hide intro menu.
-
-" Splits
-set splitbelow " New split goes below
-set splitright " New split goes right
 
 let g:tmux_navigator_no_mappings = 1
 let g:tmux_navigator_disable_when_zoomed = 1
@@ -374,21 +356,9 @@ let g:indent_guides_guide_size = 1
 let g:mustache_abbreviations = 1
 
 
-" Ignore things
-set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd,*.o,*.obj,*.min.js
-set wildignore+=*/bower_components/*,*/node_modules/*
-set wildignore+=*/vendor/*,*/.git/*,*/.hg/*,*/.svn/*,*/log/*,*/tmp/*
-
-
 " ----------------------------------------- "
 " File Type settings 			    "
 " ----------------------------------------- "
-
-" vim
-autocmd vimrc BufRead .vimrc,*.vim set keywordprg=:help
-
-" markdown
-autocmd vimrc BufRead,BufNewFile *.md set filetype=markdown
 
 au BufNewFile,BufRead *.vim setlocal noet ts=4 sw=4 sts=4
 au BufNewFile,BufRead *.txt setlocal noet ts=4 sw=4
