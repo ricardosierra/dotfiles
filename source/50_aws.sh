@@ -29,7 +29,7 @@ function aws-list-services-by-cluster() {
     for s in "${services[@]}"; do
       echo "$c $s"
     done
-    [[ ${#services[@]} > 0 ]] && echo
+    [[ ${#services[@]} -gt 0 ]] && echo
   done
 }
 
@@ -135,7 +135,7 @@ function aws-stop-tasks() {
 # info: loga linhas de info no stderr (usado internamente pelas funções aws)
 function info() {
   local prefix=$1; shift
-  echo "[$prefix] $@" 1>&2
+  echo "[$prefix] $*" 1>&2
 }
 
 # aws-logs: lê logs do CloudWatch de um stream específico
