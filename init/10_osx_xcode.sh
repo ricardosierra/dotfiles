@@ -9,7 +9,13 @@ if [[ ! -d "$('xcode-select' -print-path 2>/dev/null)" ]]; then
   sudo xcode-select -switch /Library/Developer/CommandLineTools
 fi
 
-# Install asdf
-curl -LO https://github.com/asdf-vm/asdf/releases/download/v0.16.4/asdf-v0.16.4-darwin-arm64.tar.gz
-tar -xzf asdf-v0.16.4-darwin-arm64.tar.gz
-xattr -d com.apple.quarantine ~/.bin/asdf
+# Install asdf (binary release, detecta arquitetura)
+ASDF_VERSION="v0.16.4"
+ASDF_ARCH="$(uname -m | sed 's/x86_64/amd64/;s/arm64/arm64/')"
+ASDF_TARBALL="asdf-${ASDF_VERSION}-darwin-${ASDF_ARCH}.tar.gz"
+mkdir -p ~/.bin
+curl -fsSL "https://github.com/asdf-vm/asdf/releases/download/${ASDF_VERSION}/${ASDF_TARBALL}" \
+  -o "/tmp/${ASDF_TARBALL}"
+tar -xzf "/tmp/${ASDF_TARBALL}" -C ~/.bin/
+rm "/tmp/${ASDF_TARBALL}"
+xattr -d com.apple.quarantine ~/.bin/asdf 2>/dev/null || true
