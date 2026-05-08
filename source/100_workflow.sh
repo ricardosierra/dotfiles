@@ -25,7 +25,7 @@ function workflow-demanda-send() {
 
   git checkout -b "feature/${1:-.}"
   git add .
-  eval git commit -am "\"$@\""
+  git commit -am "$*"
   git push origin "feature/${1:-.}"
   git checkout "$branch_name"   # volta pro branch de origem
 }
@@ -42,7 +42,7 @@ function workflow-fix-send() {
 
   git checkout -b "fix/${1:-.}"
   git add .
-  eval git commit -am "\"$@\""
+  git commit -am "$*"
   git push origin "fix/${1:-.}"
   git checkout "$branch_name"
 }
@@ -59,7 +59,7 @@ function workflow-hotfix-send() {
 
   git checkout -b "hotfix/${1:-.}"
   git add .
-  eval git commit -am "\"$@\""
+  git commit -am "$*"
   git push origin "hotfix/${1:-.}"
   git checkout "$branch_name"
 }
@@ -77,7 +77,7 @@ function wfp() {
   git checkout dev
   git merge "feature/${1:-.}"
   git add .
-  eval git commit -am "\"$@\""
+  git commit -am "$*"
   git push origin master
   git push origin "feature/${1:-.}"
   git checkout "$branch_name"
