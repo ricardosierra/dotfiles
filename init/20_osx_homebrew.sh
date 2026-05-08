@@ -7,8 +7,8 @@ is_osx || return 1
 if ! command -v brew >/dev/null 2>&1; then
   e_header "Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  echo >> /Users/sierra/.bash_profile
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/sierra/.bash_profile
+  echo >> "$HOME/.bash_profile"
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.bash_profile"
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 

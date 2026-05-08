@@ -18,7 +18,11 @@ fi
 ######################################################
 
 if [ "$(uname)" = "Darwin" ]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+    # ARM Mac: /opt/homebrew; Intel Mac: /usr/local
+    for _brew_path in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+        [ -x "$_brew_path" ] && eval "$($_brew_path shellenv)" && break
+    done
+    unset _brew_path
 fi
 
 
@@ -114,7 +118,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Versao 0.15 - Nao funcionou o php na 16
 export ASDF_DIR="$HOME/.asdf"
-. "$ASDF_DIR/asdf.sh"
+[ -f "$ASDF_DIR/asdf.sh" ] && . "$ASDF_DIR/asdf.sh"
 
 # ASDF README
 # append completions to fpath
@@ -246,5 +250,5 @@ fi
 # No final:
 # zprof
 # Added by Antigravity
-export PATH="/Users/sierra/.antigravity/antigravity/bin:$PATH"
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 export PATH="$HOME/.artisaan/bin:$PATH"

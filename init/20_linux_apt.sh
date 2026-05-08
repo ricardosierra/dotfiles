@@ -42,15 +42,11 @@ if is_debian; then
   sudo apt-get -qq update
   sudo apt-get -qq dist-upgrade
 elif is_archlinux; then
-  sudo pacman -qq update
-  sudo pacman -qq dist-upgrade
+  sudo pacman -Syuu --noconfirm
 else
   sudo yum -qq update
   sudo yum -qq dist-upgrade
 fi
-
-# Install asdf
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.11.3
 
 # Install APT packages.
 packages=(
@@ -286,39 +282,27 @@ fi
 
 echo ""
 echo [+] "Deseja instalar os pacotes de Multimidia? y/n" ;
-echo '.: amarok, xmms, xmms-skins, xmms-mp4, mpg123, totem-xine, ksnapshot, istanbul, recordmydesktop, gtk-recordmydesktop, xvidcap :.'
+echo '.: mpg123 :.'
 read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
-    amarok
-    xmms
-    xmms-skins
-    xmms-mp4
     mpg123
-    totem-xine
-    ksnapshot
-    istanbul
-    recordmydesktop
-    gtk-recordmydesktop
-    xvidcap
   )
 fi
 
 
 echo ""
 echo [+] "Deseja instalar o Netcat e ferramentas de Tunnelling? y/n" ;
-echo '.: netcat, sbd, cryptcat, socat, vtun, stunnel :.'
+echo '.: netcat-openbsd, socat, vtun, stunnel4 :.'
 read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
-    netcat
-    sbd
-    cryptcat
+    netcat-openbsd
     socat
     vtun
-    stunnel
+    stunnel4
   )
 fi
 
@@ -436,51 +420,6 @@ then
     wget
     curl
     nikto
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar linguagens de script? y/n" ;
-echo '.: ruby, python, perl, perl-doc, gawk, vim-ruby, vim-python :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    ruby
-    python
-    perl
-    perl-doc
-    gawk
-    vim-ruby
-    vim-python
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar o Ruby Gems? y/n" ;
-echo '.: gems, rubygems :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    gems
-    rubygems
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar as dependencias do Metasploit? y/n" ;
-echo '.: libopenssl-ruby, ruby-libglade2, libgtk2-ruby :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    libopenssl-ruby
-    ruby-libglade2
-    libgtk2-ruby
   )
 fi
 

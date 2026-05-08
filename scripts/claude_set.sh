@@ -5,6 +5,10 @@
 #   claude-set 45m 92%
 #   claude-set 3h29m          (time only, keeps existing %)
 
+RUNTIME="${XDG_RUNTIME_DIR:-/tmp}"
+TIMER_FILE="${RUNTIME}/claude_start"
+USAGE_FILE="${RUNTIME}/claude_usage"
+
 input="$1"
 pct_arg="$2"
 
@@ -30,11 +34,11 @@ fi
 
 remaining=$(( hours * 3600 + minutes * 60 ))
 fake_start=$(( $(date +%s) - (18000 - remaining) ))
-printf '%s\n' "$fake_start" > /tmp/claude_start
+printf '%s\n' "$fake_start" > "$TIMER_FILE"
 
 if [ -n "$pct_arg" ]; then
     pct=$(echo "$pct_arg" | sed 's/%//')
-    printf '%s\n' "$pct" > /tmp/claude_usage
+    printf '%s\n' "$pct" > "$USAGE_FILE"
     echo "Claude timer set: ${hours}h${minutes}m remaining, ${pct}% used."
 else
     echo "Claude timer set: ${hours}h${minutes}m remaining."

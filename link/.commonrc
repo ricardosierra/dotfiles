@@ -2,7 +2,7 @@
 export DOTFILES=~/.dotfiles
 
 if [ "$DOTFILES_DEBUG" = yes ]; then
-  echo 'Loading commounrc...'
+  echo 'Loading commonrc...'
 fi
 
 # Verify Dotfiles Config
