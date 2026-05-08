@@ -99,6 +99,8 @@ Third-party libraries included as git submodules (e.g., git-extras, oh-my-zsh, r
 | `~/.exports` | Custom environment variables |
 | `~/.path` | Extra PATH entries |
 
+For a **complete reference** of all available aliases and functions (Git, Docker, AWS, Tmux, network tools, etc.), see [`docs/en/Aliases.md`](../Aliases.md).
+
 ---
 
 ## The prompt

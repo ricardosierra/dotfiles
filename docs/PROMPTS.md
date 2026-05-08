@@ -48,48 +48,6 @@ Não mexa em link/.tmux.conf.
 
 ---
 
-## 2. Shellcheck no pre-push
-
-```
-Quero adicionar lint automatizado de shell scripts no
-~/.dotfiles antes de cada `git push`. Restrições importantes:
-
-- Lint SÓ os arquivos shell modificados no push (não o repo
-  todo — são ~1.277 arquivos).
-- Hook deve ser opt-in via comando explícito, não habilitado
-  automaticamente em todo clone.
-- Se shellcheck não estiver instalado, exibir aviso e seguir
-  (não bloquear o push).
-- Se houver erros de shellcheck, abortar o push com saída
-  clara mostrando arquivo e linha.
-
-Implemente:
-
-1. Adicione `shellcheck` ao
-   ~/.dotfiles/init/30_osx_homebrew_recipes.sh.
-2. Crie ~/.dotfiles/.githooks/pre-push:
-   - Lê `git diff --name-only @{u}..HEAD` (com fallback se
-     não houver upstream).
-   - Filtra arquivos com extensão .sh ou cujo shebang seja
-     shell (bash/sh/zsh).
-   - Roda `shellcheck -x` em cada um.
-   - Output formatado: `✓ pass` ou `✗ N errors`.
-3. Crie ~/.dotfiles/bin/dotfiles-install-hooks que executa
-   `git config core.hooksPath .githooks` no repo dotfiles
-   (apenas local — nunca --global).
-4. Documente no README a invocação:
-     ./bin/dotfiles-install-hooks
-5. Adicione 1 commit por mudança lógica (recipes, hook,
-   installer, docs). Mensagens em pt-BR.
-
-Critério de pronto:
-- `git push` num branch com erro shellcheck conhecido falha.
-- `git push` num branch limpo passa.
-- Sem hooks instalados (estado inicial), push funciona normal.
-```
-
----
-
 ## 3. Substituir `/Users/sierra` hardcoded por `$HOME`
 
 ```

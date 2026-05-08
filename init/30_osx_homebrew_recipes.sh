@@ -66,6 +66,7 @@ recipes=(
   qpdf               # inspeção/manipulação de PDF
   ripgrep            # busca em árvore (rg)
   sevenzip           # 7-Zip 24+ oficial (sucessor do p7zip)
+  shellcheck         # lint estático de shell scripts
   sleuthkit          # análise forense de filesystems (fsstat, fls, icat)
   tesseract          # OCR (extrai texto de imagem)
   testdisk           # photorec — recupera arquivos / inspeciona partições
@@ -77,7 +78,7 @@ brew_install_recipes
 # Misc cleanup!
 
 # This is where brew stores its binary symlinks
-local binroot="$(brew --config | awk '/HOMEBREW_PREFIX/ {print $2}')"/bin
+binroot="$(brew --config | awk '/HOMEBREW_PREFIX/ {print $2}')"/bin
 
 
 # Atualiza permissões do htop

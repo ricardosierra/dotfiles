@@ -1,69 +1,89 @@
 
-# Git shortcuts
+# =============================================================================
+# Git — atalhos e funções
+# =============================================================================
+
+# atalho principal: g ao invés de git
 alias g='git'
-function ga() { git add "${@:-.}"; } # Add all files by default
+
+# ga: adiciona arquivos (passa tudo por padrão se não informar nada)
+function ga() { git add "${@:-.}"; }
+
+# push / pull simples
 alias gp='git push'
 alias pull='git pull'
 alias push='git push'
+
+# adiciona tudo e mostra status de uma vez
 alias gadd='git add --all && git status'
+
+# push e já seta o upstream pro branch atual
 alias gpup='gp --set-upstream origin $(gbs)'
+
+# push de todos os branches de uma vez
 alias gpa='gp --all'
+
+# pull rápido
 alias gu='git pull'
+
+# log
 alias gl='git log'
+
+# log bonito com grafo, decoração e todas as branches
 alias gg='gl --decorate --oneline --graph --date-order --all'
+
+# status
 alias gs='git status'
 alias gst='gs'
+
+# diff entre working tree e staged
 alias gd='git diff'
+
+# diff do que já está staged (pronto pra commit)
 alias gdc='gd --cached'
 
-# @description Multiline description goes here and
-# there
-#
-# @example
-#   some:other:func a b c
-#   echo 123
-#
-# @arg $1 string Some arg.
-# @arg $@ any Rest of arguments.
-#
-# @noargs
-#
-# @exitcode 0  If successfull.
-# @exitcode >0 On failure
-# @exitcode 5  On some error.
-#
-# @stdout Path to something.
-#
-# @see some:other:func()
+# cmt: commita com a mensagem que você passar direto
+# uso: cmt "mensagem aqui"
 function cmt() {
-    eval git commit -m "\"$@\""
+    git commit -m "$*"
 }
+
+# cmta: faz add de todos os tracked + commit numa tacada só
 function cmta() {
-    eval git commit -am "\"$@\""
+    git commit -am "$*"
 }
+
+# branches
 alias gb='git branch'
-alias gba='git branch -a'
+alias gba='git branch -a'  # todas as branches, inclusive remotas
+
+# seta upstream do branch atual pro origin
 alias gbup='gb --set-upstream-to=origin/$(gbs) $(gbs)'
-function gc() { git checkout "${@:-master}"; } # Checkout master by default
+
+# checkout (vai pro master se não passar nada)
+function gc() { git checkout "${@:-master}"; }
 alias gco='gc'
-alias gcb='gc -b'
-alias gbc='gc -b' # Dyslexia
+alias gcb='gc -b'   # cria e entra no branch
+alias gbc='gc -b'   # alias pra dyslexia :)
+
+# remotes
 alias gr='git remote'
-alias grv='gr -v'
-#alias gra='git remote add'
-alias grr='git remote rm'
+alias grv='gr -v'            # mostra as URLs dos remotes
+alias grr='git remote rm'    # remove um remote
 alias gcl='git clone'
+
+# vai pra raiz do repositório (vai pro topo da árvore)
 alias gcd='git rev-parse 2>/dev/null && cd "./$(git rev-parse --show-cdup)"'
 
-# Current branch or SHA if detached.
-alias gbs='git branch | perl -ne '"'"'/^\* (?:\(detached from (.*)\)|(.*))/ && print "$1$2"'"'"''
+# pega o nome do branch atual (ou o SHA se estiver em detached HEAD)
+gbs() { git branch | perl -ne '/^\* (?:\(detached from (.*)\)|(.*))/ && print "$1$2"'; }
 
-# Run commands in each subdirectory.
+# roda comandos em todos os subdiretórios (útil em monorepos)
 alias gu-all='eachdir git pull'
 alias gp-all='eachdir git push'
 alias gs-all='eachdir git status'
 
-# Set upstream branch
+# gsu: seta o upstream do branch atual caso ainda não tenha
 function gsu() {
   local branch_name=$(git symbolic-ref --short HEAD)
   [[ ! "$branch_name" ]] && echo 'Error: current git branch not detected' && return 1
@@ -72,8 +92,9 @@ function gsu() {
   git branch --set-upstream-to=origin/$branch_name $branch_name
 }
 
-# Rebase topic branch onto origin parent branch and update local parent branch
-# to match origin parent branch
+# grbo: rebaseia um branch de feature em cima do parent remoto
+# útil quando o branch pai avançou e você precisa atualizar o filho
+# uso: grbo parent-branch [topic-branch]
 function grbo() {
   local parent topic parent_sha origin_sha
   parent=$1
@@ -103,11 +124,14 @@ function grbo() {
   fi
 }
 function _grbo_err() {
-  echo "Error: $@"
+  echo "Error: $*"
   echo "Usage: grbo parent-branch [topic-branch]"
 }
 
-# open all changed files (that still actually exist) in the editor
+# ged: abre no editor todos os arquivos modificados (que ainda existem)
+# sem argumentos: abre arquivos unstaged/untracked
+# com 1 arg: abre arquivos modificados desde aquele commit
+# com 2 args: abre arquivos modificados entre os dois commits
 function ged() {
   local files
   local _IFS="$IFS"
@@ -133,7 +157,8 @@ function ged() {
   cd - > /dev/null
 }
 
-# add a github remote by github username
+# gra: adiciona um remote do GitHub pelo username
+# uso: gra <usuario-github>
 function gra() {
   if (( "${#@}" != 1 )); then
     echo "Usage: gra githubuser"
@@ -143,7 +168,7 @@ function gra() {
   gr add "$1" "git://github.com/$1/$repo"
 }
 
-# GitHub URL for current repo.
+# gurl: pega a URL do GitHub/Bitbucket do repo atual
 function gurl() {
   local remotename="${@:-origin}"
   local remote="$(git remote -v | awk '/^'"$remotename"'.*\(push\)$/ {print $2}')"
@@ -152,10 +177,11 @@ function gurl() {
   local user_repo="$(echo "$remote" | perl -pe 's/.*://;s/\.git$//')"
   echo "https://$host/$user_repo"
 }
-# GitHub URL for current repo, including current branch + path.
+
+# gurlp: URL do repo incluindo branch atual + path relativo (ótimo pra colar em PR)
 alias gurlp='echo $(gurl)/tree/$(gbs)/$(git rev-parse --show-prefix)'
 
-# git log with per-commit cmd-clickable GitHub URLs (iTerm)
+# gf: log com URLs clicáveis no iTerm (cmd+click abre o arquivo no GitHub)
 function gf() {
   git log $* --name-status --color | awk "$(cat <<AWK
     /^.*commit [0-9a-f]{40}/ {sha=substr(\$2,1,7)}
@@ -165,22 +191,25 @@ AWK
   )" | less -F
 }
 
-# open last commit in GitHub, in the browser.
+# gfu: abre o último commit no GitHub no browser
+# uso: gfu [n] — abre o N-ésimo commit (padrão: 1 = último)
 function gfu() {
   local n="${@:-1}"
   n=$((n-1))
   git web--browse  $(git log -n 1 --skip=$n --pretty=oneline | awk "{printf \"$(gurl)/commit/%s\", substr(\$1,1,7)}")
 }
-# open current branch + path in GitHub, in the browser.
+
+# gpu: abre o branch atual + path no GitHub no browser
 alias gpu='git web--browse $(gurlp)'
 
-# Just the last few commits, please!
+# gf1..gf5: atalhos pra ver os últimos N commits com URLs
 for n in {1..5}; do alias gf$n="gf -n $n"; done
 
+# gj: navega entre arquivos com conflito de merge via git-jump
 function gj() { git-jump "${@:-next}"; }
 alias gj-='gj prev'
 
-# Combine diff --name-status and --stat
+# gstat: combina diff --name-status com --stat, colorido e bonito
 function gstat() {
   local file mode modes color lines range code line_regex
   local file_len graph_len e r c
@@ -211,39 +240,28 @@ function gstat() {
   lines=($(git diff -M --stat --stat-width=999 --stat-name-width=$file_len \
     --stat-graph-width=$graph_len --color "$range"))
   e=$(echo -e "\033")
-  r="$e[0m"
+  r="${e}[0m"
   declare -A c=([M]="1;33" [D]="1;31" [A]="1;32" [R]="1;34")
   for line in "${lines[@]}"; do
     file="$(echo "$line" | perl -pe "$line_regex")"
     if [[ "$file" =~ \{.+\=\>.+\} ]]; then
       mode=R
-      line="$(echo "$line" | perl -pe "s/(^|=>|\})/$r$e[${c[R]}m\$1$r$e[${c[A]}m/g")"
-      line="$(echo "$line" | perl -pe "s/(\{)/$r$e[${c[R]}m\$1$r$e[${c[D]}m/")"
+      line="$(echo "$line" | perl -pe "s/(^|=>|\})/$r${e}[${c[R]}m\$1$r${e}[${c[A]}m/g")"
+      line="$(echo "$line" | perl -pe "s/(\{)/$r${e}[${c[R]}m\$1$r${e}[${c[D]}m/")"
     else
       mode=${modes["$file"]}
       color=0; [[ "$mode" ]] && color=${c[$mode]}
-      line="$e[${color}m$line"
+      line="${e}[${color}m$line"
     fi
-    echo "$line" | sed "s/\|/$e[0m$mode \|/"
+    echo "$line" | sed "s/\|/${e}[0m$mode \|/"
   done
   IFS=$OLDIFS
 }
 
-# Rename/delete diff helper
-# (pipe to pbcopy for github comment-friendly output)
-#
-# 1. Check out a branch
-# 2. Get a list of changed files since master:
-#    $ git diff master --name-status
-# 3. Organize listed files into M/D pairs, eg:
-#    M    src/File.jsx
-#    D    src/FileFeatureFlagName.jsx
-#
-#    M    src/File.test.jsx
-#    D    src/FileFeatureFlagName.test.jsx
-# 4. For each pair, run this function, eg:
-#    $ git_diff_rename src/File.jsx src/FileFeatureFlagName.jsx
-#    $ git_diff_rename src/File.test.jsx src/FileFeatureFlagName.test.jsx
+# git_diff_rename: gera diff formatado pra PR quando você renomeou/deletou arquivo
+# pipe pra pbcopy pra copiar como bloco de detalhes do GitHub
+# uso:
+#   git_diff_rename src/Novo.jsx master src/Antigo.jsx
 function git_diff_rename() {
   local prev_commit="$1"
   local before="$3"
@@ -260,7 +278,8 @@ function git_diff_rename() {
   fi
 }
 
-# Open a handful of PRs to test the CI system (defaults to 5)
+# git_pr_blaster: cria N PRs de teste pra estressar o CI (padrão: 5)
+# cria branches temporários, faz push, abre no browser e deleta local
 function git_pr_blaster() {
   local i new_branch branch="$(gbs)"
   for i in $(seq 1 ${1:-5}); do
@@ -276,10 +295,10 @@ function git_pr_blaster() {
   done
 }
 
-# OSX-specific Git shortcuts
+# aliases específicos pra macOS com suporte a ferramentas visuais
 if is_osx; then
-  alias gdk='git ksdiff'
-  alias gdkc='gdk --cached'
+  alias gdk='git ksdiff'        # abre diff no Kaleidoscope
+  alias gdkc='gdk --cached'     # diff staged no Kaleidoscope
   function gt() {
     local path repo
     {
@@ -290,14 +309,14 @@ if is_osx; then
     } >/dev/null 2>&1
     if [[ -e "$repo" ]]; then
       echo "Opening git repo $repo."
-      gittower "$repo"
+      gittower "$repo"   # abre no Tower (app Git visual)
     else
       echo "Error: $path is not a git repo."
     fi
   }
 fi
 
-# Use Git’s colored diff when available
+# sobrescreve o diff padrão com o diff colorido do git (só se git estiver disponível)
 hash git &>/dev/null
 if [ $? -eq 0 ]; then
 	diff() {
@@ -305,7 +324,8 @@ if [ $? -eq 0 ]; then
 	}
 fi
 
-# Create a git.io short URL
+# gitio: cria uma URL curta no git.io
+# uso: gitio meu-slug https://github.com/...
 gitio() {
 	if [ -z "${1}" -o -z "${2}" ]; then
 		echo "Usage: \`gitio slug url\`"
@@ -314,8 +334,8 @@ gitio() {
 	curl -i http://git.io/ -F "url=${2}" -F "code=${1}"
 }
 
-
-# Call from a local repo to open the repository on github/bitbucket in browser
+# repo: abre o repositório atual no GitHub/Bitbucket no browser
+# detecta automaticamente se é Bitbucket pra usar a URL correta
 repo() {
 	local giturl=$(git config --get remote.origin.url | sed 's/git@/\/\//g' | sed 's/.git$//' | sed 's/https://g' | sed 's/:/\//g')
 	if [[ $giturl == "" ]]; then
