@@ -46,8 +46,8 @@ alias dipl='docker inspect  $(docker ps -qq) | grep IPAddress'
 # =============================================================================
 # Start/Stop de containers
 # =============================================================================
-alias mstar1='docker-machine start $(docker-machine ls | tail -1 | awk "{print $1}")'
-alias mstop1='docker-machine stop $(docker-machine ls | tail -1 | awk "{print $1}")'
+mstar1() { docker-machine start "$(docker-machine ls | tail -1 | awk '{print $1}')"; }
+mstop1() { docker-machine stop  "$(docker-machine ls | tail -1 | awk '{print $1}')"; }
 alias dmk='docker-machine kill'
 
 # para e remove todos os containers graciosamente
@@ -57,10 +57,8 @@ alias dra='docker rm $(docker stop $(docker ps -aq))'
 alias drk='docker rm $(docker kill $(docker ps -aq))'
 
 # inspeciona a última máquina Docker Machine criada
-alias dmin='docker-machine inspect $(docker-machine ls | tail -1 | awk "{print $1}")'
-
-# remove a última máquina Docker Machine
-alias dmrm='docker-machine rm $(docker-machine ls | tail -1 | awk "{print $1}")'
+dmin() { docker-machine inspect "$(docker-machine ls | tail -1 | awk '{print $1}')"; }
+dmrm() { docker-machine rm     "$(docker-machine ls | tail -1 | awk '{print $1}')"; }
 
 # =============================================================================
 # Redes Docker
@@ -116,10 +114,10 @@ dexec() {
 }
 
 # shell /bin/sh no último container (útil pra Alpine que não tem bash)
-dexl() { docker exec -i -t $(docker ps -l -q) /bin/sh ;}
+dexl() { docker exec -i -t "$(docker ps -l -q)" /bin/sh ;}
 
 # shell /bin/sh num container específico
-dex() { docker exec -i -t $@ /bin/sh ;}
+dex() { docker exec -i -t "$@" /bin/sh ;}
 
 alias dlog='docker logs $(docker ps -l -q)'  # logs do último container
 alias drun='docker run -i -t -name '
@@ -169,17 +167,10 @@ alias busyd='docker run -itd busybox'
 
 # delcon: remove containers que batem com o filtro passado
 # uso: delcon ubuntu  (remove todos com "ubuntu" no nome/imagem)
-delcon() { docker rm -f $(docker ps  -a | grep $@ | awk '{print $1}') ;}
-
-# stopcon: para containers que batem com o filtro
-stopcon() { docker stop $(docker ps  -a | grep $@ | awk '{print $1}') ;}
-
-# delnone: apaga todas as imagens órfãs (tag <none>) — sobras de builds quebrados
-delnone() { docker rmi $(docker images | grep none | awk '{print $3}') ;}
-
-# delimg: apaga imagens que batem com o filtro
-# uso: delimg nginx
-delimg() { docker rmi $(docker images | grep $@ | awk '{print $3}') ;}
+delcon()  { docker rm -f "$(docker ps  -a | grep "$@" | awk '{print $1}')" ;}
+stopcon() { docker stop "$(docker ps  -a | grep "$@" | awk '{print $1}')" ;}
+delnone() { docker rmi "$(docker images | grep none | awk '{print $3}')" ;}
+delimg()  { docker rmi "$(docker images | grep "$@" | awk '{print $3}')" ;}
 
 # conta conexões abertas no processo do Docker (útil pra debugar leaks)
 alias conns="sudo lsof -a -p $(pidof docker) | wc -l"
