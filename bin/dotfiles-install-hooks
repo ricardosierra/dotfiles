@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Configura core.hooksPath para .githooks no repo dotfiles (apenas local).
+
+DOTFILES="$HOME/.dotfiles"
+
+current=$(git -C "$DOTFILES" config core.hooksPath 2>/dev/null)
+if [ "$current" = ".githooks" ]; then
+  echo "hooks já configurados em $DOTFILES/.githooks"
+  exit 0
+fi
+
+git -C "$DOTFILES" config core.hooksPath .githooks
+echo "hooks configurados: $DOTFILES/.githooks"

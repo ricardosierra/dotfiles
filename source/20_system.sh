@@ -1,24 +1,30 @@
 #!/bin/bash
 
-# Simple calculator
+# =============================================================================
+# Utilitários de sistema — calculadora, compressão, JSON, rede, certif SSL
+# =============================================================================
+
+# calc: calculadora de linha de comando com precisão de 10 casas decimais
+# uso: calc "2 + 2"  ou  calc "3.14 * 2"
 calc() {
 	local result=""
 	result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')"
 	#						└─ default (when `--mathlib` is used) is 20
 
 	if [[ "$result" == *.* ]]; then
-		# improve the output for decimal numbers
+		# melhora a exibição: remove zeros à direita e adiciona "0" antes do ponto
 		printf "$result" |
-		sed -e 's/^\./0./'		  `# add "0" for cases like ".5"` \
-			-e 's/^-\./-0./'	  `# add "0" for cases like "-.5"`\
-			-e 's/0*$//;s/\.$//';  # remove trailing zeros
+		sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
+			-e 's/^-\./-0./'      `# add "0" for cases like "-.5"`\
+			-e 's/0*$//;s/\.$//'; # remove trailing zeros
 	else
 		printf "$result"
 	fi
 	printf "\n"
 }
 
-# Compare original and gzipped file size
+# gz: compara o tamanho original de um arquivo com o tamanho gzipado
+# uso: gz arquivo.txt
 gz() {
 	local origsize=$(wc -c < "$1")
 	local gzipsize=$(gzip -c "$1" | wc -c)
@@ -27,8 +33,8 @@ gz() {
 	printf "gzip: %d bytes (%2.2f%%)\n" "$gzipsize" "$ratio"
 }
 
-# Syntax-highlight JSON strings or files
-# Usage: `json '{"foo":42}'` or `echo '{"foo":42}' | json`
+# json: formata e colore JSON (aceita argumento ou pipe)
+# uso: json '{"foo":42}'  ou  cat arquivo.json | json
 json() {
 	if [ -t 0 ]; then # argument
 		python -mjson.tool <<< "$*" | pygmentize -l javascript
@@ -37,45 +43,47 @@ json() {
 	fi
 }
 
-# Run `dig` and display the most useful info
+# digga: roda dig e mostra só o que importa (todos os records de uma vez)
+# uso: digga google.com
 digga() {
 	dig +nocmd "$1" any +multiline +noall +answer
 }
 
-# Query Wikipedia via console over DNS
+# mwiki: consulta o Wikipedia via DNS (retorna o resumo em texto)
+# uso: mwiki bash  ou  mwiki linux kernel
 mwiki() {
 	dig +short txt "$*".wp.dg.cx
 }
 
-# UTF-8-encode a string of Unicode symbols
+# escape: converte uma string em sequências \x{XX} de Unicode
+# uso: escape "héllo"
 escape() {
 	printf "\\\x%s" $(printf "$@" | xxd -p -c1 -u)
-	# print a newline unless we’re piping the output to another program
 	if [ -t 1 ]; then
-		echo ""; # newline
+		echo ""
 	fi
 }
 
-# Decode \x{ABCD}-style Unicode escape sequences
+# unidecode: decodifica sequências \x{ABCD} de volta pra texto
+# uso: unidecode "\x{0041}"
 unidecode() {
-	perl -e "binmode(STDOUT, ':utf8'); print \"$@\""
-	# print a newline unless we’re piping the output to another program
+	perl -e "binmode(STDOUT, ':utf8'); print \"$*\""
 	if [ -t 1 ]; then
-		echo ""; # newline
+		echo ""
 	fi
 }
 
-# Get a character’s Unicode code point
+# codepoint: mostra o code point Unicode de um caractere
+# uso: codepoint é   → U+00E9
 codepoint() {
-	perl -e "use utf8; print sprintf('U+%04X', ord(\"$@\"))"
-	# print a newline unless we’re piping the output to another program
+	perl -e "use utf8; print sprintf('U+%04X', ord(\"$*\"))"
 	if [ -t 1 ]; then
-		echo ""; # newline
+		echo ""
 	fi
 }
 
-# Show all the names (CNs and SANs) listed in the SSL certificate
-# for a given domain
+# getcertnames: mostra todos os domínios (CN e SANs) de um certificado SSL
+# uso: getcertnames google.com
 getcertnames() {
 	if [ -z "${1}" ]; then
 		echo "ERROR: No domain specified."
@@ -84,7 +92,7 @@ getcertnames() {
 
 	local domain="${1}"
 	echo "Testing ${domain}…"
-	echo ""; # newline
+	echo ""
 
 	local tmp=$(echo -e "GET / HTTP/1.0\nEOT" \
 		| openssl s_client -connect "${domain}:443" 2>&1)
@@ -94,11 +102,11 @@ getcertnames() {
 			| openssl x509 -text -certopt "no_header, no_serial, no_version, \
 			no_signame, no_validity, no_issuer, no_pubkey, no_sigdump, no_aux")
 		echo "Common Name:"
-		echo ""; # newline
+		echo ""
 		echo "${certText}" | grep "Subject:" | sed -e "s/^.*CN=//"
-		echo ""; # newline
+		echo ""
 		echo "Subject Alternative Name(s):"
-		echo ""; # newline
+		echo ""
 		echo "${certText}" | grep -A 1 "Subject Alternative Name:" \
 			| sed -e "2s/DNS://g" -e "s/ //g" | tr "," "\n" | tail -n +2
 		return 0
@@ -108,8 +116,9 @@ getcertnames() {
 	fi
 }
 
-# `v` with no arguments opens the current directory in Vim, otherwise opens the
-# given location
+# v: abre o vim no diretório atual ou num arquivo específico
+# uso: v          → abre o diretório atual
+#      v arquivo  → abre o arquivo
 v() {
 	if [ $# -eq 0 ]; then
 		vim .
@@ -118,25 +127,23 @@ v() {
 	fi
 }
 
-# `o` with no arguments opens the current directory, otherwise opens the given
-# location
+# o: abre o explorador de arquivos (xdg-open no Linux)
+# uso: o          → abre o diretório atual
+#      o pasta/   → abre a pasta
 o() {
 	if [ $# -eq 0 ]; then
-		xdg-open .	> /dev/null 2>&1
+		xdg-open . > /dev/null 2>&1
 	else
 		xdg-open "$@" > /dev/null 2>&1
 	fi
 }
 
-# `tre` is a shorthand for `tree` with hidden files and color enabled, ignoring
-# the `.git` directory, listing directories first. The output gets piped into
-# `less` with options to preserve color and line numbers, unless the output is
-# small enough for one screen.
+# tre: tree com arquivos ocultos, cores, ignorando .git, paginado
 tre() {
 	tree -aC -I '.git' --dirsfirst "$@" | less -FRNX
 }
 
-# Get colors in manual pages
+# man: man page com cores bonitas usando LESS_TERMCAP
 unalias man 2>/dev/null
 man() {
 	env \
@@ -150,7 +157,9 @@ man() {
         command man "$@"
 }
 
-# get dbus session
+# dbs: lista serviços do D-Bus (session ou system)
+# uso: dbs           → lista sessão
+#      dbs system    → lista serviços do sistema
 dbs() {
 	local t=$1
 	if [[  -z "$t" ]]; then
@@ -158,11 +167,13 @@ dbs() {
 	fi
 
 	dbus-send --$t --dest=org.freedesktop.DBus \
-		--type=method_call	--print-reply \
+		--type=method_call --print-reply \
 		/org/freedesktop/DBus org.freedesktop.DBus.ListNames
 }
 
-# check if uri is up
+# isup: checa se uma URL está respondendo com 200 OK
+# manda notificação desktop com o resultado
+# uso: isup https://meusite.com
 isup() {
 	local uri=$1
 
@@ -173,21 +184,20 @@ isup() {
 	fi
 }
 
-# get the name of a x window
+# xname: pega o nome e classe de uma janela X11 pelo ID
+# uso: xname <window-id>  (pegue o ID com xwininfo)
 xname(){
 	local window_id=$1
 
 	if [[ -z $window_id ]]; then
 		echo "Please specifiy a window id, you find this with 'xwininfo'"
-
 		return 1
 	fi
 
 	local match_string='".*"'
 	local match_int='[0-9][0-9]*'
-	local match_qstring='"[^"\\]*(\\.[^"\\]*)*"' # NOTE: Adds 1 backreference
+	local match_qstring='"[^"\\]*(\\.[^"\\]*)*"'
 
-	# get the name
 	xprop -id $window_id | \
 		sed -nr \
 		-e "s/^WM_CLASS\(STRING\) = ($match_qstring), ($match_qstring)$/instance=\1\nclass=\3/p" \
@@ -197,6 +207,7 @@ xname(){
 		-e '${g; p}'
 }
 
+# dell_monitor: configura resolução 4K 30Hz num monitor Dell via xrandr
 dell_monitor() {
 	xrandr --newmode "3840x2160_30.00"  338.75  3840 4080 4488 5136  2160 2163 2168 2200 -hsync +vsync
 	xrandr --addmode  DP1 "3840x2160_30.00"

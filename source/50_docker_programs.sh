@@ -117,7 +117,7 @@ android-studio(){
         command android-studio "$@"
         return 
     fi
-    docker run -rm -ti \
+    docker run --rm -ti \
 	  --privileged \
 	  -v $HOME/AndroidStudioProjects:/home/ubuntu/AndroidStudioProjects \
 	  -v $HOME/.android:/home/ubuntu/.android \
@@ -217,7 +217,7 @@ cadvisor(){
     browser-exec "http://cadvisor:8080"
 }
 cheese(){
-    if [[ "$(   c)" ]]; then
+    if [[ "$(pinpoint cheese)" ]]; then
         command cheese "$@"
         return 
     fi
@@ -932,7 +932,7 @@ php_cli(){
     done
 
     echo "${EXTRA_ARGS}"
-    echo "docker run --rm ${EXTRA_ARGS}--user $(id -u):$(id -g) --name=php-cli -v $(pwd):/var/www/html sierratecnologia/php:7.0 php "$@""
+    echo "docker run --rm ${EXTRA_ARGS}--user $(id -u):$(id -g) --name=php-cli -v $(pwd):/var/www/html sierratecnologia/php:7.0 php $*"
     docker run --rm${EXTRA_ARGS} --user $(id -u):$(id -g) --name=php-cli -v $(pwd):/var/www/html sierratecnologia/php:7.0 php "$@"
 }
 phpmyadmin(){
@@ -1271,7 +1271,7 @@ ssh2john(){
                 --user $(id -u):$(id -g) \
 		-v ${file}:/root/$(basename ${file}) \
 		--entrypoint ssh2john \
-		${DOCKER_REPO_PREFIX}john $@
+		"${DOCKER_REPO_PREFIX}john" "$@"
 }
 
 steam(){
