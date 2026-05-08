@@ -82,8 +82,8 @@ xcode-select --install
 Then install dotfiles:
 
 ```sh
-export DOTFILES_GH_USER=ricardorsierra
-export DOTFILES_GH_BRANCH=master
+export DOTFILES_GH_USER=ricardosierra
+export DOTFILES_GH_BRANCH=release
 bash -c "$(curl -fsSL https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
 ```
 
@@ -92,8 +92,8 @@ _Tested on macOS 10.15+_
 ### Linux
 
 ```sh
-export DOTFILES_GH_USER=ricardorsierra
-export DOTFILES_GH_BRANCH=master
+export DOTFILES_GH_USER=ricardosierra
+export DOTFILES_GH_BRANCH=release
 bash -c "$(wget -qO- https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
 ```
 
@@ -123,16 +123,16 @@ Para instalar `shellcheck`: `brew install shellcheck` ou rode o init `30_osx_hom
 ### macOS
 
 ```sh
-export DOTFILES_GH_USER=ricardorsierra
-export DOTFILES_GH_BRANCH=master
+export DOTFILES_GH_USER=ricardosierra
+export DOTFILES_GH_BRANCH=release
 bash -c "$(curl -fsSL https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
 ```
 
 ### Linux
 
 ```sh
-export DOTFILES_GH_USER=ricardorsierra
-export DOTFILES_GH_BRANCH=master
+export DOTFILES_GH_USER=ricardosierra
+export DOTFILES_GH_BRANCH=release
 bash -c "$(wget -qO- https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
 ```
 
@@ -145,8 +145,8 @@ Veja [Personalizando](docs/pt/Personalizando.md) para configurar variáveis e ad
 ### macOS
 
 ```sh
-export DOTFILES_GH_USER=ricardorsierra
-export DOTFILES_GH_BRANCH=master
+export DOTFILES_GH_USER=ricardosierra
+export DOTFILES_GH_BRANCH=release
 bash -c "$(curl -fsSL https://raw.github.com/$DOTFILES_GH_USER/dotfiles/$DOTFILES_GH_BRANCH/bin/dotfiles) install" && source ~/.bashrc
 ```
 
@@ -219,7 +219,7 @@ claude-set 3h29m 86%
 
 Because [`dotfiles`](bin/dotfiles) is self-contained, you can delete everything else from your fork and it will still work — it only needs `/copy`, `/link`, and `/init` (ignored if empty or missing).
 
-Found a bug? [File an issue](https://github.com/ricardorsierra/dotfiles/issues) or [open a PR](https://github.com/ricardorsierra/dotfiles/pulls).
+Found a bug? [File an issue](https://github.com/ricardosierra/dotfiles/issues) or [open a PR](https://github.com/ricardosierra/dotfiles/pulls).
 
 ---
 
