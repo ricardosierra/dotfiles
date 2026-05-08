@@ -49,7 +49,7 @@ function qq() {
   n_times $panes tmux split-window -t $win -c "$dir"
   tmux select-layout -t $win main-vertical
   tmux select-pane -t $win
-  tmux send-keys -t $win "$EDITOR $@" Enter
+  tmux send-keys -t $win "$EDITOR $*" Enter
 }
 
 alias q2='qq 2'   # qq com 2 painéis

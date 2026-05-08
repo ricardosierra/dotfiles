@@ -109,7 +109,7 @@ gogo(){
 golistdeps(){
 	(
 	if [[ ! -z "$1" ]]; then
-		gogo $@
+		gogo "$@"
 	fi
 
 	go list -e -f '{{join .Deps "\n"}}' ./... | xargs go list -e -f '{{if not .Standard}}{{.ImportPath}}{{end}}'

@@ -125,7 +125,7 @@ grep --silent "$VOLTA_HOME/bin" <<< $PATH || export PATH="$VOLTA_HOME/bin:$PATH"
 
 # Use npx instead of installing global npm modules
 function make_npx_alias () {
-  alias $1="npx $@"
+  alias "$1"="npx $1"
 }
 
 make_npx_alias json2yaml
