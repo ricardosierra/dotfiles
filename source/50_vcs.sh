@@ -76,7 +76,7 @@ alias gcl='git clone'
 alias gcd='git rev-parse 2>/dev/null && cd "./$(git rev-parse --show-cdup)"'
 
 # pega o nome do branch atual (ou o SHA se estiver em detached HEAD)
-alias gbs='git branch | perl -ne '"'"'/^\* (?:\(detached from (.*)\)|(.*))/ && print "$1$2"'"'"''
+gbs() { git branch | perl -ne '/^\* (?:\(detached from (.*)\)|(.*))/ && print "$1$2"'; }
 
 # roda comandos em todos os subdiretórios (útil em monorepos)
 alias gu-all='eachdir git pull'
@@ -124,7 +124,7 @@ function grbo() {
   fi
 }
 function _grbo_err() {
-  echo "Error: $@"
+  echo "Error: $*"
   echo "Usage: grbo parent-branch [topic-branch]"
 }
 
@@ -240,20 +240,20 @@ function gstat() {
   lines=($(git diff -M --stat --stat-width=999 --stat-name-width=$file_len \
     --stat-graph-width=$graph_len --color "$range"))
   e=$(echo -e "\033")
-  r="$e[0m"
+  r="${e}[0m"
   declare -A c=([M]="1;33" [D]="1;31" [A]="1;32" [R]="1;34")
   for line in "${lines[@]}"; do
     file="$(echo "$line" | perl -pe "$line_regex")"
     if [[ "$file" =~ \{.+\=\>.+\} ]]; then
       mode=R
-      line="$(echo "$line" | perl -pe "s/(^|=>|\})/$r$e[${c[R]}m\$1$r$e[${c[A]}m/g")"
-      line="$(echo "$line" | perl -pe "s/(\{)/$r$e[${c[R]}m\$1$r$e[${c[D]}m/")"
+      line="$(echo "$line" | perl -pe "s/(^|=>|\})/$r${e}[${c[R]}m\$1$r${e}[${c[A]}m/g")"
+      line="$(echo "$line" | perl -pe "s/(\{)/$r${e}[${c[R]}m\$1$r${e}[${c[D]}m/")"
     else
       mode=${modes["$file"]}
       color=0; [[ "$mode" ]] && color=${c[$mode]}
-      line="$e[${color}m$line"
+      line="${e}[${color}m$line"
     fi
-    echo "$line" | sed "s/\|/$e[0m$mode \|/"
+    echo "$line" | sed "s/\|/${e}[0m$mode \|/"
   done
   IFS=$OLDIFS
 }
