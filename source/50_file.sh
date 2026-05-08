@@ -96,7 +96,7 @@ _Z_DATA=$DOTFILES/caches/z/z
 # =============================================================================
 # Aliases para Debian/Linux (equivalentes de comandos macOS)
 # =============================================================================
-alias open='browser-exec "$@"'           # abre arquivos/URLs como no macOS
+open() { browser-exec "$@"; }            # abre arquivos/URLs como no macOS
 alias pbcopy='xclip -selection clipboard'   # copia pra área de transferência
 alias pbpaste='xclip -selection clipboard -o'  # cola da área de transferência
 
@@ -223,7 +223,7 @@ filesize() {
 	else
 		local arg=-sh   # BSD du
 	fi
-	if [[ -n "$@" ]]; then
+	if [[ $# -gt 0 ]]; then
 		du $arg -- "$@"
 	else
 		du $arg .[^.]* *  # mostra tudo (incluindo arquivos ocultos)

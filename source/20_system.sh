@@ -67,7 +67,7 @@ escape() {
 # unidecode: decodifica sequências \x{ABCD} de volta pra texto
 # uso: unidecode "\x{0041}"
 unidecode() {
-	perl -e "binmode(STDOUT, ':utf8'); print \"$@\""
+	perl -e "binmode(STDOUT, ':utf8'); print \"$*\""
 	if [ -t 1 ]; then
 		echo ""
 	fi
@@ -76,7 +76,7 @@ unidecode() {
 # codepoint: mostra o code point Unicode de um caractere
 # uso: codepoint é   → U+00E9
 codepoint() {
-	perl -e "use utf8; print sprintf('U+%04X', ord(\"$@\"))"
+	perl -e "use utf8; print sprintf('U+%04X', ord(\"$*\"))"
 	if [ -t 1 ]; then
 		echo ""
 	fi

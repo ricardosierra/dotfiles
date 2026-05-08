@@ -25,7 +25,7 @@
 # 32  42  green     36  46  cyan
 # 33  43  yellow    37  47  white
 
-if [[ ! "${__prompt_colors[@]}" ]]; then
+if [[ ${#__prompt_colors[@]} -eq 0 ]]; then
     # DEFAULT COLORS
     bold="\[\e[1m\]";
     reset="\[\e[0m\]";
