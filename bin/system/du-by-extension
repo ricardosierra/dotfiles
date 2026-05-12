@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# du-by-extension — ranking de uso de disco por extensão de arquivo
+# Uso: du-by-extension [diretório]  (default: pasta atual)
+set -euo pipefail
+
+dir="${1:-.}"
+[[ -d "$dir" ]] || { echo "du-by-extension: '$dir' não é diretório"; exit 1; }
+
+# stat -c (GNU/Linux) vs stat -f (BSD/macOS)
+if [[ "$OSTYPE" =~ ^darwin ]]; then
+  STAT_FMT='-f%z'
+else
+  STAT_FMT='-c%s'
+fi
+
+find "$dir" -type f -print0 2>/dev/null | \
+  while IFS= read -r -d '' f; do
+    s=$(stat "$STAT_FMT" "$f" 2>/dev/null) || continue
+    base="${f##*/}"
+    if [[ "$base" == "${base%.*}" ]]; then
+      ext="(sem extensão)"
+    else
+      ext=".${base##*.}"
+    fi
+    printf '%d %s\n' "$s" "$ext"
+  done | \
+  awk '{sum[$2] += $1} END {for (e in sum) print sum[e], e}' | \
+  sort -rn | head -20 | \
+  awk '{
+    b = $1
+    e = $2
+    if (b >= 1073741824) printf "%7.1fG  %s\n", b/1073741824, e
+    else if (b >= 1048576) printf "%7.1fM  %s\n", b/1048576, e
+    else if (b >= 1024) printf "%7.1fK  %s\n", b/1024, e
+    else printf "%7d   %s\n", b, e
+  }'
