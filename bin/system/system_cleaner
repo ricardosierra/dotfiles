@@ -1,66 +1,61 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #################################################################
-# sistema - Atualiza seu ubuntu/Debian			        #
-# Autor: Matheus Ferreira Cardoso                               #
-# M-Unix                                                        #
-# Email: munix.root@gmail.com   				#
+# system_cleaner — atualiza Ubuntu/Debian + limpa caches de RAM #
+# Autor original: Matheus Ferreira Cardoso (M-Unix)             #
+# ROOT_REQUIRED. PT-BR.                                         #
 #################################################################
 
-# -y - assume `sim' para todas as perguntas
+command -v apt-get >/dev/null 2>&1 || {
+  echo "system_cleaner: precisa de apt-get (Ubuntu/Debian)"
+  exit 1
+}
+command -v dialog >/dev/null 2>&1 || {
+  echo "Faltando: dialog (apt install dialog)"
+  exit 1
+}
 
-dialog                                            \
-   --title 'Vamos atualiza/Otimizar'                             \
-   --msgbox 'Bem vindo ao cclenner LINUX.'  \
-   6 40
+dialog --title 'Vamos atualizar/Otimizar' \
+       --msgbox 'Bem vindo ao cleaner.' 6 40
 
-t=0;
-while [ $t -lt 100 ];
-do t=$[t+1];
-echo $t;sleep .1;
-done\
-| dialog --gauge "Otimizando Aguarde........." 6 75
+t=0
+while [ $t -lt 100 ]; do
+  t=$((t + 1))
+  echo $t
+  sleep .1
+done | dialog --gauge "Otimizando Aguarde........." 6 75
 
-sudo apt-get update -y # Atualizar a lista de pacotes 
-sudo apt-get upgrade -y # Efetua a atualização 
-sudo apt-get upgrade -f -y 
-sudo apt-get -f install # Corrigir problemas de dependências, concluir instalação de pacotes pendentes e outros erros
-sudo apt-get autoremove -y # Remover pacotes instalados automaticamente e que não tem mais nenhuma utilidade para o sistema
-sudo apt-get autoclean -y # Remover pacotes antigos ou duplicados
-sudo apt-get clean -y # Remove arquivos inúteis do cache, onde registra as cópias das atualizações q são instaladas pelo gerenciador de pacotes
-sudo apt-get -f remove -y # Remover pacotes com problemas
+sudo apt-get update -y               # atualizar lista de pacotes
+sudo apt-get upgrade -y              # efetuar atualização
+sudo apt-get -y -f install           # corrigir dependências
+sudo apt-get autoremove -y           # remover pacotes órfãos
+sudo apt-get autoclean -y            # remover pacotes antigos
+sudo apt-get clean -y                # limpar cache
 
 echo "##############################################################"
 echo "######################### AGUARDE ############################"
 echo "##############################################################"
-
 sleep 4
 
-#Limpar o cache da memoria RAM
-MEM1=`free|awk '/Mem:/ {print int(100*$3/$2)}'`
-sudo free -m 
+# Limpar cache de RAM
+MEM1=$(free | awk '/Mem:/ {print int(100*$3/$2)}')
+free -m
 echo "##########################################################################"
-echo "Memória RAM Usada antes de fazer a limpeza:" $MEM1% 
+echo "Memória RAM usada antes da limpeza: $MEM1%"
 echo "##########################################################################"
-echo " "
 echo "LIMPANDO MEMORIA --- RAM ---"
 sleep 3
-sync 
-echo 3 > /proc/sys/vm/drop_caches
+sync
+sudo tee /proc/sys/vm/drop_caches <<< 3 >/dev/null
 echo "LIMPANDO MEMORIA SWAP..."
 sleep 4
 sudo swapoff -a
 sudo swapon -a
 echo "##########################################################################"
-MEM2=`free|awk '/Mem:/ {print int(100*$3/$2)}'`
-sudo free -m 
+MEM2=$(free | awk '/Mem:/ {print int(100*$3/$2)}')
+free -m
 echo "##########################################################################"
-echo "Uso de memória RAM após a limpeza:" $MEM2% "Economia de: " `expr $MEM1 - $MEM2`"%" 
+echo "Uso de memória RAM após a limpeza: $MEM2% (economia: $((MEM1 - MEM2))%)"
 echo "##########################################################################"
 
-dialog                                         \
-   --title 'Aguarde'                           \
-   --sleep 5                                   \
-   --infobox '\nFinalizando em 5 segundos...'  \
-   0 0
-
-exit
+dialog --title 'Aguarde' --sleep 5 \
+       --infobox '\nFinalizando em 5 segundos...' 0 0
