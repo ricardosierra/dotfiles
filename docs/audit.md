@@ -206,7 +206,7 @@ Saídas em `.audit/` (gitignored). Scripts individuais:
 
 ## 5. Plano de fases (próximas aprovações)
 
-Status atual: **Fases 0, 1 (parcial), 2, 3 e Prompt #44 concluídas**.
+Status atual: **TODAS as fases 0-8 concluídas** ✅ (auditoria finalizada).
 
 | Fase | Conteúdo | Status |
 |---|---|---|
@@ -220,7 +220,7 @@ Status atual: **Fases 0, 1 (parcial), 2, 3 e Prompt #44 concluídas**.
 | **5. Modernização bootstrap (parte 2)** | **apt unificado:** `init/20_apt.sh` substitui `20_linux_apt + 20_ubuntu_apt` com arrays declarativos + guards `is_ubuntu`/`is_ubuntu_desktop`/`is_debianOS`/`is_kali`; originais em `archive/legacy/`. **vendor/rbenv removido:** submodule deinit + git rm; 7 plugins `rbenv-*` removidos de `.gitmodules` (rbenv-vars, ruby-build, rbenv-{default-gems,gem-rehash,whatis,use,update}). `source/50_ruby.sh` e `init/60_ruby.sh` agora usam rbenv via brew/apt/dnf — cross-platform. Teste `syntax.bats` atualizado | ✅ feito |
 | **6. Cleanup de 50_docker_programs.sh** | **Removidos:** atom (EOL 2022), dcos (EOL 2021), phonegap (EOL 2020), tormessenger (EOL 2018). **Pinpoint adicionado em 30 funções** (apt_file, aws, bees, cadvisor, dbvis, netbeans*, nginx, notify_*, pulseaudio, scilab, t, tarsnap, termboy, thunderbird, tor*, traceroute, transmission, virsh, virt_viewer, visualstudio→code, vlc, watchman, wireshark, wrk, ykpersonalize, yubico_piv_tool). phpmyadmin mantido sem pinpoint (sem CLI nativo). Total: 52 → 48 funções, todas com fallback nativo→docker | ✅ feito |
 | **7. Testes + CI** | `test/path.bats` (3 testes: PATH sem duplicatas/vazios/missing dirs com PATH isolado). `test/shebangs.bats` (6 testes: init/, scripts/{audit,claude}/, bin/dotfiles, novos scripts). `.github/workflows/tests.yml` matrix ubuntu+macos rodando test/run_tests.sh. Suite cresceu 7→9 | ✅ feito |
-| **8. Docs finais** | matriz de suporte no README, atualizar trilingual | pendente |
+| **8. Docs finais** | README atualizado: matriz de suporte (macOS/Ubuntu/Debian/Kali/Fedora), badge de CI, diretórios novos (archive/, packages/, scripts/audit/, .github/), refs cruzadas pra audit.md/scripts-review.md/deprecations.md. Trilingual atualizado (`docs/en/About.md`, `docs/pt/Introducao.Md`, `docs/es/Acerca.md`) com seção da auditoria + tabela dos 7 novos scripts | ✅ feito |
 
 Cada fase em PR/commits separados, reversíveis.
 
