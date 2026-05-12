@@ -57,13 +57,8 @@ _shell_files() {
   [ "$status" -eq 0 ]
 }
 
-@test "bash -n: init/20_ubuntu_apt.sh passa na checagem de sintaxe" {
-  run bash -n "$DOTFILES_ROOT/init/20_ubuntu_apt.sh"
-  [ "$status" -eq 0 ]
-}
-
-@test "bash -n: init/20_linux_apt.sh passa na checagem de sintaxe" {
-  run bash -n "$DOTFILES_ROOT/init/20_linux_apt.sh"
+@test "bash -n: init/20_apt.sh passa na checagem de sintaxe" {
+  run bash -n "$DOTFILES_ROOT/init/20_apt.sh"
   [ "$status" -eq 0 ]
 }
 
