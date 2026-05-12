@@ -1,21 +1,21 @@
+# source/50_ruby.sh — inicializa rbenv (se disponível) ou rvm como fallback.
+# shellcheck shell=bash
+#
+# Antes: tinha fallback pra $DOTFILES/vendor/rbenv/bin caso nenhum rbenv
+# estivesse no PATH. Hoje: vendor/rbenv removido — install via brew/apt/asdf.
+
 export PATH
 
-# @todo Commando type nao funciona com -P no zsh, nem o whitch
- 
-if [[ "$(pinpoint rbenv)" && ! "$(type -t _rbenv)" ]]; then
+# Initialize rbenv se disponível no PATH (via brew/apt/asdf-shim)
+if command -v rbenv >/dev/null 2>&1 && ! type -t _rbenv >/dev/null 2>&1; then
   eval "$(rbenv init -)"
-elif [[ -e /etc/profile.d/rvm.sh ]]; then
-  # rvm init
-  source /etc/profile.d/rvm.sh
-else
-  # rbenv init.
-  PATH="$(path_remove $DOTFILES/vendor/rbenv/bin):$DOTFILES/vendor/rbenv/bin"
-
-  if [[ "$(pinpoint rbenv)" && ! "$(type -t _rbenv)" ]]; then
-    eval "$(rbenv init -)"
-  fi
 fi
 
+# RVM como alternativa (system-wide ou user-local)
 if [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
-  source ~/.rvm/scripts/rvm
+  # shellcheck disable=SC1091
+  source "$HOME/.rvm/scripts/rvm"
+elif [[ -e /etc/profile.d/rvm.sh ]]; then
+  # shellcheck disable=SC1091
+  source /etc/profile.d/rvm.sh
 fi
