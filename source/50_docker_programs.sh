@@ -139,21 +139,6 @@ apt_file(){
         --name apt-file \
         ${DOCKER_REPO_PREFIX}apt-file
 }
-alias a=atom
-atom(){
-    if [[ "$(pinpoint atom)" ]]; then
-        command atom "$@"
-        return 
-    fi
-    images_local_build atom
-
-    docker run -d -ti \
-        --user $(id -u):$(id -g) \
-        -e DISPLAY=$DISPLAY \
-        -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -v `pwd`:/var/www \
-        ${DOCKER_REPO_PREFIX}atom "$@"
-}
 alias apt-file="apt_file"
 audacity(){
     if [[ "$(pinpoint audacity)" ]]; then
@@ -384,16 +369,6 @@ clementine(){
 # 		-w /src \
 # 		cordova cordova "$@"
 # }
-dcos(){
-    images_local_build dcos-cli
-
-    docker run -it --rm \
-        --user $(id -u):$(id -g) \
-            -v $HOME/.dcos:/root/.dcos \
-            -v $(pwd):/root/apps \
-            -w /root/apps \
-            ${DOCKER_REPO_PREFIX}dcos-cli "$@"
-}
 dbvis(){
     images_local_build dbvis
 
@@ -940,19 +915,6 @@ phpmyadmin(){
 
   dfazer
 }
-phonegap(){
-  images_local_build phonegap 3.6.0-0-21-19
-
-  del_stopped phonegap
-
-  docker run -it --rm \
-    --user $(id -u):$(id -g) \
-    --privileged \
-    -v /dev/bus/usb:/dev/bus/usb \
-    -v $PWD:/data \
-    -w /data \
-    phonegap "$@"
-}
 # pivman(){
 #   images_local_build pivman
 
@@ -1385,25 +1347,6 @@ torbrowser(){
 		--device /dev/snd \
 		--name torbrowser \
 		${DOCKER_REPO_PREFIX}tor-browser
-
-	# exit current shell
-	exit 0
-}
-tormessenger(){
-  images_local_build tor-messenger
-
-	del_stopped tormessenger
-
-	docker run -d \
-                --user $(id -u):$(id -g) \
-		-v /etc/localtime:/etc/localtime:ro \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-e DISPLAY=unix$DISPLAY \
-		-e GDK_SCALE \
-		-e GDK_DPI_SCALE \
-		--device /dev/snd \
-		--name tormessenger \
-		${DOCKER_REPO_PREFIX}tor-messenger
 
 	# exit current shell
 	exit 0
