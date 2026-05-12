@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# port-killer — encontra e mata o processo escutando numa porta
+# Uso: port-killer <port> [--force]
+set -euo pipefail
+
+if [[ -z "${1:-}" || "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+  cat <<'EOF'
+Uso: port-killer <port> [--force]
+
+  port      número da porta TCP/UDP
+  --force   pula confirmação interativa
+
+Exemplos:
+  port-killer 3000           # mostra processo e pergunta antes de matar
+  port-killer 3000 --force   # mata sem perguntar
+EOF
+  exit 0
+fi
+
+command -v lsof >/dev/null 2>&1 || {
+  echo "Faltando: lsof"
+  exit 1
+}
+
+port="$1"
+force=0
+[[ "${2:-}" == "--force" ]] && force=1
+
+pid=$(lsof -ti :"$port" 2>/dev/null || true)
+if [[ -z "$pid" ]]; then
+  echo "Nenhum processo escutando em :$port"
+  exit 0
+fi
+
+echo "Processo(s) escutando em :$port"
+# shellcheck disable=SC2086
+ps -p $pid -o pid,user,comm 2>/dev/null
+echo
+
+if (( force == 1 )); then
+  # shellcheck disable=SC2086
+  kill $pid && echo "Killed."
+else
+  read -rp "Matar? [y/N] " ans
+  if [[ "$ans" =~ ^[Yy] ]]; then
+    # shellcheck disable=SC2086
+    kill $pid && echo "Killed."
+  else
+    echo "Abortado."
+  fi
+fi
