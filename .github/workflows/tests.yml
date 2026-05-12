@@ -1,0 +1,54 @@
+name: tests
+
+on:
+  push:
+    branches: [master, release]
+  pull_request:
+    branches: [master, release]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # No submodules — vendor/* and link/* não são necessários
+          # pra rodar os testes (run_tests.sh exclui esses paths).
+          submodules: false
+
+      # ----- macOS deps -----
+      - name: Install deps (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install bats-core shellcheck
+
+      # ----- Linux deps -----
+      - name: Install deps (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+          # bats-core via git (apt versão é antiga e incompatível)
+          git clone --depth 1 --branch v1.10.0 \
+            https://github.com/bats-core/bats-core.git /tmp/bats-core
+          sudo /tmp/bats-core/install.sh /usr/local
+
+      # ----- Sanity check -----
+      - name: Versions
+        run: |
+          bash --version | head -1
+          shellcheck --version | head -2
+          bats --version
+
+      # ----- Run suite -----
+      - name: Run test suite
+        run: bash test/run_tests.sh
