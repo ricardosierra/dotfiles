@@ -1,25 +1,32 @@
-# Homebrew installs python2 pip as "pip2"
-for pip_cmd in pip2 pip FAIL; do [[ "$(which $pip_cmd)" ]] && break; done
+#!/bin/bash
+# Installs Python CLI tools via pipx (isolated per-tool venvs).
+# Antes: sudo pip install — poluía o Python do sistema.
+# Hoje: pipx pra ferramentas CLI; libs por projeto em venvs.
 
-# Exit if pip is not installed.
-[[ $pip_cmd == FAIL ]] && e_error "Pip needs to be installed." && return 1
+# Garantir pipx
+if ! command -v pipx >/dev/null 2>&1; then
+  e_header "Installing pipx"
+  if is_osx; then
+    brew install pipx
+  elif command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get install -y pipx
+  elif command -v dnf >/dev/null 2>&1; then
+    sudo dnf install -y pipx
+  else
+    e_error "Não soube instalar pipx neste sistema. Instale manualmente: https://pipx.pypa.io/"
+    return 1
+  fi
+  pipx ensurepath >/dev/null
+fi
 
-# Add pip packages
-pip_packages=(
-  netifaces
-  psutil
-  tmuxp
+# Ferramentas CLI Python (libs como netifaces/psutil ficam por projeto em venv).
+pipx_tools=(
+  tmuxp                # gerenciador de sessões tmux
 )
 
-# is_osx || pip_packages+=(powerline-status)
-
-installed_pip_packages="$($pip_cmd list 2>/dev/null | awk '{print $1}')"
-pip_packages=($(setdiff "${pip_packages[*]}" "$installed_pip_packages"))
-
-if (( ${#pip_packages[@]} > 0 )); then
-  e_header "Installing pip packages (${#pip_packages[@]})"
-  for package in "${pip_packages[@]}"; do
-    e_arrow "$package"
-    $pip_cmd install "$package"
-  done
-fi
+for tool in "${pipx_tools[@]}"; do
+  if ! pipx list --short 2>/dev/null | awk '{print $1}' | grep -qx "$tool"; then
+    e_header "Installing $tool via pipx"
+    pipx install "$tool"
+  fi
+done
