@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# wc-by-language — LoC agregadas por linguagem (extensão), alternativa leve a tokei/cloc.
+# Uso: wc-by-language [diretório]  (default: pasta atual)
+#
+# Skip: .git, node_modules, .next, dist, build, target, vendor, __pycache__, .venv, venv
+# Compatível com bash 3.2 (sem associative arrays).
+set -euo pipefail
+
+dir="${1:-.}"
+[[ -d "$dir" ]] || { echo "wc-by-language: '$dir' não é diretório"; exit 1; }
+
+find "$dir" \
+  \( -name .git -o -name node_modules -o -name .next -o -name dist \
+     -o -name build -o -name target -o -name vendor \
+     -o -name __pycache__ -o -name .venv -o -name venv \) -prune -o \
+  -type f -print 2>/dev/null | \
+  awk '
+    BEGIN {
+      L["php"]="PHP"; L["js"]="JavaScript"; L["jsx"]="JavaScript"
+      L["ts"]="TypeScript"; L["tsx"]="TypeScript"; L["py"]="Python"
+      L["rb"]="Ruby"; L["go"]="Go"; L["rs"]="Rust"; L["java"]="Java"
+      L["kt"]="Kotlin"; L["swift"]="Swift"; L["c"]="C"; L["cpp"]="C++"
+      L["h"]="C"; L["hpp"]="C++"; L["cs"]="C#"; L["sh"]="Shell"
+      L["bash"]="Shell"; L["zsh"]="Shell"; L["lua"]="Lua"
+      L["html"]="HTML"; L["css"]="CSS"; L["scss"]="SCSS"
+      L["sass"]="Sass"; L["less"]="Less"; L["sql"]="SQL"
+      L["md"]="Markdown"; L["yml"]="YAML"; L["yaml"]="YAML"
+      L["json"]="JSON"; L["xml"]="XML"; L["toml"]="TOML"
+      L["ini"]="INI"; L["vim"]="Vim"; L["el"]="Elisp"
+      L["ex"]="Elixir"; L["exs"]="Elixir"
+    }
+    {
+      n = split($0, parts, ".")
+      if (n < 2) next
+      ext = tolower(parts[n])
+      if (!(ext in L)) next
+      cmd = "wc -l < \047" $0 "\047 2>/dev/null"
+      lines = 0
+      cmd | getline lines
+      close(cmd)
+      C[L[ext]] += lines + 0
+      T += lines + 0
+    }
+    END {
+      if (T == 0) { print "Nenhum código reconhecido."; exit 0 }
+      n = 0
+      for (l in C) { n++; names[n]=l; cnt[n]=C[l] }
+      # Bubble sort desc por linhas
+      for (i=1; i<n; i++)
+        for (j=i+1; j<=n; j++)
+          if (cnt[j] > cnt[i]) {
+            t=cnt[i]; cnt[i]=cnt[j]; cnt[j]=t
+            t=names[i]; names[i]=names[j]; names[j]=t
+          }
+      for (i=1; i<=n; i++)
+        printf "%-12s %8d  (%5.1f%%)\n", names[i], cnt[i], cnt[i]*100/T
+      printf "%-12s %8d\n", "TOTAL", T
+    }'
