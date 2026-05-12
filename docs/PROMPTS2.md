@@ -1444,6 +1444,143 @@ Não migre sem confirmação.
 
 ---
 
+## 43. Revisar scripts em bin/ — funcionalidade, deps e modernização
+
+```
+O dotfiles tem ~50 scripts em ~/.dotfiles/bin/ e subdiretórios
+(bin/dev, bin/files, bin/games, bin/life, bin/network, bin/pentest,
+bin/security, bin/sed, bin/system, bin/text). Muitos têm 10+ anos
+e nunca foram revisados.
+
+Faça uma revisão **script-por-script** das pastas:
+- bin/pentest/
+- bin/network/
+- bin/system/
+- bin/files/
+- bin/security/
+- bin/life/
+- bin/text/
+
+Para CADA script, responda em uma seção própria:
+
+1. **O que faz** — uma frase descrevendo a função.
+2. **Dependências externas** — quais binários/libs precisa
+   (curl, lynx, nmap, zenity, imagemagick, bc, ffmpeg, etc).
+   Marcar [✓] se ainda instalável via brew/apt em 2026,
+   [✗] se obsoleto.
+3. **Estado** — uma das categorias:
+   - WORKS: roda sem mudanças, deps presentes em sistemas
+     modernos
+   - WORKS_NEEDS_DEP: roda se instalar X
+   - BROKEN_URL: scraping de URL morta (sugerir
+     substituto, ex: wttr.in pra previsão do tempo)
+   - BROKEN_DEP: dep obsoleta sem substituto
+   - PT_BR_ONLY: usa textos/inputs pt-BR (não-bloqueante,
+     mas notar)
+   - ROOT_REQUIRED: precisa de sudo/root (notar risco)
+   - DESKTOP_ONLY: precisa de zenity/dialog (Linux desktop)
+4. **Modernização sugerida** — uma linha do que faria pra
+   2026 (ex: "trocar lynx por curl + jq"; "adicionar
+   shebang"; "remover apt-key, usar /usr/share/keyrings").
+5. **Veredicto** — KEEP / KEEP_WITH_CHANGES / ARCHIVE /
+   REMOVE.
+
+Não modifique nenhum arquivo ainda — só produza o relatório
+em docs/scripts-review.md no formato:
+
+```markdown
+# Revisão de scripts em bin/
+
+## bin/pentest/
+
+### pentest
+1. **O que faz:** menu PenScan — DNS pulls, nmap ping sweep,
+   MSSQL enum, hostname resolver.
+2. **Deps:** `toilet` [✓ apt/brew], `nmap` [✓], `host` [✓].
+3. **Estado:** WORKS_NEEDS_DEP (toilet não vem por padrão).
+4. **Modernização:** adicionar `for dep in toilet nmap host;
+   do command -v $dep || missing+=($dep); done` no início.
+5. **Veredicto:** KEEP_WITH_CHANGES.
+
+### scan
+1. ...
+```
+
+Depois do relatório, **sugira no mínimo 5 novos scripts** que
+fariam sentido nesses domínios mas não existem:
+
+- bin/system/ — algo tipo `du-by-extension` (mostra disk usage
+  agrupado por extensão de arquivo)?
+- bin/network/ — algo tipo `wifi-strength` (mostra força do
+  sinal Wi-Fi atual)?
+- bin/files/ — algo tipo `dedupe` (encontra arquivos
+  duplicados por hash)?
+- bin/text/ — algo tipo `wc-by-language` (linhas de código
+  por linguagem)?
+- bin/pentest/ — algo tipo `ssl-check` (auditoria de
+  certificado SSL de um domínio)?
+
+Para cada sugestão, escreva 5-10 linhas justificando
+**por que** o dono dos dotfiles provavelmente usaria.
+
+Critério de pronto:
+- docs/scripts-review.md criado com todos os scripts das
+  pastas listadas inspecionados.
+- Tabela-resumo no topo: nome | estado | veredicto.
+- Seção "Novos scripts sugeridos" com 5+ propostas
+  justificadas.
+- Não modifique nada em bin/ — apenas relatório.
+```
+
+---
+
+## 44. Criar/modernizar scripts identificados pela revisão #43
+
+```
+Após rodar o Prompt #43, leia docs/scripts-review.md e
+implemente as mudanças.
+
+Regras:
+
+1. **Um commit por script modificado** (não bulk).
+2. **Sempre adicionar shebang** se faltar (`#!/usr/bin/env bash`
+   pra bash, `#!/bin/sh` pra POSIX puro).
+3. **Sempre validar deps no topo do script**:
+   ```sh
+   for dep in nmap host toilet; do
+     command -v "$dep" >/dev/null 2>&1 || {
+       echo "Faltando: $dep — instale com: brew install $dep / apt install $dep"
+       missing=1
+     }
+   done
+   [[ ${missing:-0} -eq 1 ]] && exit 1
+   ```
+4. **Substituir scraping morto** por APIs modernas:
+   - tempo/clima → `wttr.in`
+   - IP externo → `ipinfo.io` ou `ifconfig.me`
+5. **Não modernize de forma agressiva** — preserve a
+   função original. Se o script faz X, continua fazendo X.
+6. **Não delete scripts marcados ARCHIVE/REMOVE no #43**
+   sem confirmação explícita do dono.
+7. **Para os NOVOS scripts sugeridos**:
+   - Mostre o conteúdo proposto antes de criar
+   - Use o mesmo estilo (header com Autor, comentário do
+     que faz, set -euo pipefail quando apropriado)
+   - Coloque no diretório semanticamente correto
+     (bin/system/du-by-extension, etc)
+
+Critério de pronto:
+- Scripts WORKS_NEEDS_DEP: ganham guard de dep no topo.
+- Scripts BROKEN_URL: API atualizada.
+- Scripts sem shebang: ganham shebang.
+- Cada novo script tem documentação (--help ou cabeçalho).
+- `bash test/run_tests.sh` continua verde.
+- `bash scripts/audit/audit_no_shebang.sh` retorna vazio
+  pros dirs revisados.
+```
+
+---
+
 ## Como usar estes prompts
 
 1. Copie o bloco de código do prompt desejado
