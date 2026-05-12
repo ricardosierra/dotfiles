@@ -1,0 +1,216 @@
+# Brewfile — pacotes macOS gerenciados via Homebrew Bundle.
+#
+# Uso:
+#   brew bundle --file=packages/Brewfile          # instala tudo que falta
+#   brew bundle check --file=packages/Brewfile    # lista o que falta
+#   brew bundle cleanup --file=packages/Brewfile  # mostra o que está instalado e não está aqui
+#   brew bundle dump --file=packages/Brewfile     # gera Brewfile do estado atual
+#
+# Conteúdo extraído de init/30_osx_homebrew_recipes.sh e
+# init/30_osx_homebrew_casks.sh (preservados como fallback até migração final).
+
+# =============================================================================
+# Formulae (CLI tools)
+# =============================================================================
+
+# Linguagens / runtimes (instalados via brew quando volta/asdf não cobrem)
+brew "ansible"
+brew "awscli"
+
+# Shell + cores
+brew "bash"
+brew "coreutils"
+brew "gnu-sed"
+brew "gawk"
+
+# Git e dev tooling
+brew "git"
+brew "git-extras"
+brew "hub"
+
+# VCS
+brew "mercurial"
+
+# Sysadmin / observabilidade
+brew "htop"
+brew "jq"
+brew "smartmontools"
+brew "nmap"
+brew "telnet"
+
+# Database
+brew "postgresql"
+
+# Prompt + tmux
+brew "powerline-go"
+brew "tmux"
+brew "tmux-xpanes"
+brew "reattach-to-user-namespace"
+
+# Search / find moderno
+brew "fd"
+brew "ripgrep"
+brew "the_silver_searcher"
+
+# Pager / output
+brew "lesspipe"
+brew "tree"
+brew "wget"
+brew "terminal-notifier"
+brew "thefuck"
+
+# Brincadeiras
+brew "cmatrix"
+brew "cowsay"
+brew "id3tool"
+brew "sl"
+
+# Helpers / SSH
+brew "ssh-copy-id"
+brew "copyclip"
+
+# Manuais
+brew "man2html"
+
+# Dependências do PHP
+brew "re2c"
+brew "gd"
+brew "freetype"
+brew "libzip"
+
+# Linux helper em macOS
+brew "ext4fuse"
+
+# Leitura de qualquer arquivo
+brew "antiword"           # .doc legado
+brew "dcraw"              # RAW de câmeras
+brew "exiftool"           # metadados
+brew "ffmpeg"             # áudio/vídeo
+brew "file-formula"       # `file` GNU mais novo
+brew "imagemagick"        # imagens (HEIC, PSD, etc.)
+brew "libarchive"         # bsdtar — tar, ar, iso, xar, lha, cpio
+brew "mediainfo"          # metadados detalhados de mídia
+brew "mupdf-tools"        # mutool — PDF/EPUB/XPS/CBZ
+brew "p7zip"              # 7z, zip, rar (read), iso, dmg
+brew "pandoc"             # converte praticamente qualquer formato
+brew "poppler"            # pdftotext/pdfimages/pdfinfo
+brew "qpdf"               # inspeção/manipulação de PDF
+brew "sevenzip"           # 7-Zip 24+ oficial
+brew "shellcheck"         # lint estático
+brew "sleuthkit"          # análise forense de filesystems
+brew "tesseract"          # OCR
+brew "testdisk"           # photorec
+brew "unar"               # The Unarchiver CLI
+
+# =============================================================================
+# Casks (GUI apps)
+# =============================================================================
+
+# Produtividade
+cask "a-better-finder-rename"
+cask "alfred"
+cask "bartender"
+cask "bettertouchtool"
+cask "betterzip"
+cask "fastscripts"
+cask "moom"
+cask "menumeters"
+cask "scroll-reverser"
+
+# Dev tools
+cask "iterm2"
+cask "macvim"
+cask "visual-studio-code"
+cask "sourcetree"
+cask "tower"
+cask "meld"
+cask "datagrip"
+cask "robo-3t"
+cask "postman"
+cask "charles"
+cask "ngrok"
+cask "android-platform-tools"
+cask "docker"
+cask "vagrant"
+cask "virtualbox"
+cask "hex-fiend"
+cask "midi-monitor"
+
+# Navegadores
+cask "google-chrome"
+cask "chromium"
+cask "firefox"
+
+# Comunicação
+cask "slack"
+cask "skype"
+cask "messenger-for-desktop"
+cask "caprine"
+cask "microsoft-remote-desktop-beta"
+cask "teamspeak-client"
+cask "teamviewer"
+cask "synology-assistant"
+
+# Cloud
+cask "dropbox"
+cask "chronosync"
+
+# Mídia / criação
+cask "gimp"
+cask "reaper"
+cask "vlc"
+cask "spotify"
+cask "iina"               # player baseado em mpv
+
+# Captura
+cask "gyazo"
+cask "licecap"
+
+# Calc
+cask "numi"
+
+# Diversão
+cask "battle-net"
+cask "star-realms"
+cask "steam"
+
+# Sys
+cask "omnidisksweeper"
+cask "the-unarchiver"
+cask "xscreensaver"
+cask "controllermate"
+cask "karabiner-elements"
+cask "seil"
+cask "sharemouse"
+
+# Design
+cask "zeplin"
+
+# Leitura/abertura de arquivos
+cask "libreoffice"        # docx/xlsx/pptx/odt + CLI (`soffice`)
+cask "calibre"            # e-books + `ebook-convert`
+cask "keka"               # archives universais (RAR, 7z, ISO)
+
+# Virtualização e ISOs
+cask "utm"                # ARM/x86 nativo (Apple Silicon)
+cask "balenaetcher"       # gravação de ISO em USB
+
+# Drivers
+cask "sonos"
+cask "xbox360-controller-driver-unofficial"
+
+# Quick Look plugins
+cask "qlcolorcode"
+cask "qlmarkdown"
+cask "qlprettypatch"
+cask "qlstephen"
+cask "quicklook-csv"
+cask "quicklook-json"
+cask "quicknfo"
+cask "suspicious-package"
+cask "webpquicklook"
+
+# Fontes
+cask "font-m-plus"
+cask "font-mplus-nerd-font"
+cask "font-mplus-nerd-font-mono"
