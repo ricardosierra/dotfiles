@@ -1,34 +1,40 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# clear-snap — limpa apt cache, journal, revisões antigas de snaps, thumbnails.
+# Ubuntu/Debian (precisa de apt-get).
+set -eu
+
+command -v apt-get >/dev/null 2>&1 || {
+  echo "clear-snap: precisa de apt-get (Ubuntu/Debian)"
+  exit 1
+}
 
 sudo apt-get clean
 sudo apt-get autoclean
 
-journalctl --disk-usage
-sudo journalctl --vacuum-time=3d
-journalctl --disk-usage
+if command -v journalctl >/dev/null 2>&1; then
+  journalctl --disk-usage
+  sudo journalctl --vacuum-time=3d
+  journalctl --disk-usage
+fi
 
-
-# Removes old revisions of snaps
-# CLOSE ALL SNAPS BEFORE RUNNING THIS
-du -h /var/lib/snapd/snaps
-set -eu
-snap list --all | awk '/disabled/{print $1, $3}' |
-    while read snapname revision; do
-        sudo snap remove "$snapname" --revision="$revision"
+# Snaps cleanup (apenas se snap estiver instalado — CLOSE ALL SNAPS BEFORE)
+if command -v snap >/dev/null 2>&1; then
+  echo "Removendo revisões antigas de snaps (feche os snaps antes!)..."
+  du -h /var/lib/snapd/snaps 2>/dev/null || true
+  snap list --all | awk '/disabled/{print $1, $3}' |
+    while read -r snapname revision; do
+      sudo snap remove "$snapname" --revision="$revision"
     done
-du -h /var/lib/snapd/snaps
+  du -h /var/lib/snapd/snaps 2>/dev/null || true
+fi
 
+# Thumbnails
+if [[ -d "$HOME/.cache/thumbnails" ]]; then
+  du -sh "$HOME/.cache/thumbnails"
+  rm -rf "$HOME/.cache/thumbnails"/*
+fi
 
-
-
-du -sh ~/.cache/thumbnails
-rm -rf ~/.cache/thumbnails/*
-
-
-#4. Remove old Linux kernels that were manually installed [For Experts]
-sudo dpkg --list 'linux-image*'
-# sudo apt-get remove linux-image-VERSION
-
-
-# REmove Orphans package
-sudo apt-get install gtkorphan
+echo
+echo "[dica] Pra listar kernels manualmente instalados:"
+echo "       sudo dpkg --list 'linux-image*'"
+echo "[dica] Pra encontrar pacotes órfãos: sudo apt install gtkorphan"
