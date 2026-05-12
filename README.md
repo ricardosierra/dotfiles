@@ -1,7 +1,9 @@
 # Dotfiles
 
-> OSX · Ubuntu · Fedora · KaliLinux · Debian  
+> macOS · Ubuntu · Debian · Kali · Fedora  
 > Fork do ["Cowboy" Ben Alman](https://github.com/cowboy/dotfiles) — inspirado por [jfrazelle](https://github.com/jfrazelle/dotfiles)
+
+[![tests](https://github.com/ricardorsierra/dotfiles/actions/workflows/tests.yml/badge.svg)](https://github.com/ricardorsierra/dotfiles/actions/workflows/tests.yml)
 
 ---
 
@@ -12,6 +14,26 @@
 | [English](#installation) | [About](docs/en/About.md) · [Install](docs/en/Install.md) · [Folders & Functions](docs/en/dotfiles/FoldersAndFunctions.md) |
 | [Português (Brasil)](#instalação) | [Introdução](docs/pt/Introducao.md) · [Funcionamento](docs/pt/Funcionamento.md) · [Personalizando](docs/pt/Personalizando.md) · [Atalhos](docs/pt/usando/Atalhos.md) |
 | [Español](#instalación) | [Acerca de](docs/es/Acerca.md) · [Instalación](docs/es/Instalacion.md) · [Carpetas y Funciones](docs/es/dotfiles/CarpetasYFunciones.md) |
+
+**Auditoria de manutenção (2026-Q2):**
+[`docs/audit.md`](docs/audit.md) (relatório completo) ·
+[`docs/scripts-review.md`](docs/scripts-review.md) (revisão dos 27 scripts em `bin/`) ·
+[`docs/deprecations.md`](docs/deprecations.md) (política de archive) ·
+[`scripts/audit/`](scripts/audit/) (11 auditorias automatizadas)
+
+---
+
+## Matriz de suporte
+
+| Plataforma | Versão mínima testada | Bootstrap | CI |
+|---|---|---|---|
+| macOS | 10.15 Catalina+ (Apple Silicon OK) | Homebrew + `init/20_macos_homebrew.sh` + opcional `brew bundle --file=packages/Brewfile` | ✅ |
+| Ubuntu | 22.04 LTS (e derivadas: Mint, Pop, Zorin, elementary) | `init/20_apt.sh` unificado | ✅ |
+| Debian | 12 (bookworm) | `init/20_apt.sh` | manual |
+| Kali Linux | rolling | `init/20_apt.sh` | manual |
+| Fedora | 39+ | parcial — Ruby/Python via `dnf` em `init/60_ruby.sh` e `30_python_pip.sh` | — |
+
+CI roda em [GitHub Actions](.github/workflows/tests.yml) com matrix Ubuntu + macOS a cada push.
 
 ---
 
@@ -40,16 +62,20 @@ On subsequent runs, step 1 is skipped, step 2 updates the repo, and step 5 remem
 
 | Directory | Purpose |
 |-----------|---------|
+| `/.github/workflows` | GitHub Actions CI (matrix Ubuntu + macOS) |
+| `/archive` | Código legado opt-in (legacy, legacy-security, personal, docs-2.0) |
 | `/backups` | Created automatically — backs up files overwritten by copy/link steps |
 | `/bin` | Executable scripts and symlinks, added to `$PATH` |
 | `/caches` | Cached data used by scripts and functions |
 | `/conf` | Config files that don't belong in `~/` |
 | `/copy` | Files copied verbatim into `~/` (use for files with sensitive personal data) |
-| `/link` | Files symlinked into `~/` (changes in either location affect both) |
-| `/source` | Shell files sourced on every new shell, in alphanumeric order |
 | `/init` | Install scripts (OS-detected, run once) |
-| `/test` | Unit tests for complex bash functions |
-| `/vendor` | Third-party libraries (git submodules) |
+| `/link` | Files symlinked into `~/` (changes in either location affect both) |
+| `/packages` | Listas declarativas de pacotes (Brewfile) |
+| `/scripts/audit` | 11 scripts de auditoria do repo (uso, deps, segurança) |
+| `/source` | Shell files sourced on every new shell, in alphanumeric order |
+| `/test` | bats suítes + legacy + shellcheck |
+| `/vendor` | Third-party libraries (git submodules: .tmux, git-extras, z, rename) |
 
 ### The copy step
 
