@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# dedupe — lista arquivos duplicados por hash MD5 em um diretório
+# Uso: dedupe [diretório]  (default: pasta atual)
+#
+# Não deleta nada — só lista grupos de duplicatas.
+# Pra deletar: revise a saída e remova manualmente.
+set -euo pipefail
+
+dir="${1:-.}"
+[[ -d "$dir" ]] || { echo "dedupe: '$dir' não é diretório"; exit 1; }
+
+# md5sum (Linux/GNU) ou md5 -r (macOS/BSD) — saída compatível: "<hash> <file>"
+if command -v md5sum >/dev/null 2>&1; then
+  hash_cmd=(md5sum)
+elif command -v md5 >/dev/null 2>&1; then
+  hash_cmd=(md5 -r)
+else
+  echo "Faltando: md5sum (Linux) ou md5 (macOS)"
+  exit 1
+fi
+
+find "$dir" -type f -size +0c -print0 2>/dev/null | \
+  xargs -0 "${hash_cmd[@]}" 2>/dev/null | \
+  sort | \
+  awk '
+    {
+      hash = $1
+      $1 = ""
+      sub(/^ +/, "")
+      file = $0
+      if (hash == prev_hash) {
+        if (!shown) print "\n--- duplicates ---\n" prev_file
+        print file
+        shown = 1
+      } else {
+        shown = 0
+      }
+      prev_hash = hash
+      prev_file = file
+    }
+  '
