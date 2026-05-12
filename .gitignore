@@ -39,3 +39,26 @@ npm-debug.log
 
 /init/60_fidelize.sh
 beef/
+
+# === auditoria (gerado por scripts/audit/) ===
+/.audit/
+
+# === OS metadata ===
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+desktop.ini
+
+# === logs ===
+*.log
+tmux-client-*.log
+
+# === editores ===
+*.swp
+*.swo
+*~
+
+# === typos / lixo histórico ===
+*.txrt
+retorno.*
