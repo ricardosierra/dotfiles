@@ -216,7 +216,6 @@ src 50_ubuntu
 src 50_vcs
 src 50_web
 # src 60_windows
-src 80_work_station
 src 90_dump
 src 100_workflow
 

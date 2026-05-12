@@ -76,7 +76,10 @@ alias gcl='git clone'
 alias gcd='git rev-parse 2>/dev/null && cd "./$(git rev-parse --show-cdup)"'
 
 # pega o nome do branch atual (ou o SHA se estiver em detached HEAD)
-gbs() { git branch | perl -ne '/^\* (?:\(detached from (.*)\)|(.*))/ && print "$1$2"'; }
+# 'function gbs { }' (sem parênteses) bypassa a checagem de alias do zsh no parser.
+# unalias ainda necessário em runtime: oh-my-zsh/git define gbs='git bisect'.
+unalias gbs 2>/dev/null
+function gbs { git branch | perl -ne '/^\* (?:\(detached from (.*)\)|(.*))/ && print "$1$2"'; }
 
 # roda comandos em todos os subdiretórios (útil em monorepos)
 alias gu-all='eachdir git pull'
