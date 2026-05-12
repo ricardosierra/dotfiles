@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# wifi-strength — SSID + força do sinal da conexão Wi-Fi atual
+# macOS: airport (legacy) ou networksetup
+# Linux: nmcli (NetworkManager)
+set -euo pipefail
+
+if [[ "$OSTYPE" =~ ^darwin ]]; then
+  airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
+  if [[ -x "$airport" ]]; then
+    "$airport" -I | awk '
+      /^[[:space:]]+SSID:/        {ssid=$2}
+      /^[[:space:]]+agrCtlRSSI:/  {rssi=$2}
+      /^[[:space:]]+channel:/     {chan=$2}
+      END {
+        if (rssi != "") {
+          pct = (rssi + 100) * 2
+          if (pct > 100) pct = 100
+          if (pct < 0) pct = 0
+        } else pct = "?"
+        printf "SSID: %s  |  Signal: %s%%  |  Channel: %s\n", ssid, pct, chan
+      }'
+  else
+    # macOS Sonoma+ removeu o airport CLI
+    iface=$(route -n get default 2>/dev/null | awk '/interface:/ {print $2}')
+    ssid=$(networksetup -getairportnetwork "$iface" 2>/dev/null | sed 's/^.*: //')
+    echo "SSID: ${ssid:-?}  |  (RSSI/canal: airport CLI removido neste macOS — use 'sudo wdutil info')"
+  fi
+elif command -v nmcli >/dev/null 2>&1; then
+  nmcli -t -f ACTIVE,SSID,SIGNAL,CHAN dev wifi 2>/dev/null | \
+    awk -F: '$1 == "yes" {printf "SSID: %s  |  Signal: %s%%  |  Channel: %s\n", $2, $3, $4}'
+else
+  echo "wifi-strength: precisa de 'airport' (macOS) ou 'nmcli' (Linux NetworkManager)"
+  exit 1
+fi
