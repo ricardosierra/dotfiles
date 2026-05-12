@@ -1,4 +1,7 @@
-#!/usr/bin/zsh
+# source/01_path.sh — configura $PATH
+# Sourced pelo bin/dotfiles; não tem shebang (o anterior #!/usr/bin/zsh quebrava
+# em sistemas sem zsh em /usr/bin e era irrelevante pra arquivo sourced).
+# shellcheck shell=bash
 
 paths=(
   # Sistem Bins
@@ -10,9 +13,6 @@ paths=(
   /bin
   /usr/games
   /snap/bin
-
-  # SIERRA
-  $CORE/bin
 
   # Opt Programs
   /opt/flutter/bin
@@ -54,6 +54,10 @@ paths=(
   $HOME/.local/share/flatpak/exports/share
 
 )
+
+# $CORE só existe quando /sierra/Core está montado (set em bin/dotfiles).
+# Adiciona condicionalmente pra não poluir PATH com /bin duplicado em macOS.
+[[ -n "${CORE:-}" ]] && paths+=("$CORE/bin")
 
 # Configure PATHS (Caso ja exista, remove e entao add denovo. Caso o path seja vazio nao add o : no final)
 export PATH
