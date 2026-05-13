@@ -79,9 +79,13 @@ function __prompt_git() {
   local status branch flags
   status="$(git status uno 2>/dev/null)"
   [[ $? != 0 ]] && return 1;
-  branch="$(echo "$status" | awk '/# Initial commit/ {print "(init)"}')"
-  [[ "$branch" ]] || branch="$(echo "$status" | awk '/# On branch/ {print $4}')"
-  [[ "$branch" ]] || branch="$(git branch | perl -ne '/^\* \(detached from (.*)\)$/ ? print "($1)" : /^\* (.*)/ && print $1')"
+  branch="$(echo "$status" | awk '
+    /# Initial commit/   { print "(init)"; exit }
+    /^(# )?On branch /   { print $NF; exit }
+    /^HEAD detached at / { print "(" $4 ")"; exit }
+  ')"
+  [[ "$branch" ]] || branch="$(git symbolic-ref --short HEAD 2>/dev/null)"
+  [[ "$branch" ]] || branch="($(git rev-parse --short HEAD 2>/dev/null))"
   flags="$(
     echo "$status" | awk 'BEGIN {r=""} \
         /^(# )?Changes to be committed:$/        {r=r "+"}\
