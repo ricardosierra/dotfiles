@@ -2,6 +2,9 @@
 
 ## [Unreleased](https://gitlab.com/ricardosierra/dotfiles/compare/0.5.0...master)
 
+### Added
+- Git hooks globais anti-autoria de IA (`link/.git_hooks/`, `link/.git_template/`, `config/husky/init.sh`, `init/15_git.sh`, `scripts/install_git_hooks.ps1`) com sanitização automática (`commit-msg`), bloqueio de identidade (`pre-commit`) e barreira de push (`pre-push`) por padrão em novas instalações no macOS, Linux e Windows.
+
 ## [0.5.0] - 2026-05-02 - (https://gitlab.com/ricardosierra/dotfiles/compare/0.4.0...0.5.0)
 
 ### Added

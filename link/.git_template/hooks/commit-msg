@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Git hook: strip AI forced co-authorship trailers (Cursor, Claude, Grok, Codex, Gemini, etc.)
+# Portável para macOS, Linux e Windows (Git Bash/MSYS/WSL).
+
+COMMIT_MSG_FILE="$1"
+[ -f "$COMMIT_MSG_FILE" ] || exit 0
+
+HOOK_DIR="$(cd "$(dirname "$0")" 2>/dev/null && pwd -P)"
+PYTHON_CMD=""
+
+if command -v python3 >/dev/null 2>&1; then
+  PYTHON_CMD="python3"
+elif command -v python >/dev/null 2>&1; then
+  PYTHON_CMD="python"
+elif command -v py >/dev/null 2>&1; then
+  PYTHON_CMD="py"
+elif [ -x "/usr/bin/python3" ]; then
+  PYTHON_CMD="/usr/bin/python3"
+fi
+
+# 1. Tenta sanitizar com Python se disponível
+cleaned=0
+if [ -n "$PYTHON_CMD" ] && [ -f "$HOOK_DIR/clean_commit_msg.py" ]; then
+  if "$PYTHON_CMD" "$HOOK_DIR/clean_commit_msg.py" "$COMMIT_MSG_FILE" 2>/dev/null; then
+    cleaned=1
+  fi
+fi
+
+# 2. Fallback POSIX se Python não estiver disponível ou falhar
+if [ "$cleaned" -eq 0 ]; then
+  TMP_FILE="${COMMIT_MSG_FILE}.tmp.$$"
+  grep -E -i -v '(co-authored-by|made-with|generated-by|assisted-by|authored-by|prompted-by):.*(cursor|cursoragent|anysphere|claude|anthropic|grok|xai|x\.ai|codex|openai|chatgpt|gemini|deepmind|antigravity|copilot|aider|windsurf|codeium|tabnine|supermaven|devin)' "$COMMIT_MSG_FILE" | \
+  grep -E -i -v '(made with \[.*(cursor|claude|gemini|codex)|cursoragent@cursor\.com|noreply@anthropic\.com)' > "$TMP_FILE" 2>/dev/null && mv -f "$TMP_FILE" "$COMMIT_MSG_FILE"
+  rm -f "$TMP_FILE"
+fi
+
+# 3. Delega para hook local do repositório se existir
+GIT_DIR="$(git rev-parse --git-dir 2>/dev/null || true)"
+if [ -n "$GIT_DIR" ] && [ -f "$GIT_DIR/hooks/commit-msg" ] && [ -x "$GIT_DIR/hooks/commit-msg" ]; then
+  REAL_LOCAL="$(cd "$GIT_DIR/hooks" 2>/dev/null && pwd -P)/commit-msg"
+  REAL_GLOBAL="$(cd "$(dirname "$0")" 2>/dev/null && pwd -P)/$(basename "$0")"
+  if [ "$REAL_LOCAL" != "$REAL_GLOBAL" ]; then
+    "$GIT_DIR/hooks/commit-msg" "$@"
+    exit $?
+  fi
+fi
+
+exit 0
