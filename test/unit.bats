@@ -162,3 +162,17 @@ setup() {
   result=$(array_join_filter arr ',')
   [ "$result" = "a,b,c" ]
 }
+
+# =============================================================================
+# 50_history
+# =============================================================================
+
+@test "50_history: carrega sem erro e aplica as opcoes em Bash e Zsh" {
+  run /bin/bash -c 'source "$DOTFILES/source/50_history.sh" 2>&1 && shopt -q histreedit && shopt -q histverify'
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+  command -v /bin/zsh >/dev/null 2>&1 || skip "zsh ausente"
+  run /bin/zsh -fc 'source "$DOTFILES/source/50_history.sh" 2>&1 && [[ -o histverify && -o histignorespace && -o histignoredups ]]'
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+}
