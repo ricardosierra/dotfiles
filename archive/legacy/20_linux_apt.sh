@@ -561,27 +561,6 @@ if [[ ! "$(pinpoint google-chrome)" ]]; then
   fi
 fi
 
-# Install Google Hangout
-if [[ ! "$(dpkg -l |grep google-talkplugin)" ]]; then
-  echo ""
-  echo [+] "Deseja instalar o Google Hangout? y/n" ;
-  read -n 1 digx
-  if [ $digx = "y" ]; then
-    e_header "Installing Google Hangout"
-    (
-      if is_debian; then
-        wget https://dl.google.com/linux/direct/google-talkplugin_current_amd64.deb -O ~/Downloads/google-talkplugin.deb
-        sudo dpkg -i ~/Downloads/google-talkplugin.deb
-        rm ~/Downloads/google-talkplugin.deb
-      else
-        wget https://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm -O ~/Downloads/google-talkplugin.rpm
-        sudo dpkg -i ~/Downloads/google-talkplugin.rpm
-        rm ~/Downloads/google-talkplugin.rpm
-      fi
-    )
-  fi
-fi
-
 echo ""
 echo [+] "Deseja instalar o Java? y/n" ;
 echo '.: openjdk-7-jre, openjdk-7-jdk :.'
