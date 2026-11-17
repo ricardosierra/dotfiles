@@ -47,23 +47,13 @@ _shell_files() {
   [ "$status" -eq 0 ]
 }
 
-@test "bash -n: init/60_golang.sh passa na checagem de sintaxe" {
-  run bash -n "$DOTFILES_ROOT/init/60_golang.sh"
+@test "bash -n: init/60_languages.sh passa na checagem de sintaxe" {
+  run bash -n "$DOTFILES_ROOT/init/60_languages.sh"
   [ "$status" -eq 0 ]
 }
 
-@test "bash -n: init/60_ruby.sh passa na checagem de sintaxe" {
-  run bash -n "$DOTFILES_ROOT/init/60_ruby.sh"
-  [ "$status" -eq 0 ]
-}
-
-@test "bash -n: init/20_ubuntu_apt.sh passa na checagem de sintaxe" {
-  run bash -n "$DOTFILES_ROOT/init/20_ubuntu_apt.sh"
-  [ "$status" -eq 0 ]
-}
-
-@test "bash -n: init/20_linux_apt.sh passa na checagem de sintaxe" {
-  run bash -n "$DOTFILES_ROOT/init/20_linux_apt.sh"
+@test "bash -n: init/20_apt.sh passa na checagem de sintaxe" {
+  run bash -n "$DOTFILES_ROOT/init/20_apt.sh"
   [ "$status" -eq 0 ]
 }
 
