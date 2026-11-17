@@ -4,6 +4,7 @@ is_linux || is_osx || return 1
 
 export GO_VERSION=1.24.3
 export GO_SRC=/usr/local/go
+export GOPATH="${GOPATH:-$HOME/.go}"
 
 # if we are passing the version
 if [[ ! -z "$1" ]]; then
