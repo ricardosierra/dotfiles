@@ -8,7 +8,7 @@ echo 'Dotfiles - Ricardo R. Sierra - http://ricardosierra.com.br/'
 ###########################################
 
 # Where the magic happens.
-export DOTFILES=~/.dotfiles
+export DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 [[ -d /sierra/Core ]] && export CORE=/sierra/Core
 export DOCKERFILES=~/.dockerfiles
 
