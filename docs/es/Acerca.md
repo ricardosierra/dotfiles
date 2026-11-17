@@ -40,3 +40,28 @@ Se crean copias de seguridad automáticamente en `~/.dotfiles/backups/` antes de
 
 - [Instalación](Instalacion.md)
 - [Carpetas y Funciones](dotfiles/CarpetasYFunciones.md)
+
+## Auditoría de mantenimiento (2026-Q2)
+
+Un ciclo completo de auditoría se ejecutó en este repo para eliminar tooling
+legado, modernizar el bootstrap y agregar CI. Salidas principales:
+
+- [`docs/audit.md`](../audit.md) — informe completo (8 fases, 60+ commits)
+- [`docs/scripts-review.md`](../scripts-review.md) — revisión de 27 scripts en
+  `bin/{pentest,network,system,files,security,life,text}/` + 7 herramientas nuevas
+- [`docs/deprecations.md`](../deprecations.md) — política de archive
+- [`scripts/audit/`](../../scripts/audit/) — 11 scripts de auditoría reutilizables
+- [`archive/`](../../archive/) — código legado en cuarentena (instalador BeEF,
+  grabador CDRW, funciones docker muertas atom/phonegap/dcos/tormessenger, etc.)
+
+Nuevas herramientas CLI agregadas en este ciclo (todas en `bin/`):
+
+| Herramienta | Qué hace |
+|---|---|
+| `port-killer <puerto>` | Mata el proceso escuchando en un puerto (con confirmación) |
+| `du-by-extension [dir]` | Top 20 de uso de disco por extensión |
+| `wifi-strength` | SSID actual + fuerza de señal (macOS/Linux) |
+| `dedupe [dir]` | Lista duplicados por hash MD5 |
+| `ssl-check <dominio>` | Audita cert TLS: issuer, validez, días restantes |
+| `git-cleanup [--apply]` | Elimina ramas ya mergeadas en main/master/develop |
+| `wc-by-language [dir]` | LoC por lenguaje (alternativa ligera a tokei/cloc) |

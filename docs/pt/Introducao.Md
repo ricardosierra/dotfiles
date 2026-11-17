@@ -60,3 +60,30 @@ Nas execuções seguintes, o passo 1 é ignorado, o passo 2 atualiza o repositó
 - [Funcionamento](Funcionamento.md) — detalhes de cada diretório e passo
 - [Personalizando](Personalizando.md) — como adicionar seus próprios aliases e configurações
 - [Atalhos](usando/Atalhos.md) — referência de aliases disponíveis
+
+---
+
+## Auditoria de manutenção (2026-Q2)
+
+Um ciclo completo de auditoria rodou neste repo pra remover tooling legado,
+modernizar o bootstrap e adicionar CI. Saídas principais:
+
+- [`docs/audit.md`](../audit.md) — relatório completo (8 fases, 60+ commits)
+- [`docs/scripts-review.md`](../scripts-review.md) — revisão de 27 scripts em
+  `bin/{pentest,network,system,files,security,life,text}/` + 7 ferramentas novas
+- [`docs/deprecations.md`](../deprecations.md) — política de archive
+- [`scripts/audit/`](../../scripts/audit/) — 11 scripts de auditoria reusáveis
+- [`archive/`](../../archive/) — código legado em quarentena (instalador BeEF,
+  gravador CDRW, funções docker mortas atom/phonegap/dcos/tormessenger, etc.)
+
+Novas ferramentas CLI adicionadas neste ciclo (todas em `bin/`):
+
+| Ferramenta | O que faz |
+|---|---|
+| `port-killer <porta>` | Mata processo escutando numa porta (com confirmação) |
+| `du-by-extension [dir]` | Top 20 de uso de disco por extensão |
+| `wifi-strength` | SSID atual + força do sinal (macOS/Linux) |
+| `dedupe [dir]` | Lista duplicatas por hash MD5 |
+| `ssl-check <dominio>` | Audita cert TLS: issuer, validade, dias restantes |
+| `git-cleanup [--apply]` | Remove branches já mergeadas em main/master/develop |
+| `wc-by-language [dir]` | LoC por linguagem (alternativa leve a tokei/cloc) |

@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# git-cleanup — remove branches locais já mergeadas em main/master/develop
+# Uso: git-cleanup [--apply]
+#   sem --apply: só lista (dry-run, default)
+#   com --apply: deleta as branches
+set -euo pipefail
+
+apply=0
+[[ "${1:-}" == "--apply" ]] && apply=1
+[[ "${1:-}" == "--help" || "${1:-}" == "-h" ]] && {
+  echo "Uso: git-cleanup [--apply]"
+  echo "  Lista branches já mergeadas em main/master/develop."
+  echo "  --apply remove as branches (default: dry-run)."
+  exit 0
+}
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+  echo "git-cleanup: não é um repo git"
+  exit 1
+fi
+
+# Acha branch base
+base_branch=""
+for b in main master develop; do
+  if git show-ref --verify --quiet "refs/heads/$b"; then
+    base_branch="$b"
+    break
+  fi
+done
+
+if [[ -z "$base_branch" ]]; then
+  echo "git-cleanup: nenhum main/master/develop local encontrado"
+  exit 1
+fi
+
+# Compat bash 3.2: array via while-read (sem mapfile)
+merged=()
+while IFS= read -r line; do
+  merged+=("$line")
+done < <(
+  git branch --merged "$base_branch" |
+    sed 's/^[[:space:]]*//' |
+    grep -vE "^\*|^${base_branch}$|^main$|^master$|^develop$"
+)
+
+if (( ${#merged[@]} == 0 )); then
+  echo "Nenhuma branch para limpar (base: $base_branch)"
+  exit 0
+fi
+
+echo "Branches já mergeadas em $base_branch:"
+printf '  %s\n' "${merged[@]}"
+echo
+
+if (( apply == 1 )); then
+  for b in "${merged[@]}"; do
+    git branch -d "$b"
+  done
+else
+  echo "${#merged[@]} branch(es). Rode com '--apply' pra remover."
+fi

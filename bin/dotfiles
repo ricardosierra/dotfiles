@@ -504,7 +504,7 @@ Usage:
 
 Description:
     See the README for documentation.
-    https://github.com/ricardorsierra/dotfiles
+    https://github.com/ricardosierra/dotfiles
 
     Is a fork then "Cowbow" Ben Alman <http://benalman.com/about/license/>
 
@@ -690,8 +690,8 @@ function git_update_dotfiles() {
     new_dotfiles_install=1
     prompt_delay=15
     e_header "Downloading dotfiles"
-    git clone --branch ${DOTFILES_GH_BRANCH:-master} --recursive \
-    git://github.com/${DOTFILES_GH_USER:-ricardorsierra}/dotfiles.git $DOTFILES
+    git clone --branch ${DOTFILES_GH_BRANCH:-release} --recursive \
+    git://github.com/${DOTFILES_GH_USER:-ricardosierra}/dotfiles.git $DOTFILES
     cd $DOTFILES
   elif [[ "$1" != "restart" ]]; then
     # Make sure we have the latest files.

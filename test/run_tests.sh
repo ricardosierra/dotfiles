@@ -54,6 +54,7 @@ run_shellcheck() {
   files=$(find "$DOTFILES" \
     \( -path "*/vendor/*" -o -path "*/.oh-my-zsh/*" \
        -o -path "*/.tmux/plugins/*" -o -path "*/.rbenv/*" \
+       -o -path "*/.vim/plugged/*" \
        -o -path "*/.git/*" \) -prune \
     -o -name "*.sh" -print | sort)
 
