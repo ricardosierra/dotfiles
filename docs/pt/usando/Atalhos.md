@@ -111,6 +111,8 @@ Tudo que está disponível no shell após instalar os dotfiles — aliases, fun�
 | `gc [branch]` | `git checkout master` | Checkout (master se não informar) |
 | `gco` | = `gc` | Alias alternativo |
 | `gcb <branch>` / `gbc` | `git checkout -b` | Cria e entra no branch |
+| `gomaster` | `git checkout master && git pull origin master` | Vai pro master (ou main, se não houver master) e dá pull |
+| `godev` | `git checkout develop && git pull origin develop` | Vai pro develop (ou dev) e dá pull |
 | `gr` | `git remote` | Gerencia remotes |
 | `grv` | `git remote -v` | Mostra URLs dos remotes |
 | `grr <remote>` | `git remote rm` | Remove um remote |

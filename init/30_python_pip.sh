@@ -1,43 +1,32 @@
-# Python 3.12+ (PEP 668): pip recusa instalação em sistema sem flag explícita.
-# CLI tools → pipx (ambiente isolado, sem conflito com sistema)
-# Libraries → pip3 com --break-system-packages
+#!/bin/bash
+# Installs Python CLI tools via pipx (isolated per-tool venvs).
+# Antes: sudo pip install — poluía o Python do sistema.
+# Hoje: pipx pra ferramentas CLI; libs por projeto em venvs.
 
-# pipx: instala se necessário
-if ! command -v pipx &>/dev/null; then
-  if command -v pip3 &>/dev/null; then
-    pip3 install --break-system-packages pipx 2>/dev/null || sudo apt-get -qq install -y pipx
+# Garantir pipx
+if ! command -v pipx >/dev/null 2>&1; then
+  e_header "Installing pipx"
+  if is_osx; then
+    brew install pipx
+  elif command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get install -y pipx
+  elif command -v dnf >/dev/null 2>&1; then
+    sudo dnf install -y pipx
   else
-    sudo apt-get -qq install -y pipx
+    e_error "Não soube instalar pipx neste sistema. Instale manualmente: https://pipx.pypa.io/"
+    return 1
   fi
+  pipx ensurepath >/dev/null
 fi
 
-# CLI tools via pipx (cada um em ambiente isolado)
+# Ferramentas CLI Python (libs como netifaces/psutil ficam por projeto em venv).
 pipx_tools=(
-  tmuxp
+  tmuxp                # gerenciador de sessões tmux
 )
 
 for tool in "${pipx_tools[@]}"; do
-  if ! pipx list 2>/dev/null | grep -q "$tool"; then
-    e_arrow "pipx install $tool"
+  if ! pipx list --short 2>/dev/null | awk '{print $1}' | grep -qx "$tool"; then
+    e_header "Installing $tool via pipx"
     pipx install "$tool"
   fi
 done
-
-# Libraries Python via pip3 --break-system-packages
-pip_packages=(
-  netifaces
-  psutil
-)
-
-if command -v pip3 &>/dev/null; then
-  installed_pip_packages="$(pip3 list 2>/dev/null | awk '{print $1}')"
-  pip_packages=($(setdiff "${pip_packages[*]}" "$installed_pip_packages"))
-
-  if (( ${#pip_packages[@]} > 0 )); then
-    e_header "Installing pip packages (${#pip_packages[@]})"
-    for package in "${pip_packages[@]}"; do
-      e_arrow "$package"
-      pip3 install --break-system-packages "$package"
-    done
-  fi
-fi

@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Hook global pre-push: impede envio de commits com autoria ou trailers de agentes de IA
+# Portável para macOS, Linux e Windows (Git Bash/MSYS/WSL).
+
+remote="$1"
+url="$2"
+zero_sha="0000000000000000000000000000000000000000"
+
+stdin_data=""
+while read -r local_ref local_sha remote_ref remote_sha; do
+  stdin_data="${stdin_data}${local_ref} ${local_sha} ${remote_ref} ${remote_sha}"$'\n'
+  if [ "$local_sha" = "$zero_sha" ]; then
+    continue
+  fi
+
+  if [ "$remote_sha" = "$zero_sha" ]; then
+    range="$(git rev-list "$local_sha" --not --remotes="$remote" 2>/dev/null || echo "$local_sha")"
+  else
+    range="$(git rev-list "${remote_sha}..${local_sha}" 2>/dev/null)"
+  fi
+
+  for commit in $range; do
+    msg="$(git log -1 --format="%B" "$commit")"
+    if echo "$msg" | grep -E -i -q "(co-authored-by:\s*.*(cursor|claude|anthropic|grok|xai|x\.ai|codex|openai|chatgpt|gemini|deepmind|copilot|antigravity|windsurf|aider)|made-with:\s*.*(cursor|claude|anthropic|grok|xai|codex|openai|chatgpt|gemini|deepmind|copilot)|cursoragent@cursor\.com|noreply@anthropic\.com|made with \[.*cursor)"; then
+      echo ""
+      echo "❌ [GIT PRE-PUSH BLOQUEADO]"
+      echo "O commit $commit possui co-autoria ou menção indevida de IA:"
+      echo "----------------------------------------"
+      echo "$msg"
+      echo "----------------------------------------"
+      echo "Push cancelado para evitar enviar créditos/autoria forçada de IA ao repositório remoto."
+      exit 1
+    fi
+  done
+done
+
+# Delega para hook local do repositório se existir
+GIT_DIR="$(git rev-parse --git-dir 2>/dev/null || true)"
+if [ -n "$GIT_DIR" ] && [ -f "$GIT_DIR/hooks/pre-push" ] && [ -x "$GIT_DIR/hooks/pre-push" ]; then
+  REAL_LOCAL="$(cd "$GIT_DIR/hooks" 2>/dev/null && pwd -P)/pre-push"
+  REAL_GLOBAL="$(cd "$(dirname "$0")" 2>/dev/null && pwd -P)/$(basename "$0")"
+  if [ "$REAL_LOCAL" != "$REAL_GLOBAL" ]; then
+    printf "%s" "$stdin_data" | "$GIT_DIR/hooks/pre-push" "$@"
+    exit $?
+  fi
+fi
+
+exit 0

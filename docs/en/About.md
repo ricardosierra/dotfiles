@@ -41,3 +41,28 @@ Backups are created automatically in `~/.dotfiles/backups/` before any file is o
 
 - [Installation](Install.md)
 - [Folders & Functions](dotfiles/FoldersAndFunctions.md)
+
+## Maintenance audit (2026-Q2)
+
+A complete audit cycle was run on this repo to remove legacy tooling, modernize
+the bootstrap, and add CI. Key outputs:
+
+- [`docs/audit.md`](../audit.md) — full report (8 phases, 60+ commits)
+- [`docs/scripts-review.md`](../scripts-review.md) — review of 27 scripts in
+  `bin/{pentest,network,system,files,security,life,text}/` + 7 new tools
+- [`docs/deprecations.md`](../deprecations.md) — archive policy
+- [`scripts/audit/`](../../scripts/audit/) — 11 reusable audit scripts
+- [`archive/`](../../archive/) — legacy code quarantined (BeEF installer,
+  CDRW burner, atom/phonegap/dcos/tormessenger docker functions, etc.)
+
+New CLI tools added in this cycle (all in `bin/`):
+
+| Tool | What it does |
+|---|---|
+| `port-killer <port>` | Kill the process listening on a port (with confirmation) |
+| `du-by-extension [dir]` | Top 20 disk usage by file extension |
+| `wifi-strength` | Current SSID + signal strength (macOS/Linux) |
+| `dedupe [dir]` | List duplicate files by MD5 hash |
+| `ssl-check <domain>` | Audit TLS cert: issuer, validity, days left |
+| `git-cleanup [--apply]` | Remove branches already merged into main/master/develop |
+| `wc-by-language [dir]` | LoC count grouped by language (lightweight tokei/cloc) |
