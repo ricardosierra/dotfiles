@@ -344,14 +344,13 @@ fi
 
 echo ""
 echo [+] "Deseja instalar ferramentas de sniffing? y/n" ;
-echo '.: wireshark, ettercap, ettercap-gtk, tcpdump, tcpflow, ssldump, nemesis, dsniff, etherape :.'
+echo '.: wireshark, ettercap-graphical, tcpdump, tcpflow, ssldump, nemesis, dsniff, etherape :.'
 read -n 1 digx
 if [ $digx = "y" ]
 then
   packages+=(
     wireshark
-    ettercap
-    ettercap-gtk
+    ettercap-graphical
     tcpdump
     tcpflow
     ssldump
