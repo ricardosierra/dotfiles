@@ -148,362 +148,88 @@ fi
 
 
 
+# ═══════════════════════════════════════════════════════════════════════════
+#  SELEÇÃO POR CATEGORIA  (s = instala tudo da categoria, N = pula)
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ── SISTEMA ─────────────────────────────────────────────────────────────────
 echo ""
-echo [+] "Deseja instalar os componentes essenciais do sitema e utilitários (recomendado)? y/n" ;
-echo '.: build-essential, linux-headers, sysvconfig, bum, tofrodos, xinetd, unrar, p7zip-full, fcrackzip, ipcalc, sharutils, xclip, ldap-utils, cabextract, g++, ssh :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
+e_header "SISTEMA — Utilitários, terminal e sistema de arquivos"
+echo "  build-essential, linux-headers, p7zip-full, unrar, tmux, screen,"
+echo "  sshfs, ntfs-3g, apt-file, apt-utils, ipcalc, fcrackzip..."
+read -N 1 -t 30 -p "Instalar? [s/N] " ans; echo
+if [[ "$ans" =~ [Ss] ]]; then
   packages+=(
-    build-essential
-    linux-headers-`uname -r`
-    sysvconfig
-    bum
-    tofrodos
-    xinetd
-    unrar
-    p7zip-full
-    fcrackzip
-    ipcalc
-    sharutils
-    xclip
-    ldap-utils
-    cabextract
-    g++
-    ssh
+    build-essential g++ linux-headers-$(uname -r)
+    tofrodos xinetd unrar p7zip-full fcrackzip ipcalc sharutils ldap-utils cabextract
+    tmux screen tn5250
+    apt-file apt-utils apt-listchanges dconf
+    sshfs ntfs-3g genisoimage
   )
 fi
 
-
+# ── REDE ────────────────────────────────────────────────────────────────────
 echo ""
-echo [+] "Deseja instalar os servicos de rede? y/n" ;
-echo '.: samba, nis, nfs, smbfs :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
+e_header "REDE — Serviços de rede, monitoração e VPN"
+echo "  samba, nfs-kernel-server, ntop, sysstat, procinfo, vpnc..."
+read -N 1 -t 30 -p "Instalar? [s/N] " ans; echo
+if [[ "$ans" =~ [Ss] ]]; then
   packages+=(
-    samba
-    nis
-    nfs
-    smbfs
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar os servicos de monitoracao? y/n" ;
-echo '.: ntop, sysstat, procinfo :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    ntop
-    sysstat
-    procinfo
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar os gerenciadores de pacotes? y/n" ;
-echo '.: apt-file, apt-utils, apt-listchanges, dconf :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    #apt-build
-    #apt-dpkg-ref
-    #apt-listbugs
-    apt-file
-    #apt-howto
-    apt-utils
-    apt-listchanges
-    dconf
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar os emuladores de terminal? y/n" ;
-echo '.: tmux tn5250, screen :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-	  tmux
-    tn5250
-    screen
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar as ferramentas de sistemas de arquivos? y/n" ;
-echo '.: sshfs, ntfs-3g, ntfs-config, ntfsprogs, mkisofs :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    sshfs
-    ntfs-3g
-    ntfs-config
-    ntfsprogs
-    mkisofs
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar algumas configuracoes do Gnome? y/n" ;
-echo '.: gconf, gnomebaker, nautilus-open-terminal :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    gconf
-    gnomebaker
-    nautilus-open-terminal
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar o ISAKPMD e VPNc? y/n" ;
-echo '.: vpnc :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    isakmpd
+    samba nfs-kernel-server cifs-utils
+    ntop sysstat procinfo
     vpnc
   )
 fi
 
-
+# ── HACKING ─────────────────────────────────────────────────────────────────
 echo ""
-echo [+] "Deseja instalar os pacotes de Multimidia? y/n" ;
-echo '.: mpg123 :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
+e_header "HACKING — Pentest, análise de rede e segurança ofensiva"
+echo "  netcat-openbsd, socat, nmap, fping, hping3, wireshark,"
+echo "  ettercap-graphical, tcpdump, john, medusa, hydra, aircrack-ng, nikto..."
+read -N 1 -t 30 -p "Instalar? [s/N] " ans; echo
+if [[ "$ans" =~ [Ss] ]]; then
+  # Tunneling
+  packages+=(netcat-openbsd socat vtun stunnel4)
+  # Scanners ativos
+  packages+=(fping hping3 traceroute tcptraceroute ike-scan nbtscan sslscan python3-scapy)
+  # Scanners passivos
+  packages+=(p0f)
+  # Sniffing
+  packages+=(wireshark ettercap-graphical tcpdump tcpflow ssldump dsniff etherape)
+  # Cracking
+  packages+=(john medusa hydra)
+  # Wireless
+  packages+=(aircrack-ng)
+  # Criptografia
+  packages+=(gpa seahorse)
+  # Web
+  packages+=(nikto)
+  # Bibliotecas
+  packages+=(libssl-dev libpcap-dev libnet-dns-perl libsnmp-perl libnet-ssleay-perl ncurses-dev)
+  # Dependências visualização (Scapy, etc.)
+  packages+=(graphviz gv sox)
+fi
+
+# ── DESKTOP ─────────────────────────────────────────────────────────────────
+echo ""
+e_header "DESKTOP — Multimídia, comunicação e aplicações gráficas"
+echo "  mpg123, filezilla, pidgin, thunderbird, irssi, tor, wine..."
+read -N 1 -t 30 -p "Instalar? [s/N] " ans; echo
+if [[ "$ans" =~ [Ss] ]]; then
   packages+=(
     mpg123
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar o Netcat e ferramentas de Tunnelling? y/n" ;
-echo '.: netcat-openbsd, socat, vtun, stunnel4 :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    netcat-openbsd
-    socat
-    vtun
-    stunnel4
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar Scanners? y/n" ;
-echo '.: nmap, fping, hping2, hping3, scapy, snmp, traceroute, ike-scan, nbtscan, sslscan :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    nmap
-    fping
-    hping2
-    hping3
-    scapy
-    snmp
-    traceroute
-    tcptraceroute
-    ike-scan
-    nbtscan
-    sslscan
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar Scanners Passivos? y/n" ;
-echo '.: p0f, pads :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    p0f
-    pads
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar ferramentas de sniffing? y/n" ;
-echo '.: wireshark, ettercap-graphical, tcpdump, tcpflow, ssldump, nemesis, dsniff, etherape :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    wireshark
-    ettercap-graphical
-    tcpdump
-    tcpflow
-    ssldump
-    nemesis
-    dsniff
-    etherape
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar as bibliotecas (recomendado)? y/n" ;
-echo '.: libssl, libssl-dev, libssh-2, python-pycurl, libnet-dns-perl, libsnmp-perl, libcrypt-ssleay-perl, libnet-ssleay-perl, ncurses-dev, libpcap-dev :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    libssl
-    libssl-dev
-    libssh-2
-    python-pycurl
-    libnet-dns-perl
-    libsnmp-perl
-    libcrypt-ssleay-perl
-    libnet-ssleay-perl
-    ncurses-dev
-    libpcap-dev
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar ferramentas de cracking? y/n" ;
-echo '.: john, medusa, hydra :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    john
-    medusa
-    hydra
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar ferramentas para Wireless? y/n" ;
-echo '.: aircrack, aircrack-ng :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    aircrack
-    aircrack-ng
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar ferramentas de linha de comando para aplicacoes Web? y/n" ;
-echo '.: wget, curl, nikto :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    wget
-    curl
-    nikto
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar as dependencias do Scapy? y/n" ;
-echo '.: graphviz, imagemagick, python-gnuplot, python-crypto, python-visual, python-pyx, acroread, gv, sox :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    graphviz
-    imagemagick
-    python-gnuplot
-    python-crypto
-    python-visual
-    python-pyx
-    acroread
-    gv
-    sox
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar ferramentas para Documentacao? y/n" ;
-echo '.: notecase, vim, liferea :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    notecase
-    vim
-    liferea
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar Utilitários para Browsers/Web? y/n" ;
-echo '.: azerus, opera, filezilla, pidgin, pidgin-otr, thunderbird, lightning-extension, enigmail, irssi, silc, tor :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    azureus
-    opera
-    filezilla
-    pidgin
-    pidgin-otr
-    thunderbird
-    lightning-extension
-    enigmail
-    irssi
-    silc
-    tor
-  )
-fi
-
-
-echo ""
-echo [+] "Deseja instalar ferramentas para Windows? y/n" ;
-echo '.: wine, quicksynergy :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
+    filezilla pidgin pidgin-otr irssi tor
     wine
-    quicksynergy
   )
 fi
 
-
+# ── DESENVOLVIMENTO ──────────────────────────────────────────────────────────
 echo ""
-echo [+] "Deseja instalar ferramentas de criptografia? y/n" ;
-echo '.: dmsetup, password-gorilla, gpa, seahorse :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-  packages+=(
-    dmsetup
-    password-gorilla
-    gpa
-    seahorse
-  )
+e_header "DESENVOLVIMENTO — Java e ferramentas"
+echo "  openjdk-21-jdk, liferea..."
+read -N 1 -t 30 -p "Instalar? [s/N] " ans; echo
+if [[ "$ans" =~ [Ss] ]]; then
+  packages+=(openjdk-21-jdk liferea)
 fi
 
 
@@ -559,25 +285,6 @@ if [[ ! "$(pinpoint google-chrome)" ]]; then
       fi
     )
   fi
-fi
-
-echo ""
-echo [+] "Deseja instalar o Java? y/n" ;
-echo '.: openjdk-7-jre, openjdk-7-jdk :.'
-read -n 1 digx
-if [ $digx = "y" ]
-then
-    if is_debian; then
-      sudo apt -qq install openjdk-7-jre -y
-      sudo apt -qq install openjdk-7-jdk -y
-    elif is_archlinux; then
-      sudo pacman -qq install openjdk-7-jre -y
-      sudo pacman -qq install openjdk-7-jdk -y
-    else
-      sudo yum -qq install openjdk-7-jre -y
-      sudo yum -qq install openjdk-7-jdk -y
-    fi
-    java -version
 fi
 
 
