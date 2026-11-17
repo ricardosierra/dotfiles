@@ -133,26 +133,15 @@ android-studio(){
 	  sierratecnologia/android-studio:3.0 "$@"
 }
 apt_file(){
+    if [[ "$(pinpoint apt-file)" ]]; then
+        command apt-file "$@"
+        return
+    fi
     images_local_build apt-file
     docker run --rm -it \
         --user $(id -u):$(id -g) \
         --name apt-file \
         ${DOCKER_REPO_PREFIX}apt-file
-}
-alias a=atom
-atom(){
-    if [[ "$(pinpoint atom)" ]]; then
-        command atom "$@"
-        return 
-    fi
-    images_local_build atom
-
-    docker run -d -ti \
-        --user $(id -u):$(id -g) \
-        -e DISPLAY=$DISPLAY \
-        -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -v `pwd`:/var/www \
-        ${DOCKER_REPO_PREFIX}atom "$@"
 }
 alias apt-file="apt_file"
 audacity(){
@@ -180,6 +169,10 @@ audacity(){
             ${DOCKER_REPO_PREFIX}audacity
 }
 aws(){
+    if [[ "$(pinpoint aws)" ]]; then
+        command aws "$@"
+        return
+    fi
     images_local_build aws
     docker run -it --rm \
         --user $(id -u):$(id -g) \
@@ -189,6 +182,10 @@ aws(){
             ${DOCKER_REPO_PREFIX}awscli "$@"
 }
 bees(){
+    if [[ "$(pinpoint bees)" ]]; then
+        command bees "$@"
+        return
+    fi
     images_local_build bees
     docker run -it --rm \
         --user $(id -u):$(id -g) \
@@ -201,6 +198,10 @@ bees(){
             ${DOCKER_REPO_PREFIX}beeswithmachineguns "$@"
 }
 cadvisor(){
+    if [[ "$(pinpoint cadvisor)" ]]; then
+        command cadvisor "$@"
+        return
+    fi
     images_local_build cadvisor
     docker run -d \
         --user $(id -u):$(id -g) \
@@ -384,17 +385,11 @@ clementine(){
 # 		-w /src \
 # 		cordova cordova "$@"
 # }
-dcos(){
-    images_local_build dcos-cli
-
-    docker run -it --rm \
-        --user $(id -u):$(id -g) \
-            -v $HOME/.dcos:/root/.dcos \
-            -v $(pwd):/root/apps \
-            -w /root/apps \
-            ${DOCKER_REPO_PREFIX}dcos-cli "$@"
-}
 dbvis(){
+    if [[ "$(pinpoint dbvis)" ]]; then
+        command dbvis "$@"
+        return
+    fi
     images_local_build dbvis
 
     docker run -d -ti \
@@ -810,6 +805,10 @@ mysql-workbench(){
 # }
 alias nb=netbeans
 netbeans(){
+    if [[ "$(pinpoint netbeans)" ]]; then
+        command netbeans "$@"
+        return
+    fi
     images_remote_build sierratecnologia netbeans
     docker run -ti --rm \
         --user $(id -u):$(id -g) \
@@ -821,6 +820,10 @@ netbeans(){
 alias nb-php=netbeans_php
 alias netbeans-php=netbeans_php
 netbeans_php(){
+    if [[ "$(pinpoint netbeans)" ]]; then
+        command netbeans "$@"
+        return
+    fi
     images_remote_build sierratecnologia netbeans-php
 	docker run -ti --rm \
                 --user $(id -u):$(id -g) \
@@ -843,6 +846,10 @@ netcat(){
       ${DOCKER_REPO_PREFIX}netcat "$@"
 }
 nginx(){
+    if [[ "$(pinpoint nginx)" ]]; then
+        command nginx "$@"
+        return
+    fi
 	del_stopped nginx
 
 	docker run -d \
@@ -870,6 +877,10 @@ nmap(){
             ${DOCKER_REPO_PREFIX}nmap "$@"
 }
 notify_osd(){
+    if [[ "$(pinpoint notify-osd)" ]]; then
+        command notify-osd "$@"
+        return
+    fi
   images_local_build notify-osd
 
 	del_stopped notify_osd
@@ -888,6 +899,10 @@ notify_osd(){
 }
 alias notify-send=notify_send
 notify_send(){
+    if [[ "$(pinpoint notify-send)" ]]; then
+        command notify-send "$@"
+        return
+    fi
 	relies_on notify_osd
 	local args=${@:2}
 
@@ -939,19 +954,6 @@ phpmyadmin(){
   del_stopped phpmyadmin
 
   dfazer
-}
-phonegap(){
-  images_local_build phonegap 3.6.0-0-21-19
-
-  del_stopped phonegap
-
-  docker run -it --rm \
-    --user $(id -u):$(id -g) \
-    --privileged \
-    -v /dev/bus/usb:/dev/bus/usb \
-    -v $PWD:/data \
-    -w /data \
-    phonegap "$@"
 }
 # pivman(){
 #   images_local_build pivman
@@ -1010,6 +1012,10 @@ phonegap(){
 # 	sudo hostess add privoxy $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" privoxy)
 # }
 pulseaudio(){
+    if [[ "$(pinpoint pulseaudio)" ]]; then
+        command pulseaudio "$@"
+        return
+    fi
   images_local_build pulseaudio
 
 	del_stopped pulseaudio
@@ -1110,6 +1116,10 @@ pulseaudio(){
 # 		${DOCKER_REPO_PREFIX}s3cmd "$@"
 # }
 scilab(){
+    if [[ "$(pinpoint scilab)" ]]; then
+        command scilab "$@"
+        return
+    fi
     images_remote_build sierratecnologia scilab
     docker run -d -ti \
             --user $(id -u):$(id -g) \
@@ -1299,6 +1309,10 @@ steam(){
             ${DOCKER_REPO_PREFIX}steam
 }
 t(){
+    if [[ "$(pinpoint t)" ]]; then
+        command t "$@"
+        return
+    fi
     images_local_build t
 
     docker run -t --rm \
@@ -1308,6 +1322,10 @@ t(){
             ${DOCKER_REPO_PREFIX}t "$@"
 }
 tarsnap(){
+    if [[ "$(pinpoint tarsnap)" ]]; then
+        command tarsnap "$@"
+        return
+    fi
     images_local_build tarsnap
 
     docker run --rm -it \
@@ -1330,6 +1348,10 @@ telnet(){
         ${DOCKER_REPO_PREFIX}telnet "$@"
 }
 termboy(){
+    if [[ "$(pinpoint termboy)" ]]; then
+        command termboy "$@"
+        return
+    fi
   images_local_build termboy
 
 	del_stopped termboy
@@ -1343,6 +1365,10 @@ termboy(){
 }
 
 thunderbird(){
+    if [[ "$(pinpoint thunderbird)" ]]; then
+        command thunderbird "$@"
+        return
+    fi
   images_local_build thunderbird
 
 	docker run -ti --rm \
@@ -1356,6 +1382,10 @@ thunderbird(){
 		${DOCKER_REPO_PREFIX}thunderbird
 }
 tor(){
+    if [[ "$(pinpoint tor)" ]]; then
+        command tor "$@"
+        return
+    fi
 
 	del_stopped tor
 
@@ -1372,6 +1402,10 @@ tor(){
 	browser-exec "https://check.torproject.org/"
 }
 torbrowser(){
+    if [[ "$(pinpoint tor-browser)" ]]; then
+        command tor-browser "$@"
+        return
+    fi
 
 	del_stopped torbrowser
 
@@ -1389,26 +1423,11 @@ torbrowser(){
 	# exit current shell
 	exit 0
 }
-tormessenger(){
-  images_local_build tor-messenger
-
-	del_stopped tormessenger
-
-	docker run -d \
-                --user $(id -u):$(id -g) \
-		-v /etc/localtime:/etc/localtime:ro \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-e DISPLAY=unix$DISPLAY \
-		-e GDK_SCALE \
-		-e GDK_DPI_SCALE \
-		--device /dev/snd \
-		--name tormessenger \
-		${DOCKER_REPO_PREFIX}tor-messenger
-
-	# exit current shell
-	exit 0
-}
 torproxy(){
+    if [[ "$(pinpoint tor)" ]]; then
+        command tor "$@"
+        return
+    fi
   images_local_build tor-proxy
 
 	del_stopped torproxy
@@ -1424,6 +1443,10 @@ torproxy(){
 	sudo hostess add torproxy $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" torproxy)
 }
 traceroute(){
+    if [[ "$(pinpoint traceroute)" ]]; then
+        command traceroute "$@"
+        return
+    fi
   images_local_build traceroute
 
 	docker run --rm -it \
@@ -1432,6 +1455,10 @@ traceroute(){
 		${DOCKER_REPO_PREFIX}traceroute "$@"
 }
 transmission(){
+    if [[ "$(pinpoint transmission)" ]]; then
+        command transmission "$@"
+        return
+    fi
   images_local_build transmission
 
 	del_stopped transmission
@@ -1452,6 +1479,10 @@ transmission(){
 	browser-exec "http://transmission:9091"
 }
 virsh(){
+    if [[ "$(pinpoint virsh)" ]]; then
+        command virsh "$@"
+        return
+    fi
   images_local_build libvirt-client
 
 	relies_on kvm
@@ -1466,6 +1497,10 @@ virsh(){
 }
 alias virt-viewer="virt_viewer"
 virt_viewer(){
+    if [[ "$(pinpoint virt-viewer)" ]]; then
+        command virt-viewer "$@"
+        return
+    fi
   images_local_build virt-viewer
 
 	relies_on kvm
@@ -1483,6 +1518,10 @@ virt_viewer(){
 		${DOCKER_REPO_PREFIX}virt-viewer "$@"
 }
 visualstudio(){
+    if [[ "$(pinpoint code)" ]]; then
+        command code "$@"
+        return
+    fi
   images_local_build visualstudio
 
 	del_stopped visualstudio
@@ -1496,6 +1535,10 @@ visualstudio(){
 		${DOCKER_REPO_PREFIX}visualstudio
 }
 vlc(){
+    if [[ "$(pinpoint vlc)" ]]; then
+        command vlc "$@"
+        return
+    fi
   images_local_build vlc
 
 	del_stopped vlc
@@ -1529,6 +1572,10 @@ warzone2100(){
 		${DOCKER_REPO_PREFIX}warzone2100
 }
 watchman(){
+    if [[ "$(pinpoint watchman)" ]]; then
+        command watchman "$@"
+        return
+    fi
   images_local_build watchman
 
 	del_stopped watchman
@@ -1541,6 +1588,10 @@ watchman(){
 		${DOCKER_REPO_PREFIX}watchman --foreground
 }
 wireshark(){
+    if [[ "$(pinpoint wireshark)" ]]; then
+        command wireshark "$@"
+        return
+    fi
   images_local_build wireshark
 
 	del_stopped wireshark
@@ -1555,6 +1606,10 @@ wireshark(){
 		${DOCKER_REPO_PREFIX}wireshark
 }
 wrk(){
+    if [[ "$(pinpoint wrk)" ]]; then
+        command wrk "$@"
+        return
+    fi
   images_local_build wrk
 
 	docker run -it --rm \
@@ -1564,6 +1619,10 @@ wrk(){
 		${DOCKER_REPO_PREFIX}wrk "$@"
 }
 ykpersonalize(){
+    if [[ "$(pinpoint ykpersonalize)" ]]; then
+        command ykpersonalize "$@"
+        return
+    fi
   images_local_build ykpersonalize
 
 	del_stopped ykpersonalize
@@ -1578,6 +1637,10 @@ ykpersonalize(){
 }
 alias yubico-piv-tool="yubico_piv_tool"
 yubico_piv_tool(){
+    if [[ "$(pinpoint yubico-piv-tool)" ]]; then
+        command yubico-piv-tool "$@"
+        return
+    fi
   images_local_build yubico-piv-tool
 
 	del_stopped yubico-piv-tool

@@ -3,18 +3,20 @@
 
 # Se node já existe (asdf, volta, ou nvm), não instala de novo
 [[ "$(command -v node)" ]] && return 0
+# Install Node via volta (gerenciador padrão do dotfiles).
+# Antes: usava nave_install (gerenciador morto) + volta como fallback.
+# Hoje: só volta.
 
-# Load nave- and npm-related functions.
-source $DOTFILES/source/50_node.sh init
-
-# Install latest stable Node.js, set as default, install global npm modules.
-nave_install stable
-# Install volta if necessary
-if [[ ! "$VOLTA_HOME" ]]; then
+# Install volta se necessário
+if [[ ! -d "$HOME/.volta" ]]; then
+  e_header "Installing volta"
   curl https://get.volta.sh | bash -s -- --skip-setup
-  export VOLTA_HOME=~/.volta
-  grep --silent "$VOLTA_HOME/bin" <<< $PATH || export PATH="$VOLTA_HOME/bin:$PATH"
-  volta install node
-  volta install yarn
-  volta install tsc
 fi
+
+export VOLTA_HOME="$HOME/.volta"
+grep --silent "$VOLTA_HOME/bin" <<< "$PATH" || export PATH="$VOLTA_HOME/bin:$PATH"
+
+# Tooling base
+volta install node@lts
+volta install yarn
+volta install typescript
