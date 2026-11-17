@@ -1,6 +1,6 @@
 # Dotfiles
 
-> macOS · Ubuntu · Debian · Kali · Fedora  
+> macOS · Ubuntu · Debian · Kali · Fedora
 > Fork do ["Cowboy" Ben Alman](https://github.com/cowboy/dotfiles) — inspirado por [jfrazelle](https://github.com/jfrazelle/dotfiles)
 
 [![tests](https://github.com/ricardorsierra/dotfiles/actions/workflows/tests.yml/badge.svg)](https://github.com/ricardorsierra/dotfiles/actions/workflows/tests.yml)

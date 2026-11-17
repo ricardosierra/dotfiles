@@ -23,28 +23,22 @@ function add_ppa() {
 # WHAT DO WE NEED TO INSTALL?
 #############################
 
-# Misc.
+# Dev essentials
 apt_packages+=(
   awscli
   build-essential
-  cmatrix
-  cowsay
   curl
   docker.io
   docker-compose
   git-core
   groff
-  hollywood
   htop
   id3tool
   imagemagick
   jq
-  mercurial
   nmap
-  postgresql
   python3-pip
   silversearcher-ag
-  sl
   telnet
   thefuck
   tree
@@ -54,6 +48,18 @@ apt_packages+=(
   # Precisei remover a libgd3
   libgd-dev
   libpq-dev
+)
+
+# Database server — instala só se DOTFILES_INSTALL_POSTGRESQL=1
+[[ "${DOTFILES_INSTALL_POSTGRESQL:-0}" == "1" ]] && apt_packages+=(postgresql)
+
+# Ferramentas "fun" — instala só se DOTFILES_INSTALL_FUN=1
+[[ "${DOTFILES_INSTALL_FUN:-0}" == "1" ]] && apt_packages+=(
+  cmatrix
+  cowsay
+  hollywood
+  mercurial
+  sl
 )
 
 
