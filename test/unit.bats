@@ -162,3 +162,19 @@ setup() {
   result=$(array_join_filter arr ',')
   [ "$result" = "a,b,c" ]
 }
+
+# =============================================================================
+# 50_history
+# =============================================================================
+
+@test "50_history: carrega sem erro e aplica as opcoes em Bash e Zsh" {
+  # setup redefine DOTFILES para ~/.dotfiles; usa o arquivo deste checkout
+  local file="$BATS_TEST_DIRNAME/../source/50_history.sh"
+  run /bin/bash -c 'source "$1" 2>&1 && shopt -q histreedit && shopt -q histverify' _ "$file"
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+  command -v /bin/zsh >/dev/null 2>&1 || skip "zsh ausente"
+  run /bin/zsh -fc 'source "$1" 2>&1 && [[ -o histverify && -o histignorespace && -o histignoredups ]]' _ "$file"
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+}

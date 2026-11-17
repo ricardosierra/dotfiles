@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Sanitiza mensagem de commit contra trailers de IA no repositório dotfiles
+DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+if [ -f "$DOTFILES/link/.git_hooks/commit-msg" ]; then
+  "$DOTFILES/link/.git_hooks/commit-msg" "$@"
+fi

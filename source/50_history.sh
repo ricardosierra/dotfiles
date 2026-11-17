@@ -1,19 +1,25 @@
 # History settings
 
-# Allow use to re-edit a faild history substitution.
-shopt -s histreedit
-# History expansions will be verified before execution.
-shopt -s histverify
+# Allow re-editing failed history substitutions and verify history expansions.
+if [[ -n "${ZSH_VERSION:-}" ]]; then
+  # Zsh has no histreedit equivalent.
+  setopt HIST_VERIFY HIST_IGNORE_SPACE HIST_IGNORE_DUPS
+  HIST_STAMPS='yyyy-mm-dd'
+else
+  shopt -s histreedit histverify
+  HISTCONTROL=ignoreboth
+  HISTTIMEFORMAT='[%F %T] '
+  HISTIGNORE=' *:ls:cd:cd -:pwd:exit:date:* --help:* -h:pony:pony add *:pony update *:pony save *:pony ls:pony ls *'
+  export HISTCONTROL HISTTIMEFORMAT HISTIGNORE
+fi
 
-# Entries beginning with space aren't added into history, and duplicate
-# Larger bash history (allow 32³ entries; default is 500)
+# Larger shell history (allow 32³ entries; default is 500).
 export HISTSIZE=50000000;
-export HISTFILESIZE=$HISTSIZE;
-export HISTCONTROL=ignoredups;
-# Give history timestamps.
-export HISTTIMEFORMAT="[%F %T] "
-# Make some commands not show up in history
-export HISTIGNORE=" *:ls:cd:cd -:pwd:exit:date:* --help:* -h:pony:pony add *:pony update *:pony save *:pony ls:pony ls *";
+if [[ -n "${ZSH_VERSION:-}" ]]; then
+  export SAVEHIST=$HISTSIZE
+else
+  export HISTFILESIZE=$HISTSIZE
+fi
 
 
 # Easily re-execute the last history command.

@@ -66,6 +66,29 @@ alias gco='gc'
 alias gcb='gc -b'   # cria e entra no branch
 alias gbc='gc -b'   # alias pra dyslexia :)
 
+# _git_go: entra no primeiro branch da lista que existir (local ou em origin)
+# e já puxa ele do origin
+function _git_go() {
+  local cmd=$1 branch target=
+  shift
+  git rev-parse --git-dir >/dev/null 2>&1 || { echo "$cmd: not inside a Git repository" >&2; return 1; }
+  for branch in "$@"; do
+    if git show-ref --verify --quiet "refs/heads/$branch" ||
+       git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+      target=$branch
+      break
+    fi
+  done
+  [[ -n "$target" ]] || { echo "$cmd: none of these branches exist: $*" >&2; return 1; }
+  git checkout "$target" && git pull origin "$target"
+}
+
+# gomaster: vai pro master (ou main, se o repo não tiver master) e dá pull
+function gomaster() { _git_go gomaster master main; }
+
+# godev: vai pro develop (ou dev) e dá pull
+function godev() { _git_go godev develop dev; }
+
 # remotes
 alias gr='git remote'
 alias grv='gr -v'            # mostra as URLs dos remotes

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Valida identidade de autor contra IA no repositório dotfiles
+DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+if [ -f "$DOTFILES/link/.git_hooks/pre-commit" ]; then
+  "$DOTFILES/link/.git_hooks/pre-commit" "$@"
+fi
