@@ -47,13 +47,8 @@ _shell_files() {
   [ "$status" -eq 0 ]
 }
 
-@test "bash -n: init/60_golang.sh passa na checagem de sintaxe" {
-  run bash -n "$DOTFILES_ROOT/init/60_golang.sh"
-  [ "$status" -eq 0 ]
-}
-
-@test "bash -n: init/60_ruby.sh passa na checagem de sintaxe" {
-  run bash -n "$DOTFILES_ROOT/init/60_ruby.sh"
+@test "bash -n: init/60_languages.sh passa na checagem de sintaxe" {
+  run bash -n "$DOTFILES_ROOT/init/60_languages.sh"
   [ "$status" -eq 0 ]
 }
 
