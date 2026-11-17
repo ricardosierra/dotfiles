@@ -1,14 +1,24 @@
-#!/bin/bash
-# Script criado em:22/03/2011
-# Versao Beta
-#Criado por:Alexandre
+#!/usr/bin/env bash
+# memory — mostra uso de RAM (cross-platform Linux/macOS)
+# Autor original: Alexandre (2011, beta) — reescrito 2026
 
-#while : ; do
-
-total=$(top | free -m | tr -s ' ' | sed '/^Mem/!d' | cut -d" " -f2)
-usada=$(top | free -m | tr -s ' ' | sed '/^Mem/!d' | cut -d" " -f3)
-
-echo "Memória: $usada / ${total}" 
-
-#done
-
+if command -v free >/dev/null 2>&1; then
+  # Linux
+  free -m | awk '/^Mem:/ {printf "Memória: %s / %s MB (%.1f%%)\n", $3, $2, $3*100/$2}'
+elif [[ "$OSTYPE" =~ ^darwin ]]; then
+  # macOS — calcula via vm_stat + sysctl
+  total_bytes=$(sysctl -n hw.memsize)
+  page_size=$(vm_stat | awk '/page size of/ {print $8}')
+  pages_used=$(vm_stat | awk '
+    /Pages active/     {gsub(/\./,""); a=$3}
+    /Pages wired down/ {gsub(/\./,""); w=$4}
+    END {print a+w}')
+  used_bytes=$((pages_used * page_size))
+  total_mb=$((total_bytes / 1024 / 1024))
+  used_mb=$((used_bytes / 1024 / 1024))
+  awk -v u="$used_mb" -v t="$total_mb" \
+    'BEGIN {printf "Memória: %d / %d MB (%.1f%%)\n", u, t, u*100/t}'
+else
+  echo "memory: SO não suportado ($OSTYPE)"
+  exit 1
+fi

@@ -107,6 +107,7 @@ for lang in "${menu_selects[@]}"; do
     # ── Go ────────────────────────────────────────────────────────────────────
     golang)
       e_header "Instalando Go"
+      export GOPATH="${GOPATH:-$HOME/.go}"
       if [[ "$use_asdf" == "1" ]]; then
         asdf plugin-add golang 2>/dev/null || true
         asdf install golang latest

@@ -37,9 +37,22 @@ export DOCKER_CONTENT_TRUST=0
 
 
 
-# Importante para os paths
-# PROGRAMS VARIABLES
-export ANDROID_HOME="/home/$USER/$DOTFILES_FOLDER_PROGRAMS/android-sdk-linux"
-export ANDROID_PLATFORM_TOOLS="/home/$USER/$DOTFILES_FOLDER_PROGRAMS/android-sdk-linux/platform-tools/"
-# go path
-export GOPATH=$HOME/.go
+# Android SDK — detecta path comum por OS, permite override externo.
+# Antes: hardcoded "/home/$USER/$DOTFILES_FOLDER_PROGRAMS/android-sdk-linux"
+# que quebrava em macOS e em Linux sem essa variável.
+if [[ -z "${ANDROID_HOME:-}" ]]; then
+  for candidate in \
+    "$HOME/Library/Android/sdk" \
+    "$HOME/Android/Sdk" \
+    "/opt/android-sdk"; do
+    if [[ -d "$candidate" ]]; then
+      export ANDROID_HOME="$candidate"
+      break
+    fi
+  done
+fi
+[[ -n "${ANDROID_HOME:-}" && -d "$ANDROID_HOME/platform-tools" ]] && \
+  export ANDROID_PLATFORM_TOOLS="$ANDROID_HOME/platform-tools"
+
+# Go
+export GOPATH="$HOME/.go"
